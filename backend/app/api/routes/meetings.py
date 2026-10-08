@@ -48,7 +48,7 @@ def list_meetings(
     db: DbSession,
     user: CurrentUser,
     q: str | None = Query(None, description="Matches title or participant name/email"),
-    scope: Literal["all", "mine"] = Query("all", description="'mine' = hosted by me"),
+    scope: Literal["all", "mine", "shared"] = Query("all", description="'mine' = hosted by me, 'shared' = attended"),
     host_id: Annotated[list[int], Query()] = [],
     participant_id: Annotated[list[int], Query()] = [],
     channel_id: Annotated[list[int], Query()] = [],

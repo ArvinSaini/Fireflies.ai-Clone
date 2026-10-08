@@ -33,7 +33,7 @@ class MeetingFilters:
     """Mirrors the Fireflies Notebook filters popover."""
 
     q: str | None = None
-    scope: str = "all"  # all | mine (hosted by the current user)
+    scope: str = "all"  # all | mine (hosted by me) | shared (I attended, someone else hosted)
     host_ids: list[int] = field(default_factory=list)
     participant_ids: list[int] = field(default_factory=list)
     channel_ids: list[int] = field(default_factory=list)
@@ -63,6 +63,8 @@ def _apply_filters(stmt: Select, f: MeetingFilters, me: Participant | None) -> S
         stmt = stmt.where(or_(func.lower(Meeting.title).like(like), by_participant))
     if f.scope == "mine":
         stmt = stmt.where(_has_participant([me.id], "host")) if me else stmt.where(False)
+    elif f.scope == "shared":  # attended but hosted by someone else
+        stmt = stmt.where(_has_participant([me.id], "attendee")) if me else stmt.where(False)
     if f.host_ids:
         stmt = stmt.where(_has_participant(f.host_ids, "host"))
     if f.participant_ids:  # checkbox list: any of the selected people
