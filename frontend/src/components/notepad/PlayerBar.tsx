@@ -99,11 +99,11 @@ export function PlayerBar({ meetingId, chapters, segments }: { meetingId: number
   return (
     <div className="relative z-20 flex h-16 shrink-0 items-center border-t border-line bg-surface px-5">
       <SeekBar chapters={chapters} />
-      <div className="w-40 text-[14px] text-ink-2 tabular-nums">
+      <div className="text-[13px] text-ink-2 tabular-nums sm:w-40 sm:text-[14px]">
         {formatTimestamp(currentMs)} <span className="text-ink-5">/ {formatTimestamp(durationMs)}</span>
       </div>
 
-      <div className="flex flex-1 items-center justify-center gap-3">
+      <div className="flex flex-1 items-center justify-center gap-1 sm:gap-3">
         <Popover side="top" className="w-28" trigger={({ toggle: t }) => (
           <button onClick={t} className="w-12 rounded-lg py-1.5 text-[14px] font-medium text-ink-3 hover:bg-muted" title="Playback speed">{rate}x</button>
         )}>
@@ -122,7 +122,7 @@ export function PlayerBar({ meetingId, chapters, segments }: { meetingId: number
         </button>
         <button onClick={() => skip(15000)} className={btn} aria-label="Forward 15 seconds" title="Forward 15s (Alt+→)"><RotateCw /></button>
         <Popover side="top" align="end" className="w-56" trigger={({ toggle: t }) => (
-          <button onClick={t} className={btn} aria-label="Download" title="Download"><Download /></button>
+          <button onClick={t} className={cn(btn, "hidden sm:block")} aria-label="Download" title="Download"><Download /></button>
         )}>
           {(close) => (
             <>
@@ -135,7 +135,7 @@ export function PlayerBar({ meetingId, chapters, segments }: { meetingId: number
         </Popover>
       </div>
 
-      <div className="flex w-40 items-center justify-end gap-1">
+      <div className="hidden w-40 items-center justify-end gap-1 md:flex">
         <button onClick={() => { setStarred(!starred); toast.success(starred ? "Removed from starred" : "Meeting starred"); }}
           className={btn} aria-label="Star meeting" title="Star"><Star className={cn(starred && "fill-[#fdb022] text-[#fdb022]")} /></button>
         <button onClick={() => setTaskOpen(true)} className={btn} aria-label="Create task at this moment" title="Create task at this moment"><ListPlus /></button>

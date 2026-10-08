@@ -30,7 +30,7 @@ export function LeftRail() {
   const { panel, setPanel } = useNotepad();
   const comingSoon = useComingSoon();
   return (
-    <div className="flex w-[60px] shrink-0 flex-col items-center gap-1 border-r border-line bg-surface py-3">
+    <div className="hidden w-[60px] shrink-0 flex-col items-center gap-1 border-r border-line bg-surface py-3 sm:flex">
       {RAIL.map((r) => (
         <button key={r.value} onClick={() => setPanel(panel === r.value ? null : r.value)} title={r.label} aria-label={r.label}
           aria-pressed={panel === r.value}
@@ -49,7 +49,7 @@ export function LeftRail() {
 function PanelShell({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   const { setPanel } = useNotepad();
   return (
-    <aside className="animate-fade-in flex w-[340px] shrink-0 flex-col border-r border-line bg-surface">
+    <aside className="animate-fade-in flex w-full shrink-0 flex-col border-r border-line bg-surface sm:w-[340px]">
       <div className="flex h-14 items-center justify-between border-b border-line px-5">
         <h2 className="text-[15px] font-medium text-ink">{title}</h2>
         <div className="flex items-center gap-1">

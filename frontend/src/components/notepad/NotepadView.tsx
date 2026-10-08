@@ -40,10 +40,20 @@ function Workspace({ meeting, segments }: { meeting: MeetingDetail; segments: Se
   const [expand, setExpand] = useState<"none" | "notes" | "transcript">("none");
   const [editing, setEditing] = useState(false);
   const [info, setInfo] = useState(false);
+  // Below lg the page shows one pane at a time: the notes or the transcript/AskFred panel.
+  const [mobilePane, setMobilePane] = useState<"notes" | "panel">("notes");
 
   return (
     <div className="flex h-screen flex-col bg-surface">
       <NotepadTopbar meeting={meeting} onInfo={() => setInfo(true)} />
+      <div className="flex shrink-0 gap-1 border-b border-line p-2 lg:hidden">
+        {(["notes", "panel"] as const).map((p) => (
+          <button key={p} onClick={() => setMobilePane(p)}
+            className={cn("flex-1 rounded-md py-1.5 text-[13px] font-medium", mobilePane === p ? "bg-brand-soft text-brand-hover" : "text-ink-3")}>
+            {p === "notes" ? "Notes" : "Transcript & AskFred"}
+          </button>
+        ))}
+      </div>
       <div className="flex min-h-0 flex-1">
         <LeftRail />
         {panel === "search" && <SmartSearchPanel meetingId={meeting.id} segments={segments} />}
@@ -53,13 +63,15 @@ function Workspace({ meeting, segments }: { meeting: MeetingDetail; segments: Se
         {panel === "bookmarks" && <BookmarksPanel meetingId={meeting.id} segments={segments} />}
 
         {expand !== "transcript" && (
-          <main className="min-w-0 flex-1 overflow-y-auto">
+          <main className={cn("min-w-0 flex-1 overflow-y-auto", mobilePane === "panel" && "hidden lg:block")}>
             <SummaryColumn meeting={meeting} expanded={expand === "notes"} onToggleExpand={() => setExpand(expand === "notes" ? "none" : "notes")} />
           </main>
         )}
 
         {expand !== "notes" && (
-          <aside className={cn("relative flex min-w-0 flex-col border-l border-line", expand === "transcript" ? "flex-1" : "w-[38%] max-w-[560px] min-w-[380px]")}>
+          <aside className={cn("relative min-w-0 flex-col border-line lg:flex lg:border-l",
+            mobilePane === "panel" ? "flex flex-1" : "hidden",
+            expand === "transcript" ? "lg:flex-1" : "lg:w-[38%] lg:max-w-[560px] lg:min-w-[380px] lg:flex-none")}>
             <div className="flex h-14 shrink-0 items-center gap-6 border-b border-line px-5">
               {(["transcript", "askfred"] as const).map((t) => (
                 <button key={t} onClick={() => setRightTab(t)}

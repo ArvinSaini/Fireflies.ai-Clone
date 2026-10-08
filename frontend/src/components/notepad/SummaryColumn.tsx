@@ -91,8 +91,8 @@ export function SummaryColumn({ meeting, expanded, onToggleExpand }: { meeting: 
     template === "general" || (template === "bullets" && part === "notes") || (template === "actions" && part === "actions") || (template === "outline" && part === "outline");
 
   return (
-    <div className="relative mx-auto w-full max-w-[860px] px-10 pb-24">
-      <div className="sticky top-0 z-10 -mx-10 flex items-center justify-center bg-surface/95 px-10 py-3 backdrop-blur">
+    <div className="relative mx-auto w-full max-w-[860px] px-5 pb-24 sm:px-10">
+      <div className="sticky top-0 z-10 -mx-5 flex items-center justify-center bg-surface/95 px-5 py-3 backdrop-blur sm:-mx-10 sm:px-10">
         <Segmented<"notes" | "skills">
           variant="pill"
           value={tab}
