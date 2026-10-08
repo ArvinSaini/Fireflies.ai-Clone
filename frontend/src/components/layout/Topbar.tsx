@@ -6,7 +6,6 @@ import type { ReactNode } from "react";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
 import { useCreateMeeting } from "@/components/meetings/CreateMeetingModal";
 import { useCommandPalette } from "@/components/search/CommandPalette";
-import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { MenuItem, MenuSeparator, Popover } from "@/components/ui/Popover";
 import { Kbd } from "@/components/ui/Primitives";
@@ -113,7 +112,7 @@ export function Topbar({ title, children }: { title: ReactNode; children?: React
         {children}
         <button
           onClick={() => comingSoon("AI credits")}
-          className="hidden h-9 items-center gap-1.5 rounded-lg border border-[#fde68a] bg-surface px-3 text-[13px] font-medium text-ink-2 shadow-[0_0_0_3px_rgba(167,243,208,0.35)] hover:bg-subtle lg:flex"
+          className="hidden h-9 items-center gap-1.5 rounded-lg border whitespace-nowrap border-[#fde68a] bg-surface px-3 text-[13px] font-medium text-ink-2 shadow-[0_0_0_3px_rgba(167,243,208,0.35)] hover:bg-subtle lg:flex"
         >
           <Sparkles className="size-4" /> Get AI credits
         </button>
@@ -125,8 +124,4 @@ export function Topbar({ title, children }: { title: ReactNode; children?: React
       </div>
     </header>
   );
-}
-
-export function UserAvatarButton() {
-  return <Avatar name="Arvin Saini" size="md" />;
 }

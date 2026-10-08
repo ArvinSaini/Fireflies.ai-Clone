@@ -1,6 +1,8 @@
 import clsx, { type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-export const cn = (...inputs: ClassValue[]) => clsx(inputs);
+/** Join class names; later Tailwind utilities override earlier conflicting ones (e.g. px-0 beats px-3). */
+export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 /** Escape a user string for use inside a RegExp. */
 export const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
