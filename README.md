@@ -50,7 +50,7 @@ On first start the app creates `backend/fireflies.db` and **seeds 8 realistic me
 
 - Interactive API docs: http://localhost:8000/docs
 - Re-seed from scratch: `python -m app.seed.loader --reset`
-- Run the tests: `pytest` (24 tests: parser, AI engine and API end-to-end) · lint: `ruff check app tests`
+- Run the tests: `pytest` (41 tests: parser, AI engines and providers, API end-to-end) · lint: `ruff check app tests`
 
 ### 2. Frontend (Next.js on :3000)
 
@@ -63,9 +63,14 @@ npm run dev
 
 Open http://localhost:3000.
 
-### Optional: Claude-powered AI
+### Optional: LLM-powered AI (Claude or Gemini)
 
-The app is fully functional without an LLM: a built-in extractive engine produces the summaries, action items and AskFred answers. Set `ANTHROPIC_API_KEY` in `backend/.env` to have Claude generate summaries and answers instead. If the API call fails or is refused, the app falls back to the built-in engine.
+The app is fully functional without an LLM: a built-in extractive engine produces the summaries, action items and AskFred answers. To use an LLM instead, put a key in `backend/.env`:
+
+- `GEMINI_API_KEY=...` uses Google Gemini, called over its REST API with the standard library (no extra dependency).
+- `ANTHROPIC_API_KEY=...` uses Claude through the official SDK.
+
+`AI_PROVIDER=auto` (the default) prefers Claude when both keys are set; set it to `gemini`, `claude` or `heuristic` to force a choice. If the API call fails, is rate-limited or is refused, the app falls back to the built-in engine.
 
 ---
 
@@ -80,7 +85,7 @@ The app is fully functional without an LLM: a built-in extractive engine produce
 │ components/  feature folders (meetings, notepad, …)      │        │ services/     use-cases & business logic    │
 │ lib/api.ts   typed fetch client                          │        │   meetings · search · insights · export     │
 │ lib/queries.ts TanStack Query hooks + cache invalidation │        │   transcript_parser · chat · workspace_ai   │
-│ PlayerContext virtual clock ↔ transcript sync            │        │   ai/ heuristic engine | Claude (optional)  │
+│ PlayerContext virtual clock ↔ transcript sync            │        │   ai/ heuristic | Claude or Gemini (opt.)   │
 └──────────────────────────────────────────────────────────┘        │ models/       SQLAlchemy 2 ORM (15 tables)  │
                                                                      │ schemas/      Pydantic request/response     │
                                                                      │ SQLite + FTS5 virtual table (triggers)      │
@@ -100,8 +105,10 @@ Auth is a single dependency (`current_user`) that returns the default user. Real
 
 - A `Summarizer` / `Assistant` protocol has two implementations:
   - `HeuristicSummarizer` / `HeuristicAssistant`: keyword scoring, extractive sentences and commitment detection ("I'll…", "Marcus, can you…").
-  - `ClaudeSummarizer` / `ClaudeAssistant`: structured outputs via `client.messages.parse` with Pydantic schemas.
-- `get_summarizer()` picks one and wraps the LLM in a fallback.
+  - `LLMSummarizer` / `LLMAssistant`: provider-agnostic prompts, schemas and mapping on top of a small `StructuredLLM` provider interface (`providers.py`):
+    - `ClaudeProvider`: structured outputs via `client.messages.parse`.
+    - `GeminiProvider`: REST `generateContent` in JSON mode, validated with Pydantic.
+- `get_summarizer()` picks the provider from the configured keys and wraps it in a fallback.
 - Callers never know which engine ran; it is recorded in `summaries.generated_by`.
 
 **Media player:**
@@ -213,7 +220,7 @@ Lines without timestamps get times estimated from word count (~150 wpm).
 
 - **Single default user** (Arvin Saini, id 1). "Hosted by me" and "My Tasks" resolve the user's participant record by email.
 - **No real audio or speech-to-text.** Transcripts are seeded, uploaded or pasted, and playback is simulated, which keeps transcript/player sync fully functional.
-- **AI notes are generated locally by default** (deterministic and offline), or by Claude when a key is set. Seed meetings ship with hand-written notes.
+- **AI notes are generated locally by default** (deterministic and offline), or by Claude or Gemini when a key is set. Seed meetings ship with hand-written notes.
 - **Channel membership is many-to-many.** "Move to channel" replaces a meeting's channel set.
 - **Global AskFred is stateless on the server.** Recent chats are kept in the browser's localStorage. Per-meeting AskFred history is stored in the database.
 

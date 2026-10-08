@@ -19,6 +19,8 @@ services:
         value: https://.*\.vercel\.app
       - key: CORS_ORIGINS
         value: http://localhost:3000
-      # Optional: enables Claude-generated summaries and AskFred answers.
+      # Optional: LLM summaries + AskFred (Claude or Gemini). Leave unset to use the built-in engine.
       - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
         sync: false
