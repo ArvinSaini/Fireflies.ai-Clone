@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  Copy, Download, Eye, Globe2, Info, Link2, Menu, MoreHorizontal, PenLine, Plus, RefreshCw, Share2, Trash2, X,
+  Copy, Download, Eye, Globe2, Info, Link2, MoreHorizontal, PenLine, Plus, RefreshCw, Share2, Trash2,
 } from "lucide-react";
 import Link from "next/link";
-import { Suspense, useState } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { useState } from "react";
+import { NavDrawer } from "@/components/layout/NavDrawer";
 import { NotificationsBell } from "@/components/layout/Topbar";
 import { copyMeetingLink } from "@/components/meetings/MeetingCard";
 import { useCreateMeeting } from "@/components/meetings/CreateMeetingModal";
@@ -30,19 +30,18 @@ export function NotepadTopbar({ meeting, onInfo }: { meeting: MeetingDetail; onI
   const comingSoon = useComingSoon();
   const createMeeting = useCreateMeeting();
   const { data: me } = useMe();
-  const [drawer, setDrawer] = useState(false);
   const [dialog, setDialog] = useState<"edit" | "delete" | null>(null);
   const regenerate = useMeetingMutation(meeting.id, () => api.regenerate(meeting.id), { success: "Notes regenerated" });
   const channel = meeting.channels[0];
 
   return (
     <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line bg-surface px-3">
-      <button onClick={() => setDrawer(true)} aria-label="Open navigation" className="rounded-lg p-2 text-ink-3 hover:bg-muted"><Menu className="size-5" /></button>
+      <NavDrawer />
       <nav className="flex min-w-0 items-center gap-2 text-[14px]" aria-label="Breadcrumb">
-        <Link href={channel ? `/meetings?channel=${channel.id}` : "/meetings"} className="shrink-0 text-ink-3 hover:text-ink">
+        <Link href={channel ? `/meetings?channel=${channel.id}` : "/meetings"} className="hidden shrink-0 text-ink-3 hover:text-ink sm:inline">
           #{channel ? channel.name : "My Meetings"}
         </Link>
-        <span className="text-ink-5">/</span>
+        <span className="hidden text-ink-5 sm:inline">/</span>
         <span className="truncate text-ink-2">{meeting.title}</span>
       </nav>
       <Popover
@@ -95,29 +94,19 @@ export function NotepadTopbar({ meeting, onInfo }: { meeting: MeetingDetail; onI
         <div className="flex">
           <button onClick={() => comingSoon({ name: "Share with teammates", description: "Share meeting notes with your team or anyone via a public link. Use the link button to copy this meeting's URL." })}
             className="flex h-9 items-center gap-1.5 rounded-l-lg bg-brand px-3 text-[14px] font-medium text-white hover:bg-brand-hover">
-            <Globe2 className="size-4" /> Share
+            <Globe2 className="size-4" /> <span className="hidden sm:inline">Share</span>
           </button>
           <button onClick={() => copyMeetingLink(meeting.id)} aria-label="Copy link" title="Copy link"
             className="flex h-9 items-center rounded-r-lg border-l border-white/25 bg-brand px-2.5 text-white hover:bg-brand-hover">
             <Link2 className="size-4" />
           </button>
         </div>
-        <span className="mx-1 h-6 w-px bg-line" />
-        <button onClick={() => createMeeting("upload")} aria-label="Add meeting" className="rounded-lg border border-line p-2 text-ink-3 hover:bg-muted"><Plus className="size-4" /></button>
+        <span className="mx-1 hidden h-6 w-px bg-line sm:block" />
+        <button onClick={() => createMeeting("upload")} aria-label="Add meeting" className="hidden rounded-lg border border-line p-2 text-ink-3 hover:bg-muted sm:block"><Plus className="size-4" /></button>
         <NotificationsBell />
         <Link href="/settings" aria-label="Settings"><Avatar name={me?.name ?? "?"} color={me?.avatar_color} size="md" /></Link>
       </div>
 
-      {drawer && (
-        <div className="fixed inset-0 z-50 bg-[#0c111d]/30" onMouseDown={() => setDrawer(false)}>
-          <div className="animate-fade-in relative h-full w-fit" onMouseDown={(e) => e.stopPropagation()}>
-            <Suspense fallback={<div className="h-full w-[240px] bg-sidebar" />}>
-              <Sidebar onNavigate={() => setDrawer(false)} className="shadow-pop" />
-            </Suspense>
-            <button onClick={() => setDrawer(false)} aria-label="Close navigation" className="absolute top-4 -right-10 rounded-lg bg-surface p-1.5 text-ink-3 shadow"><X className="size-4" /></button>
-          </div>
-        </div>
-      )}
       {dialog === "edit" && <EditMeetingDialog meeting={meeting} open onClose={() => setDialog(null)} />}
       {dialog === "delete" && <DeleteMeetingDialog meeting={meeting} open onClose={() => setDialog(null)} />}
     </header>

@@ -4,6 +4,7 @@ import { Bell, ChevronDown, ClipboardPaste, FilePlus2, Search, Sparkles, Upload,
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
+import { NavDrawer } from "./NavDrawer";
 import { useCreateMeeting } from "@/components/meetings/CreateMeetingModal";
 import { useCommandPalette } from "@/components/search/CommandPalette";
 import { Button } from "@/components/ui/Button";
@@ -105,7 +106,8 @@ export function CaptureButton() {
 export function Topbar({ title, children }: { title: ReactNode; children?: ReactNode }) {
   const comingSoon = useComingSoon();
   return (
-    <header className="flex h-16 shrink-0 items-center gap-4 border-b border-line bg-surface px-5">
+    <header className="flex h-16 shrink-0 items-center gap-2 border-b border-line bg-surface px-3 sm:gap-4 sm:px-5">
+      <NavDrawer className="md:hidden" />
       <div className="min-w-0 flex-1 truncate text-[15px] text-ink-2">{title}</div>
       <SearchTrigger className="hidden w-[380px] md:flex" />
       <div className="flex flex-1 items-center justify-end gap-2">
