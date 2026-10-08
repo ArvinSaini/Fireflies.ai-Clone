@@ -1,21 +1,14 @@
 "use client";
 // Right-hand "Ask Fred" panel of the Meetings page (as in the real Notebook): ask across your meetings.
 import { ArrowUp, Hash, Layers, Mic, MessageSquarePlus, Plus, Sparkles, X } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { AnswerSources, type WorkspaceTurn } from "@/components/askfred/AnswerSources";
 import { AnswerText } from "@/components/notepad/AskFredPanel";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
 import { api } from "@/lib/api";
-import { firstName, formatTimestamp } from "@/lib/format";
+import { firstName } from "@/lib/format";
 import { useIsClient } from "@/lib/hooks";
 import { errorToast, useMe } from "@/lib/queries";
-import type { WorkspaceAnswer } from "@/lib/types";
-
-interface Turn {
-  role: "user" | "assistant";
-  content: string;
-  data?: WorkspaceAnswer;
-}
 
 const CHIPS = [
   { label: "My action items", icon: "✅", question: "What are my open action items?" },
@@ -27,7 +20,7 @@ export function LibraryAskFred({ scope }: { scope: string }) {
   const comingSoon = useComingSoon();
   const isClient = useIsClient();
   const { data: me } = useMe();
-  const [turns, setTurns] = useState<Turn[]>([]);
+  const [turns, setTurns] = useState<WorkspaceTurn[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
   const [showConnect, setShowConnect] = useState(true);
@@ -95,16 +88,7 @@ export function LibraryAskFred({ scope }: { scope: string }) {
                 <div key={i} className="text-[13px] leading-relaxed text-ink-2">
                   <p className="mb-1 flex items-center gap-1 text-xs text-ink-4"><Sparkles className="size-3 text-brand" /> Fred</p>
                   <AnswerText text={t.content} />
-                  {!!t.data?.citations.length && (
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {t.data.citations.slice(0, 4).map((c) => (
-                        <Link key={c.segment_id} href={`/meetings/${c.meeting_id}?t=${c.start_ms}`}
-                          className="rounded-full border border-line px-2 py-0.5 text-[11px] text-ink-3 hover:text-brand" title={c.text}>
-                          {c.meeting_title} · <span className="text-link">{formatTimestamp(c.start_ms)}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <AnswerSources data={t.data} compact />
                 </div>
               ),
             )}

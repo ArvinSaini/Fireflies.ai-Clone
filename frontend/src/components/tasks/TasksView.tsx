@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, ChevronUp, ListChecks, Plus, Trash2, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronUp, ListChecks, MessageSquare, Plus, Trash2, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -151,6 +151,9 @@ export function TasksView() {
               options={[{ value: "mine", label: "My Tasks" }, { value: "all", label: "All Tasks" }]} />
             <Segmented<Status> value={status} onChange={setStatus}
               options={[{ value: "open", label: `Open · ${openCount}` }, { value: "completed", label: "Completed" }, { value: "all", label: "All" }]} />
+            <button onClick={() => comingSoon("Feedback")} className="ml-auto flex items-center gap-1.5 text-[14px] text-ink-4 hover:text-ink-2">
+              <MessageSquare className="size-4" /> Share Feedback
+            </button>
           </div>
 
           <button onClick={() => comingSoon({ name: "Task integrations", description: "Send action items to Asana, Monday.com, Trello or ClickUp automatically." })}

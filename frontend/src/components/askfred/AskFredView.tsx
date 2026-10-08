@@ -1,38 +1,34 @@
 "use client";
 
-import { ArrowUp, Copy, Layers, MessageSquarePlus, Search, Sparkles, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { AlignLeft, ArrowUp, CalendarDays, CheckCheck, Copy, Layers, MessageSquarePlus, Mic, Plus, Search, Sparkles, ThumbsDown, ThumbsUp, Trash2, Wand2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Topbar } from "@/components/layout/Topbar";
 import { AnswerText } from "@/components/notepad/AskFredPanel";
+import { AnswerSources, type WorkspaceTurn } from "./AnswerSources";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
 import { api } from "@/lib/api";
-import { firstName, formatShortDate, formatTimestamp } from "@/lib/format";
+import { firstName } from "@/lib/format";
 import { useIsClient } from "@/lib/hooks";
 import { errorToast, useMe } from "@/lib/queries";
-import type { WorkspaceAnswer } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-interface Turn {
-  role: "user" | "assistant";
-  content: string;
-  data?: WorkspaceAnswer;
-}
 interface Conversation {
   id: string;
   title: string;
   updatedAt: number;
-  turns: Turn[];
+  turns: WorkspaceTurn[];
 }
 
 const STORAGE_KEY = "askfred.conversations";
-const SUGGESTIONS = [
-  "What are my open action items?",
-  "Recap my meetings from this week",
-  "What did customers say about SSO?",
-  "What was decided about pricing?",
+// The real AskFred start screen: five starters. `question` is sent to Fred; the connector row is a placeholder.
+const SUGGESTIONS: { label: string; icon: React.ReactNode; question?: string }[] = [
+  { label: "List my action items & todos for this week", icon: <CheckCheck />, question: "List my action items & todos for this week" },
+  { label: "Summarize my last meeting", icon: <AlignLeft />, question: "Summarize my last meeting" },
+  { label: "Prepare me for the upcoming meeting", icon: <Wand2 />, question: "Prepare me for the upcoming meeting" },
+  { label: "Connect Gmail, Notion, and 30+ sources for richer insights.", icon: <Layers /> },
+  { label: "Prepare weekly digest, based on my meetings", icon: <CalendarDays />, question: "Prepare weekly digest, based on my meetings" },
 ];
 
 /** Recent conversations live in localStorage: a per-browser convenience, like a chat sidebar. */
@@ -104,6 +100,30 @@ export function AskFredView() {
     }
   };
 
+  const composer = (
+    <form onSubmit={(e) => { e.preventDefault(); void ask(input); }}
+      className="relative z-10 rounded-2xl border border-line-strong bg-surface p-3 shadow-pop focus-within:border-brand-400">
+      <textarea
+        rows={active ? 1 : 2}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void ask(input); } }}
+        placeholder={active ? "Ask a follow-up question or anything…" : "Ask anything, @ for context and / for skills"}
+        aria-label="Ask Fred"
+        className="max-h-40 w-full resize-none bg-transparent px-1 py-1 text-[15px] text-ink outline-none placeholder:text-ink-5"
+      />
+      <div className="mt-1 flex items-center gap-1 text-ink-4">
+        <button type="button" onClick={() => comingSoon("Attach files")} aria-label="Attach files" className="rounded-md p-1.5 hover:bg-muted"><Plus className="size-4" /></button>
+        <button type="button" onClick={() => comingSoon("Connectors")} aria-label="Connectors" className="rounded-md p-1.5 hover:bg-muted"><Layers className="size-4" /></button>
+        <button type="button" onClick={() => comingSoon("Voice input")} aria-label="Voice input" className="ml-auto rounded-md p-1.5 hover:bg-muted"><Mic className="size-4" /></button>
+        <button type="submit" disabled={!input.trim() || pending} aria-label="Send"
+          className="flex size-8 items-center justify-center rounded-lg bg-brand text-white hover:bg-brand-hover disabled:bg-brand-200">
+          <ArrowUp className="size-4" />
+        </button>
+      </div>
+    </form>
+  );
+
   // ?q= from the Home "Ask anything" bar or the command palette (asked once).
   const askFromUrl = useEffectEvent((q: string) => void ask(q));
   useEffect(() => {
@@ -153,7 +173,10 @@ export function AskFredView() {
                 ))}
               </div>
             ))}
-            {isClient && !conversations.length && <p className="px-3 py-2 text-[13px] text-ink-5">Your chats will appear here.</p>}
+            {isClient && !conversations.length && <div className="px-3 py-10 text-center">
+                <p className="text-[14px] font-medium text-ink">No chats yet</p>
+                <p className="mt-1 text-[13px] text-ink-4">Your chats will appear here once you start one.</p>
+              </div>}
           </div>
         </aside>
 
@@ -161,18 +184,27 @@ export function AskFredView() {
           <div className="min-h-0 flex-1 overflow-y-auto">
             <div className="mx-auto max-w-[760px] px-6 py-10">
               {!active ? (
-                <div className="pt-[8vh]">
-                  <Sparkles className="size-9 text-[#47cd89]" />
-                  <h1 className="mt-6 text-[26px] text-ink">Hi {isClient && me ? firstName(me.name) : "there"}!</h1>
-                  <p className="text-[26px] text-ink-3">Ask anything about your meetings</p>
-                  <div className="mt-10 grid gap-3 sm:grid-cols-2">
-                    {SUGGESTIONS.map((s, i) => (
-                      <button key={s} onClick={() => ask(s)}
-                        className="flex items-center gap-3 rounded-xl border border-line px-4 py-3.5 text-left text-[14px] text-ink-2 shadow-xs hover:bg-subtle">
-                        <Sparkles className={cn("size-4 shrink-0", ["text-[#9b8afb]", "text-[#ee46bc]", "text-[#f38744]", "text-[#2e90fa]"][i])} /> {s}
+                <div className="mx-auto max-w-[616px] pt-[10vh]">
+                  <h1 className="text-[22px] font-medium text-ink">
+                    Hi {isClient && me ? firstName(me.name) : "there"}, how can I help today?
+                  </h1>
+                  <div className="mt-8">{composer}</div>
+                  <div className="mx-auto flex w-[88%] items-center gap-2 rounded-b-xl bg-subtle px-4 py-2.5 text-[13px] text-ink-2">
+                    <Layers className="size-4 text-ink-4" />
+                    <span className="flex-1">Bring context from 100+ apps with custom MCP</span>
+                    <button onClick={() => comingSoon("Custom MCP connectors")} className="inline-flex items-center gap-1 font-medium text-brand hover:underline">
+                      <Plus className="size-3.5" /> Add
+                    </button>
+                  </div>
+                  <div className="mt-8 space-y-2">
+                    {SUGGESTIONS.map((s) => (
+                      <button key={s.label} onClick={() => (s.question ? ask(s.question) : comingSoon("Gmail, Notion & more connectors"))}
+                        className="flex w-full items-center gap-3 rounded-lg bg-subtle px-3 py-2.5 text-left text-[13px] text-ink-2 hover:bg-muted [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-ink-4">
+                        {s.icon} {s.label}
                       </button>
                     ))}
                   </div>
+                  <p className="mt-16 text-center text-xs text-ink-5">Answers are grounded in your meeting transcripts</p>
                 </div>
               ) : (
                 <div className="space-y-8">
@@ -185,29 +217,7 @@ export function AskFredView() {
                       <div key={i} className="group text-[15px] leading-relaxed text-ink-2">
                         <p className="mb-2 flex items-center gap-1.5 text-xs text-ink-4"><Sparkles className="size-3.5 text-brand" /> Fred</p>
                         <AnswerText text={t.content} />
-                        {!!t.data?.citations.length && (
-                          <div className="mt-4 space-y-2">
-                            <p className="text-xs font-medium text-ink-4">Sources</p>
-                            {t.data.citations.map((c) => (
-                              <Link key={c.segment_id} href={`/meetings/${c.meeting_id}?t=${c.start_ms}`}
-                                className="block rounded-lg border border-line px-3 py-2 hover:border-brand-200 hover:bg-brand-soft/40">
-                                <span className="text-[13px] font-medium text-ink">{c.meeting_title}</span>
-                                <span className="ml-2 text-xs text-link">{formatTimestamp(c.start_ms)}</span>
-                                <span className="ml-1 text-xs text-ink-4">· {c.speaker}</span>
-                                <span className="mt-0.5 line-clamp-2 block text-[13px] text-ink-3">“{c.text}”</span>
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                        {!t.data?.citations.length && !!t.data?.meetings.length && (
-                          <div className="mt-3 flex flex-wrap gap-1.5">
-                            {t.data.meetings.slice(0, 6).map((m) => (
-                              <Link key={m.meeting_id} href={`/meetings/${m.meeting_id}`} className="rounded-full border border-line px-2.5 py-1 text-xs text-ink-3 hover:text-brand">
-                                {m.meeting_title} · {formatShortDate(m.started_at)}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
+                        <AnswerSources data={t.data} />
                         <div className="mt-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                           <button onClick={() => { void navigator.clipboard?.writeText(t.content); toast.success("Copied"); }} aria-label="Copy" className="rounded-md p-1.5 text-ink-4 hover:bg-muted"><Copy className="size-4" /></button>
                           <button onClick={() => toast.success("Thanks for the feedback!")} aria-label="Helpful" className="rounded-md p-1.5 text-ink-4 hover:bg-muted"><ThumbsUp className="size-4" /></button>
@@ -227,23 +237,7 @@ export function AskFredView() {
               )}
             </div>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); void ask(input); }} className="mx-auto w-full max-w-[800px] px-6 pb-6">
-            <div className="flex items-end gap-2 rounded-2xl border border-line-strong bg-surface p-2.5 shadow-pop focus-within:border-brand-400">
-              <textarea
-                rows={1}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void ask(input); } }}
-                placeholder={active ? "Ask a follow-up question or anything…" : "Ask anything about your meetings…"}
-                aria-label="Ask Fred"
-                className="max-h-40 min-h-10 flex-1 resize-none bg-transparent px-3 py-2 text-[15px] text-ink outline-none placeholder:text-ink-5"
-              />
-              <button type="submit" disabled={!input.trim() || pending} aria-label="Send"
-                className="flex size-10 items-center justify-center rounded-xl bg-brand text-white hover:bg-brand-hover disabled:bg-brand-200">
-                <ArrowUp className="size-5" />
-              </button>
-            </div>
-          </form>
+          {active && <div className="mx-auto w-full max-w-[800px] px-6 pb-6">{composer}</div>}
         </main>
       </div>
     </>
