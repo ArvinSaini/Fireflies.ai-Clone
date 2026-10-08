@@ -1,0 +1,24 @@
+# Render blueprint for the FastAPI backend (https://render.com/docs/blueprint-spec).
+# The Next.js frontend deploys to Vercel with root directory `frontend/`.
+services:
+  - type: web
+    name: fireflies-clone-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: SEED_ON_STARTUP
+        value: "true"
+      # Allow the Vercel production + preview URLs.
+      - key: CORS_ORIGIN_REGEX
+        value: https://.*\.vercel\.app
+      - key: CORS_ORIGINS
+        value: http://localhost:3000
+      # Optional: enables Claude-generated summaries and AskFred answers.
+      - key: ANTHROPIC_API_KEY
+        sync: false
