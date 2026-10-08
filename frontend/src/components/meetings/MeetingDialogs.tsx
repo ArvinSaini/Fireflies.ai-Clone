@@ -2,15 +2,17 @@
 // Dialogs shared by the meetings library and the meeting page: rename/edit, move to channel,
 // delete confirmation and the "Details" side panel.
 import { Clock3, Globe2, Hash, Lock, Plus, Trash2, X } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Checkbox, Field, Input } from "@/components/ui/Primitives";
 import { api } from "@/lib/api";
 import { formatDuration, formatLongDate, parseDate } from "@/lib/format";
-import { useChannels, useMeetingMutation } from "@/lib/queries";
+import { errorToast, keys, useChannels, useInvalidateLibrary, useMeetingMutation } from "@/lib/queries";
 import type { MeetingDetail, MeetingListItem } from "@/lib/types";
 import { LANGUAGES } from "./CreateMeetingModal";
 import { PlatformIcon, platformLabel } from "./PlatformIcon";
@@ -170,7 +172,20 @@ export function ConfirmDialog({
 
 export function DeleteMeetingDialog({ meeting, open, onClose }: { meeting: AnyMeeting; open: boolean; onClose: () => void }) {
   const router = useRouter();
-  const del = useMeetingMutation(meeting.id, () => api.deleteMeeting(meeting.id), { success: "Meeting deleted" });
+  const qc = useQueryClient();
+  const invalidateLibrary = useInvalidateLibrary();
+  const del = useMutation({
+    mutationFn: () => api.deleteMeeting(meeting.id),
+    onSuccess: () => {
+      onClose();
+      if (window.location.pathname.startsWith(`/meetings/${meeting.id}`)) router.push("/meetings");
+      // Drop (don't refetch) the deleted meeting's caches, then refresh the lists.
+      for (const key of [keys.meeting(meeting.id), keys.transcript(meeting.id), keys.analytics(meeting.id)]) qc.removeQueries({ queryKey: key });
+      void invalidateLibrary();
+      toast.success("Meeting deleted");
+    },
+    onError: errorToast,
+  });
   return (
     <ConfirmDialog
       open={open}
@@ -178,14 +193,7 @@ export function DeleteMeetingDialog({ meeting, open, onClose }: { meeting: AnyMe
       pending={del.isPending}
       title="Delete this meeting?"
       description={`"${meeting.title}" and its transcript, notes and action items will be permanently deleted.`}
-      onConfirm={() =>
-        del.mutate(undefined, {
-          onSuccess: () => {
-            onClose();
-            if (window.location.pathname.startsWith(`/meetings/${meeting.id}`)) router.push("/meetings");
-          },
-        })
-      }
+      onConfirm={() => del.mutate()}
     />
   );
 }
