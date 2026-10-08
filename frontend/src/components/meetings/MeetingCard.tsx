@@ -4,7 +4,7 @@ import { ChevronRight, Copy, Download, Hash, Lock, MoreHorizontal, PenLine, Shar
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Avatar } from "@/components/ui/Avatar";
+import { Avatar, AvatarStack } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { MenuItem, MenuSeparator, Popover } from "@/components/ui/Popover";
 import { Checkbox } from "@/components/ui/Primitives";
@@ -63,6 +63,15 @@ export function MeetingCard({
             </span>
           ))}
         </p>
+        {meeting.participants.length > 0 && (
+          <div className="mt-2.5 flex items-center gap-2" title={meeting.participants.map((p) => p.name).join(", ")}>
+            <AvatarStack people={meeting.participants} max={5} />
+            <span className="truncate text-[13px] text-ink-4">
+              {meeting.participants.slice(0, 3).map((p) => p.name.split(" ")[0]).join(", ")}
+              {meeting.participants.length > 3 && ` +${meeting.participants.length - 3}`}
+            </span>
+          </div>
+        )}
         {meeting.channels.length > 0 && (
           <div className="mt-3.5 flex flex-wrap gap-3">
             {meeting.channels.map((c) => (
