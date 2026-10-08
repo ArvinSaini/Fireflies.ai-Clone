@@ -167,3 +167,12 @@ mark.current {
 .typing-dot {
   animation: pulse-dot 1.2s infinite;
 }
+
+/* Printing (PDF export): plain white page regardless of theme. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #101828;
+  }
+}

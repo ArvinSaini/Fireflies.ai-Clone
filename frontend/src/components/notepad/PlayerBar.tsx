@@ -129,7 +129,7 @@ export function PlayerBar({ meetingId, chapters, segments }: { meetingId: number
               <MenuItem onClick={() => { close(); downloadUrl(api.exportUrl(meetingId, "md")); }}>Notes + transcript (.md)</MenuItem>
               <MenuItem onClick={() => { close(); downloadUrl(api.exportUrl(meetingId, "txt")); }}>Transcript (.txt)</MenuItem>
               <MenuItem onClick={() => { close(); downloadUrl(api.exportUrl(meetingId, "json")); }}>Data (.json)</MenuItem>
-              <MenuItem onClick={() => { close(); window.print(); }}>Print / save as PDF</MenuItem>
+              <MenuItem onClick={() => { close(); window.open(`/meetings/${meetingId}/print`, "_blank"); }}>PDF document</MenuItem>
             </>
           )}
         </Popover>
