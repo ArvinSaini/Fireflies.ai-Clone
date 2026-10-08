@@ -1,5 +1,6 @@
 "use client";
 
+import { PanelLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
@@ -40,14 +41,20 @@ export function IconRail({ onExpand }: { onExpand: () => void }) {
 
   return (
     <aside className="flex h-full w-[60px] shrink-0 flex-col items-center border-r border-line bg-sidebar py-3">
-        <button
-          type="button"
+      {/* Avatar; on hover it turns into the sidebar icon with an "Expand sidebar" tooltip, as in the live app. */}
+      <button
+        type="button"
         onClick={onExpand}
         aria-label="Expand sidebar"
-        title={me?.name}
-        className="rounded-lg p-1.5 hover:bg-muted"
+        className="group relative flex size-9 items-center justify-center rounded-lg hover:bg-muted"
       >
-        <Avatar name={me?.name ?? "…"} color={me?.avatar_color} size="sm" />
+        <span className="group-hover:hidden group-focus-visible:hidden">
+          <Avatar name={me?.name ?? "…"} color={me?.avatar_color} size="sm" />
+        </span>
+        <PanelLeft className="hidden size-[18px] text-ink-3 group-hover:block group-focus-visible:block" strokeWidth={1.75} />
+        <span className="pointer-events-none absolute top-1/2 left-full z-50 ml-2 hidden -translate-y-1/2 rounded-lg bg-[#1d2939] px-2.5 py-1.5 text-[13px] whitespace-nowrap text-white shadow-pop group-hover:block group-focus-visible:block dark:bg-[#2b2b30]">
+          Expand sidebar
+        </span>
       </button>
       <nav className="mt-3 flex flex-1 flex-col items-center gap-1">
         {NAV_GROUPS.map((group, i) => (
