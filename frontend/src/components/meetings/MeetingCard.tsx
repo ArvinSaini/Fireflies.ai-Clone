@@ -42,7 +42,7 @@ export function MeetingCard({
     >
       <div className="relative">
         <Avatar name={meeting.host?.name ?? meeting.title} size="lg" className={cn("transition-opacity", selectionMode && "opacity-0")} />
-        <div className={cn("absolute inset-0 flex items-center justify-center", selectionMode ? "opacity-100" : "opacity-0 group-hover:opacity-100")}>
+        <div className={cn("absolute inset-0 z-10 flex items-center justify-center", selectionMode ? "opacity-100" : "opacity-0 group-hover:opacity-100")}>
           <span className={cn("flex size-12 items-center justify-center rounded-lg", !selectionMode && "bg-surface/90")}>
             <Checkbox checked={selected} onChange={onSelect} label={`Select ${meeting.title}`} className="size-5" />
           </span>
