@@ -261,11 +261,13 @@ class HeuristicAssistant:
             terms = {stem(w) for w in content_words(ln.text)}
             overlap = len(q_terms & terms)
             if overlap:
-                scored.append((overlap / math.sqrt(len(terms) + 1), ln))
+                # More matched terms first; among equals prefer substantive lines over one-liners.
+                substance = min(len(ln.text.split()), 25) / 25
+                scored.append((overlap + 0.5 * substance, ln))
         scored.sort(key=lambda s: -s[0])
         best = sorted([ln for _, ln in scored[:3]], key=lambda ln: ln.index)
-        topic = ", ".join(sorted(q_terms)[:3])
-        return self._cite(f"Here's what was said about {topic}:", best,
+        topic = " ".join(w for w in question.rstrip("?").split() if w.lower().strip(",.") in set(content_words(question)))
+        return self._cite(f"Here's what was said about “{topic or question.rstrip('?')}”:", best,
                           "I couldn't find anything about that in this meeting's transcript.")
 
     @staticmethod
