@@ -6,7 +6,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import (
-    action_items, askfred, assistant, channels, meetings, topic_trackers, transcript, workspace,
+    action_items,
+    askfred,
+    assistant,
+    channels,
+    meetings,
+    topic_trackers,
+    transcript,
+    workspace,
 )
 from app.core.config import get_settings
 from app.db import init_db

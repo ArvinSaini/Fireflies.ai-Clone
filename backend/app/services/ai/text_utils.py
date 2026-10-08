@@ -87,9 +87,7 @@ def titlecase(phrase: str) -> str:
     small = {"and", "or", "of", "the", "a", "to", "in", "on", "for"}
     out = []
     for i, w in enumerate(phrase.split()):
-        if w.isupper() and len(w) > 1:
-            out.append(w)
-        elif i and w in small:
+        if (w.isupper() and len(w) > 1) or (i and w in small):  # keep acronyms and small words as-is
             out.append(w)
         else:
             out.append(w[:1].upper() + w[1:])

@@ -1,0 +1,13 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "I", "UP", "SIM"]
+# B008: FastAPI's Depends()/Query() in defaults is the framework idiom.
+# SIM905: word lists are kept as `"""…""".split()` for readability.
+# UP046: keep `class Page[T]` style choice free.
+ignore = ["E501", "B008", "SIM905", "UP046"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

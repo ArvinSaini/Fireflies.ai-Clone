@@ -11,8 +11,17 @@ from sqlalchemy import Select, case, exists, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import (
-    ActionItem, Channel, Chapter, Comment, Meeting, MeetingChannel, MeetingParticipant, Participant, Summary,
-    TranscriptSegment, User,
+    ActionItem,
+    Channel,
+    Chapter,
+    Comment,
+    Meeting,
+    MeetingChannel,
+    MeetingParticipant,
+    Participant,
+    Summary,
+    TranscriptSegment,
+    User,
 )
 from app.models.mixins import utcnow
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
@@ -341,7 +350,11 @@ def summarize_meeting(db: Session, meeting: Meeting, commit: bool = True) -> Mee
     return meeting
 
 
-def update_summary(db: Session, meeting: Meeting, overview=None, keywords=None, notes=None) -> Summary:
+def update_summary(
+    db: Session, meeting: Meeting, overview: str | None = None,
+    keywords: list[str] | None = None, notes: list[dict] | None = None,
+) -> Summary:
+    """Manual edit of the AI summary; marks it as user-authored."""
     if meeting.summary is None:
         meeting.summary = Summary(meeting_id=meeting.id, overview="", keywords=[], notes=[])
     s = meeting.summary

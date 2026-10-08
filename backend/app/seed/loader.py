@@ -84,7 +84,7 @@ def load_meeting(db: Session, owner: User, spec: dict) -> Meeting:
 
     # Completion state / due dates from the seed file (apply_summary creates open items).
     db.refresh(meeting)
-    for item, a in zip(meeting.action_items, spec.get("action_items", [])):
+    for item, a in zip(meeting.action_items, spec.get("action_items", []), strict=True):
         if a.get("completed"):
             item.is_completed = True
             item.completed_at = started + timedelta(days=1)

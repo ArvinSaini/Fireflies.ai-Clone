@@ -11,10 +11,21 @@ import re
 from collections import Counter
 
 from app.services.ai.text_utils import (
-    content_words, phrase_counts, sentences, stem, titlecase, top_keywords, truncate_words,
+    content_words,
+    phrase_counts,
+    sentences,
+    stem,
+    titlecase,
+    top_keywords,
+    truncate_words,
 )
 from app.services.ai.types import (
-    ActionItemDraft, AnswerDraft, ChapterDraft, Line, MeetingContext, SummaryDraft,
+    ActionItemDraft,
+    AnswerDraft,
+    ChapterDraft,
+    Line,
+    MeetingContext,
+    SummaryDraft,
 )
 
 ACTION_VERBS = frozenset("""

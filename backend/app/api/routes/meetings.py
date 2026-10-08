@@ -10,8 +10,16 @@ from app.api.presenters import meeting_detail, meeting_list_item
 from app.models import TopicTracker, TranscriptSegment
 from app.schemas.common import Page
 from app.schemas.meeting import (
-    BulkMeetingAction, MeetingAnalytics, MeetingCreate, MeetingDetail, MeetingListItem, MeetingUpdate, SortKey,
-    SummaryOut, SummaryUpdate, TranscriptFormat,
+    BulkMeetingAction,
+    MeetingAnalytics,
+    MeetingCreate,
+    MeetingDetail,
+    MeetingListItem,
+    MeetingUpdate,
+    SortKey,
+    SummaryOut,
+    SummaryUpdate,
+    TranscriptFormat,
 )
 from app.schemas.transcript import SegmentOut
 from app.services import export as export_service
@@ -49,10 +57,10 @@ def list_meetings(
     user: CurrentUser,
     q: str | None = Query(None, description="Matches title or participant name/email"),
     scope: Literal["all", "mine", "shared"] = Query("all", description="'mine' = hosted by me, 'shared' = attended"),
-    host_id: Annotated[list[int], Query()] = [],
-    participant_id: Annotated[list[int], Query()] = [],
-    channel_id: Annotated[list[int], Query()] = [],
-    platform: Annotated[list[str], Query(description="Captured from")] = [],
+    host_id: Annotated[list[int] | None, Query()] = None,
+    participant_id: Annotated[list[int] | None, Query()] = None,
+    channel_id: Annotated[list[int] | None, Query()] = None,
+    platform: Annotated[list[str] | None, Query(description="Captured from")] = None,
     date_from: date | None = None,
     date_to: date | None = None,
     min_duration: int | None = Query(None, ge=0, description="minutes"),
@@ -62,8 +70,8 @@ def list_meetings(
     page_size: int = Query(20, ge=1, le=100),
 ):
     filters = svc.MeetingFilters(
-        q=q, scope=scope, host_ids=host_id, participant_ids=participant_id, channel_ids=channel_id,
-        platforms=platform, date_from=date_from, date_to=date_to,
+        q=q, scope=scope, host_ids=host_id or [], participant_ids=participant_id or [], channel_ids=channel_id or [],
+        platforms=platform or [], date_from=date_from, date_to=date_to,
         min_duration_min=min_duration, max_duration_min=max_duration, sort=sort,
     )
     rows, total = svc.list_meetings(db, user, filters, page, page_size)

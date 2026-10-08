@@ -5,7 +5,14 @@ from sqlalchemy import select
 from app.api.deps import CurrentUser, DbSession, OwnedMeeting
 from app.models import Bookmark, Comment, Meeting, MeetingParticipant, Soundbite, TranscriptSegment
 from app.schemas.transcript import (
-    BookmarkCreate, BookmarkOut, CommentCreate, CommentOut, SegmentOut, SegmentUpdate, SoundbiteCreate, SoundbiteOut,
+    BookmarkCreate,
+    BookmarkOut,
+    CommentCreate,
+    CommentOut,
+    SegmentOut,
+    SegmentUpdate,
+    SoundbiteCreate,
+    SoundbiteOut,
 )
 from app.services.people import get_or_create_participant
 

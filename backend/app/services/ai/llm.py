@@ -10,7 +10,12 @@ from pydantic import BaseModel, Field
 
 from app.services.ai.heuristic import fmt_ms
 from app.services.ai.types import (
-    ActionItemDraft, AnswerDraft, ChapterDraft, Line, MeetingContext, SummaryDraft,
+    ActionItemDraft,
+    AnswerDraft,
+    ChapterDraft,
+    Line,
+    MeetingContext,
+    SummaryDraft,
 )
 
 

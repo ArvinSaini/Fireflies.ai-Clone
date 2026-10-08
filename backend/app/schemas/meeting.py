@@ -4,7 +4,12 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from app.schemas.common import (
-    ActionItemOut, ChannelOut, MeetingParticipantOut, ORMModel, ParticipantIn, ParticipantOut,
+    ActionItemOut,
+    ChannelOut,
+    MeetingParticipantOut,
+    ORMModel,
+    ParticipantIn,
+    ParticipantOut,
 )
 
 Platform = Literal["zoom", "google_meet", "teams", "upload", "paste", "manual"]
