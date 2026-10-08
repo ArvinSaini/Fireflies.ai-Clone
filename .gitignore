@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+backend/*.db
+backend/*.db-*
+backend/.env
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+frontend/.env*.local
+*.tsbuildinfo
+next-env.d.ts
+
+# Misc
+.DS_Store
+.vscode/
+.idea/
+*.log
+# Assignment brief (kept local)
+*.docx
