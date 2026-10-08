@@ -1,0 +1,556 @@
+{
+  "title": "Weekly Engineering Standup",
+  "days_ago": 0,
+  "start_hour": 9,
+  "start_minute": 30,
+  "platform": "zoom",
+  "tags": [
+    "Engineering",
+    "Standup"
+  ],
+  "participants": [
+    {
+      "name": "Marcus Johnson",
+      "email": "marcus.johnson@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Aisha Rahman",
+      "email": "aisha.rahman@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Ben Carter",
+      "email": "ben.carter@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 0.0,
+      "end": 21.4,
+      "text": "Morning, everyone. Let's keep this tight, we've got about fifteen minutes. Quick overview first: we're sixty-two percent through committed points for sprint forty-one with four days to go, which is a little behind, mostly because of Tuesday's incident. Let's go around. Aisha, you want to start with the migration?"
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 22.5,
+      "end": 41.1,
+      "text": "Sure. So the workflow schema migration is about seventy percent done. All the new tables are in, the dual-write path is live in staging, and the backfill job is running on the staging copy of production data right now. It's processed about nine million rows overnight."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 41.8,
+      "end": 44.7,
+      "text": "Nice. Any surprises in the backfill?"
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 45.1,
+      "end": 61.7,
+      "text": "One, actually. Workflows with more than five hundred steps are really slow to load in the new schema, like four to six seconds instead of under one. It's the way we're fetching step configs, it's basically an N plus one query problem."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 63.3,
+      "end": 67.2,
+      "text": "How many customers actually have workflows that big?"
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 68.3,
+      "end": 80.3,
+      "text": "I checked yesterday. It's around a hundred and forty workspaces, but a few of them are big accounts. Northwind has a couple of seven-hundred-step workflows, for example."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 80.8,
+      "end": 89.5,
+      "text": "Okay, then we definitely can't ship a regression there. Northwind is in the middle of an expansion conversation right now."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 90.9,
+      "end": 95.1,
+      "text": "Aisha, what do you think the fix looks like?"
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 96.5,
+      "end": 115.3,
+      "text": "I think we batch-load the step configs in a single query and cache them per workflow version. I've sketched it out. It's maybe two days of work, plus testing. I'll have a fix up for review by Thursday and run the load test against the Northwind-sized fixtures."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 115.9,
+      "end": 120.6,
+      "text": "Perfect. And does that put October 24th at risk?"
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 122.1,
+      "end": 133.3,
+      "text": "Not if nothing else blows up. I'd say we're still on track, but I'd like to not get pulled into the integrations bugs this week if possible."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 134.4,
+      "end": 142.7,
+      "text": "Done, I'll shield you. Ben, can you pick up the two integrations bugs that were assigned to Aisha?"
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 143.1,
+      "end": 147.9,
+      "text": "Yeah, no problem. Send me the ticket numbers after this."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 148.2,
+      "end": 157.3,
+      "text": "From the product side, is there anything we need to communicate to customers about the migration? Like will there be any downtime?"
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 158.4,
+      "end": 169.9,
+      "text": "There shouldn't be. The plan is a zero-downtime cutover using the dual-write path. Worst case, workflow editing is read-only for a couple of minutes during the switch."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 171.4,
+      "end": 182.9,
+      "text": "Okay, then I'd still like a heads-up note for the top twenty accounts, just in case. I'll draft something and send it to Marcus for a technical review."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 184.2,
+      "end": 186.2,
+      "text": "Cool. Ben, SSO spike?"
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 187.3,
+      "end": 206.4,
+      "text": "So, good news. The Okta SAML flow works end to end in the spike branch. You can log in, we do just-in-time user provisioning, and the role mapping from Okta groups works for the three default roles. I haven't tested Azure AD or Google Workspace yet, that's next."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 207.6,
+      "end": 214.0,
+      "text": "That's great. How much of the spike code is reusable for the real thing?"
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 214.9,
+      "end": 229.2,
+      "text": "Honestly, most of it. I used the library we talked about, so it's fairly clean. The main thing that's hacky is the configuration UI, which right now is literally a JSON blob in the admin panel."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 230.7,
+      "end": 239.1,
+      "text": "Yeah, we'll need a real settings page for that. I think Priya has it in her queue for next sprint."
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 239.6,
+      "end": 253.7,
+      "text": "The bigger open question is whether a workspace can have more than one identity provider. A couple of big customers have subsidiaries on different IdPs. Supporting multiple adds maybe a week of work."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 255.3,
+      "end": 258.5,
+      "text": "What's the product call on that, Sarah?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 259.0,
+      "end": 274.0,
+      "text": "My gut says single IdP for GA and multiple as a fast follow. But let me check with David on how many deals in the pipeline actually need multiple. I'll come back with an answer by Friday."
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 275.0,
+      "end": 295.9,
+      "text": "That works. I'll keep the data model flexible either way so we're not painting ourselves into a corner. Basically the identity provider config becomes its own table keyed by workspace, instead of a column on the workspace record, so going from one to many later is just a UI change."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 296.8,
+      "end": 307.8,
+      "text": "That's smart. And just so I understand the user experience, if someone in an SSO-enabled workspace tries to log in with a password, what happens?"
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 309.1,
+      "end": 326.6,
+      "text": "Admins get a toggle. They can enforce SSO, which disables password login for everyone except a break-glass owner account, or they can leave it optional during the rollout period. Most enterprise customers will want enforcement turned on eventually, but they'll test with optional first."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 327.9,
+      "end": 340.7,
+      "text": "Let's make sure that break-glass account is really clearly explained in the settings page. That's exactly the kind of thing support gets panicked tickets about at two in the morning."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 341.2,
+      "end": 344.2,
+      "text": "Good call. Anything else on SSO?"
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 344.7,
+      "end": 356.1,
+      "text": "Just that I'm going to start Azure AD testing tomorrow. I need a test tenant, so, Marcus, can you approve the Azure subscription request I put in?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 356.7,
+      "end": 360.3,
+      "text": "Yeah, I'll approve it right after this call."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 360.9,
+      "end": 376.7,
+      "text": "Before we get to the incident, can I get a quick pulse on the AI builder infrastructure? I'm putting together the beta plan this week and I want to make sure I'm not promising things we can't support."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 377.5,
+      "end": 394.5,
+      "text": "Sure. So the prompt-to-workflow service is deployed in staging behind the feature flag. Ben and I paired on it last week. It works, but latency is the main issue. Median generation time is about six and a half seconds right now."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 395.7,
+      "end": 405.3,
+      "text": "Hmm, that feels slow. In the research sessions people were fine waiting, but six seconds with no feedback feels broken. What's a realistic target?"
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 405.7,
+      "end": 422.8,
+      "text": "I think under four seconds is doable. Most of the time is spent fetching the connector catalog and stuffing it into the prompt. If we pre-filter the catalog to the top fifty connectors relevant to the prompt, the input gets way smaller."
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 423.7,
+      "end": 438.9,
+      "text": "We could also stream the draft back step by step, so the user sees the workflow being built on the canvas. That would make it feel a lot faster even if total time stays the same."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 440.2,
+      "end": 451.5,
+      "text": "Oh, I really like that. Priya would love that too, it makes the whole thing feel alive. Let's assume streaming is part of the beta experience."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 452.2,
+      "end": 463.3,
+      "text": "What about cost controls? If we have twenty beta customers and one of them starts scripting the endpoint, could that run up a big bill?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 464.4,
+      "end": 481.7,
+      "text": "Right now, yes, there's no per-workspace limit. We need rate limiting and per-workspace cost tracking before beta. That's probably three or four days of work. I'll scope it this week and put it on the board for next sprint."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 482.9,
+      "end": 494.5,
+      "text": "Great. And let's make sure the cost tracking feeds into a dashboard I can actually look at. I want to see generations per workspace per day during the beta."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 495.3,
+      "end": 501.6,
+      "text": "Makes sense. We can pipe it into the existing Grafana setup, that's the quickest option."
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 502.4,
+      "end": 513.4,
+      "text": "One more thing on the beta: on-call. If the AI service goes down at night, who gets paged? Right now it's not in any rotation."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 514.8,
+      "end": 526.3,
+      "text": "Good catch. Let's add it to the platform rotation for now, and we'll revisit once we know what the failure modes actually look like. I'll update PagerDuty today."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 527.5,
+      "end": 543.9,
+      "text": "Okay, last thing. Tuesday's incident. For anyone who missed it, a config change set the webhook retry backoff to zero, so failed webhooks retried instantly and flooded the queue. About thirty-two hundred executions were delayed, for around forty-seven minutes."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 545.4,
+      "end": 548.3,
+      "text": "Was there any data loss?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 549.8,
+      "end": 560.4,
+      "text": "No data loss, thankfully. Everything eventually executed. But nine customers filed tickets, and one of them was pretty upset because their payroll approval workflow ran late."
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 560.8,
+      "end": 576.7,
+      "text": "I can speak to the timeline a bit. The alert we got was on error rate, not on queue depth. So by the time it fired, the queue had already been backed up for about twenty minutes."
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 578.3,
+      "end": 585.4,
+      "text": "Yeah, we really need queue-depth alerting. That would've caught it in two or three minutes."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 587.0,
+      "end": 599.4,
+      "text": "Agreed. I want a proper postmortem written up. Ben, since you were on call, can you own the postmortem doc? Blameless format, timeline, root cause, and action items."
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 600.8,
+      "end": 607.7,
+      "text": "Yep, I'll have the postmortem draft ready by Monday and schedule a review for Tuesday."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 609.1,
+      "end": 622.0,
+      "text": "And I want queue-depth alerting in place before the AI builder beta, because that's going to change our traffic patterns quite a bit. I'll add it to next sprint as a must-have."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 622.9,
+      "end": 631.7,
+      "text": "Also, can we add validation on that config so a zero backoff just isn't possible? That feels like the cheapest fix."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 632.5,
+      "end": 639.1,
+      "text": "Yeah, good idea. That's a ten-line change. I'll ask the platform squad to ship it this week."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 640.1,
+      "end": 652.5,
+      "text": "Should we proactively reach out to the nine customers who filed tickets? Especially the payroll one. I think a personal note from us would go a long way."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 653.4,
+      "end": 666.1,
+      "text": "Yes, let's do that. Once the postmortem is done, I'll send a short summary to those nine accounts myself, explaining what happened and what we're changing so it doesn't happen again."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 666.7,
+      "end": 674.2,
+      "text": "That'd be great. Customers really appreciate hearing it from someone senior rather than a canned status page update."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 675.3,
+      "end": 698.6,
+      "text": "Okay, let me recap. Aisha's on the migration and the large-workflow fix, Ben picks up her integrations bugs plus Azure AD testing and the postmortem, Sarah checks on multi-IdP demand and drafts the customer note, and I'll handle the Azure approval, rate limiting scope, and the alerting ticket. Arvin will follow up with the affected customers."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 699.8,
+      "end": 702.0,
+      "text": "Sounds right to me."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 702.4,
+      "end": 710.9,
+      "text": "Thanks, everyone. Really solid progress despite the incident. Aisha, shout if you need anything to stay on track for the 24th."
+    },
+    {
+      "speaker": "aisha.rahman@acme.io",
+      "start": 711.9,
+      "end": 713.5,
+      "text": "Will do. Thanks."
+    },
+    {
+      "speaker": "ben.carter@acme.io",
+      "start": 714.4,
+      "end": 715.9,
+      "text": "Thanks, all."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 717.1,
+      "end": 721.3,
+      "text": "Alright, that's it. See you all on Slack."
+    }
+  ],
+  "summary": {
+    "overview": "Marcus ran the weekly engineering standup covering progress on the workflow schema migration, the SAML SSO spike, and a production incident from Tuesday. Aisha reported the migration is 70% complete with backfill running on staging, and flagged a performance regression on workflows with more than 500 steps. Ben shared that the Okta integration works end to end in a spike, but the team still needs a decision on supporting multiple identity providers per workspace. The group reviewed the webhook retry incident that delayed about 3,200 executions, agreed on a postmortem, and decided to add queue-depth alerting before the AI builder beta.",
+    "keywords": [
+      "schema migration",
+      "SAML SSO",
+      "Okta",
+      "webhook retries",
+      "postmortem",
+      "queue alerting",
+      "performance regression",
+      "sprint goals"
+    ],
+    "notes": [
+      {
+        "heading": "🏁 Sprint Status",
+        "start": 0.0,
+        "bullets": [
+          "Sprint 41 is at 62% of committed points with four days remaining",
+          "The schema migration and SSO spike are the two highest-priority items",
+          "One unplanned incident consumed roughly a day and a half of engineering time"
+        ]
+      },
+      {
+        "heading": "🗄️ Schema Migration",
+        "start": 90.9,
+        "bullets": [
+          "Migration is about 70% complete; dual-write is live on staging",
+          "Backfill processed roughly 9 million rows overnight",
+          "Workflows with 500+ steps load in 4 to 6 seconds due to an N+1 query; about 140 workspaces affected",
+          "Target remains October 24 for completion"
+        ]
+      },
+      {
+        "heading": "🔐 SSO Spike",
+        "start": 184.2,
+        "bullets": [
+          "Okta SAML login works end to end in the spike branch",
+          "Azure AD and Google Workspace still need testing",
+          "Open decision: support one or multiple identity providers per workspace"
+        ]
+      },
+      {
+        "heading": "🤖 AI Builder Readiness",
+        "start": 360.9,
+        "bullets": [
+          "Prompt-to-workflow service is running in staging behind a feature flag",
+          "Median generation latency is about 6.5 seconds, with a goal of under 4",
+          "Per-workspace rate limits and cost tracking are needed before the November 20 beta"
+        ]
+      },
+      {
+        "heading": "🚨 Webhook Incident",
+        "start": 527.5,
+        "bullets": [
+          "A misconfigured retry policy caused a backlog of about 3,200 delayed executions on Tuesday",
+          "Delays lasted roughly 47 minutes before the queue drained",
+          "No data loss, but nine customers filed support tickets",
+          "Root cause: retry backoff set to zero during a config change"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Kickoff and sprint status",
+      "start": 0.0,
+      "end": 90.9,
+      "description": "Marcus opens the standup and reviews where the sprint stands overall."
+    },
+    {
+      "title": "Schema migration deep dive",
+      "start": 90.9,
+      "end": 184.2,
+      "description": "Aisha details the migration progress and the large-workflow performance regression."
+    },
+    {
+      "title": "SSO spike update",
+      "start": 184.2,
+      "end": 360.9,
+      "description": "Ben shares results of the Okta SSO spike and the open question on multiple identity providers."
+    },
+    {
+      "title": "AI builder beta readiness",
+      "start": 360.9,
+      "end": 527.5,
+      "description": "Arvin checks on infrastructure readiness for the AI builder beta and the team discusses rate limits and cost tracking."
+    },
+    {
+      "title": "Tuesday incident review",
+      "start": 527.5,
+      "end": 640.1,
+      "description": "The team reviews the webhook retry incident and agrees on a postmortem and alerting."
+    },
+    {
+      "title": "Wrap-up",
+      "start": 640.1,
+      "end": 721.3,
+      "description": "Marcus recaps priorities and closes the standup."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Fix the N+1 query on large workflows and load-test against Northwind-sized fixtures",
+      "assignee": "aisha.rahman@acme.io",
+      "start": 96.5,
+      "completed": false,
+      "due_in_days": 2
+    },
+    {
+      "text": "Draft a migration heads-up note for the top 20 accounts and send it to Marcus for review",
+      "assignee": "sarah.chen@acme.io",
+      "start": 171.4,
+      "completed": false,
+      "due_in_days": 5
+    },
+    {
+      "text": "Confirm with David how many pipeline deals need multiple identity providers per workspace",
+      "assignee": "sarah.chen@acme.io",
+      "start": 259.0,
+      "completed": false,
+      "due_in_days": 3
+    },
+    {
+      "text": "Scope per-workspace rate limiting and cost tracking for the AI builder before beta",
+      "assignee": "marcus.johnson@acme.io",
+      "start": 464.4,
+      "completed": false,
+      "due_in_days": 6
+    },
+    {
+      "text": "Write the blameless postmortem for the webhook retry incident and schedule a review",
+      "assignee": "ben.carter@acme.io",
+      "start": 600.8,
+      "completed": false,
+      "due_in_days": 4
+    },
+    {
+      "text": "Send a personal incident summary to the nine affected customers after the postmortem",
+      "assignee": "arvin@acme.io",
+      "start": 653.4,
+      "completed": false,
+      "due_in_days": 7
+    }
+  ]
+}

@@ -1,0 +1,557 @@
+{
+  "title": "Customer Discovery Call — Northwind Logistics",
+  "days_ago": 4,
+  "start_hour": 14,
+  "start_minute": 0,
+  "platform": "zoom",
+  "tags": [
+    "Customer",
+    "Sales",
+    "Product"
+  ],
+  "participants": [
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "David Kim",
+      "email": "david.kim@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Tom Becker",
+      "email": "tom.becker@northwindlogistics.com",
+      "role": "attendee"
+    },
+    {
+      "name": "Lisa Ortiz",
+      "email": "lisa.ortiz@northwindlogistics.com",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "arvin@acme.io",
+      "start": 0.0,
+      "end": 20.4,
+      "text": "Hi Tom, hi Lisa, thanks so much for making the time. I know it's a busy week for you with peak season ramping up. I'm Arvin, I lead product at Acme, and I've got David, who you know, and Sarah, one of our product managers, on the call as well."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 21.6,
+      "end": 33.8,
+      "text": "Thanks for having us. Yeah, peak season is, uh, definitely here. Lisa and I have about forty-five minutes, but honestly this is a priority for us, so happy to dig in."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 35.3,
+      "end": 55.4,
+      "text": "Great to see you both again. Just to set context for Arvin and Sarah, Northwind has been on Acme Flow for about fourteen months now, with sixty seats on the Business plan, mostly in the operations team. And we've been talking about expanding to the broader company."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 56.0,
+      "end": 72.6,
+      "text": "Right. So for context, we're a mid-sized third-party logistics company. Four regional hubs, around twelve hundred employees, and we move about eighteen thousand shipments a week. Operations is where Acme Flow started, and it's become pretty central to how we work."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 73.4,
+      "end": 87.7,
+      "text": "I own the operations systems side, so I'm basically the person who builds and maintains most of the workflows. Me and two analysts. Right now we've got, I think, three hundred and forty active workflows in production."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 88.9,
+      "end": 98.0,
+      "text": "Wow, that's a lot. Can you walk us through what the most important ones actually do? I'd love to understand the day-to-day."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 98.6,
+      "end": 122.2,
+      "text": "Sure. The big three are shipment exceptions, carrier invoicing, and driver onboarding. Shipment exceptions is the crown jewel. When a shipment is delayed or damaged, our TMS fires an event, and Acme Flow figures out who needs to know, opens a ticket, notifies the customer, and escalates if it isn't resolved in four hours."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 123.5,
+      "end": 135.1,
+      "text": "That one workflow alone, we estimate, saves the team about thirty hours a week. Before, it was people refreshing a dashboard and sending emails by hand. It was chaos."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 136.3,
+      "end": 141.7,
+      "text": "That's amazing to hear. And carrier invoicing, what does that look like?"
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 142.1,
+      "end": 161.1,
+      "text": "So carriers send us invoices, usually PDFs, sometimes EDI. We match them against the rate we agreed on and the actual shipment. If the difference is more than two percent, it routes to an analyst for review. It's about four thousand invoices a month."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 162.2,
+      "end": 169.6,
+      "text": "And where does it hurt? What's the most frustrating part of using Acme Flow for you right now?"
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 170.4,
+      "end": 191.9,
+      "text": "Honestly, the editor on really big workflows. The exception workflow is about seven hundred steps now, and it takes, like, five or six seconds to open, and then dragging anything around is laggy. I've actually split it into sub-workflows just to keep it usable, which kind of makes it harder to understand."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 192.6,
+      "end": 211.7,
+      "text": "Yeah, that's really useful, and I'll be honest with you, we know about it. Our engineering team identified the root cause this week. It's a query issue on large workflows, and we have a fix in progress that should land in the next couple of weeks."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 212.7,
+      "end": 218.5,
+      "text": "Oh, that's great to hear. That would be a big quality-of-life improvement."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 219.2,
+      "end": 221.4,
+      "text": "Anything else beyond the performance?"
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 222.8,
+      "end": 239.6,
+      "text": "Version history, for sure. When one of my analysts changes something and it breaks, there's no easy way to see what changed or roll back. Last month someone changed an escalation threshold and we didn't notice for two days."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 240.5,
+      "end": 245.8,
+      "text": "Got it. So a diff view and one-click rollback would help a lot."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 246.5,
+      "end": 254.7,
+      "text": "Exactly that. Even just a list of who changed what and when would be a huge step up."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 255.5,
+      "end": 265.4,
+      "text": "What about integrations? Which systems are you connecting Acme Flow to today, and are there any you wish you could connect but can't?"
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 266.4,
+      "end": 282.8,
+      "text": "Today it's mainly our TMS, which is MercuryGate, plus NetSuite for finance, Zendesk for customer tickets, and Slack and Outlook for notifications. MercuryGate we connect through webhooks and a custom HTTP step, because there's no native connector."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 284.0,
+      "end": 292.2,
+      "text": "How painful is the custom HTTP setup? Is it something your analysts can maintain, or is it mostly you?"
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 293.0,
+      "end": 308.4,
+      "text": "Mostly me, to be honest. The authentication tokens expire every ninety days and when they do, about forty workflows break at once. I have a calendar reminder for it now, which is, you know, not ideal."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 309.5,
+      "end": 326.7,
+      "text": "Oof. Yeah, that's exactly the kind of thing a native connector should handle for you. We're putting together a curated set of connectors for Q4, and MercuryGate is a really interesting candidate given how many logistics customers we have."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 328.1,
+      "end": 338.0,
+      "text": "For what it's worth, at least three other logistics accounts in my book use MercuryGate. Northwind wouldn't be the only one asking."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 339.3,
+      "end": 349.0,
+      "text": "That's a strong signal. I'll add MercuryGate to the connector shortlist we're finalizing this week and flag it as a logistics vertical priority."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 349.6,
+      "end": 359.0,
+      "text": "That would honestly be amazing. If you need a test environment, we can probably give you access to our sandbox instance."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 359.5,
+      "end": 377.3,
+      "text": "And just to add the business side of it: when those forty workflows break, exceptions stop getting routed. Last time it happened, we had about two hundred shipments where customers weren't notified for most of a morning. That's real money and real customer goodwill."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 378.7,
+      "end": 387.0,
+      "text": "That's really helpful context. It moves this from a convenience to a reliability issue, which is how we'll treat it."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 388.4,
+      "end": 401.6,
+      "text": "Tom, let's talk about the expansion. Last time we spoke, you mentioned going from sixty to somewhere around two hundred and fifty seats. What does that path look like on your side?"
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 403.1,
+      "end": 423.7,
+      "text": "So the plan is to roll it out to finance and customer success next. Both teams have seen what ops has done and they're asking for it. The problem is our IT security team. They did a vendor review in August and they won't approve more seats without SSO."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 425.0,
+      "end": 428.0,
+      "text": "Which identity provider are you on?"
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 429.4,
+      "end": 444.1,
+      "text": "Azure AD. Everything goes through Azure AD. And they also want audit logs. Specifically, they need to see who accessed what, who changed workflows, and they want at least twelve months of retention for our SOC 2 audit."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 445.0,
+      "end": 458.1,
+      "text": "That's really helpful, and it lines up with what we're building. SAML SSO is planned for general availability by the end of November, and audit logs are planned for mid-December."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 459.6,
+      "end": 474.2,
+      "text": "Okay. The tricky part is our budget timing. The expansion budget gets decided in mid-November, and if security hasn't signed off by then, it'll probably slip to next fiscal year, which starts in April."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 474.8,
+      "end": 484.6,
+      "text": "Understood. What would security need to see by mid-November to feel comfortable, even if GA is a couple of weeks later?"
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 485.1,
+      "end": 496.6,
+      "text": "I think if they could test SSO with our Azure tenant and see documentation on the audit log design, that would probably be enough to get a conditional approval."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 497.3,
+      "end": 511.8,
+      "text": "We can absolutely do that. Our engineers are about to start Azure AD testing. Would you be open to joining an early-access program for SSO? You'd get it in your workspace before general availability."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 513.2,
+      "end": 516.8,
+      "text": "Yes, absolutely. That would really help us."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 517.5,
+      "end": 531.3,
+      "text": "Great. I'll get you enrolled in SSO early access and make sure our engineering team sets up a session with your IT folks to configure it. Let's target the first week of November."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 532.4,
+      "end": 541.1,
+      "text": "That would be great. I can be the point of contact on our side and loop in our security engineer, Rahul."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 542.4,
+      "end": 558.9,
+      "text": "And Tom, I'll put together a security packet for your IT team: our SOC 2 report, the pen test summary, the data processing agreement, and a short write-up on the audit log design. I'll get that over to you by Friday."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 560.1,
+      "end": 563.4,
+      "text": "Perfect, that's exactly what they'll ask for."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 564.1,
+      "end": 579.3,
+      "text": "One more thing I wanted to show you, if you have a few minutes. We're building an AI-assisted workflow builder. You describe what you want in plain English, and it drafts the workflow for you."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 580.1,
+      "end": 592.7,
+      "text": "Oh, interesting. That could actually be really relevant for finance. They're not technical at all. Lisa's team is going to be swamped if every finance request comes through her."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 593.0,
+      "end": 600.7,
+      "text": "Yeah, that's my biggest fear with the expansion, honestly. Me becoming the bottleneck for two hundred people."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 601.2,
+      "end": 615.5,
+      "text": "That's exactly the problem we're trying to solve. Something like \"when an invoice over ten thousand dollars arrives, route it to the controller for approval and log it in NetSuite\" should produce a working draft."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 617.0,
+      "end": 626.6,
+      "text": "My only concern is governance. I don't want two hundred people publishing workflows that touch our TMS without someone reviewing them."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 627.3,
+      "end": 639.7,
+      "text": "Totally fair. We're building a review step into the beta specifically for that. Workflows that touch sensitive systems can require approval from a workspace admin before they go live."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 640.1,
+      "end": 644.2,
+      "text": "Okay, that makes me a lot more comfortable."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 645.3,
+      "end": 658.3,
+      "text": "We're starting a private beta around November 20th with about twenty customers. Would Northwind be interested in being one of them? Your feedback, especially on governance, would be incredibly valuable."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 658.7,
+      "end": 663.6,
+      "text": "Yeah, count us in. Lisa, you'd be the lead on that?"
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 664.6,
+      "end": 666.1,
+      "text": "Definitely."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 666.6,
+      "end": 678.0,
+      "text": "Great. I'll send Lisa the beta invite and a short questionnaire about the finance use cases, so we can make sure the connectors they need are covered."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 679.1,
+      "end": 698.6,
+      "text": "So, for next steps. I'll put together a proposal for two hundred and fifty seats. Given the SSO and audit log requirements, it'd be on our Enterprise plan. I'll include a couple of options with different contract lengths. I'll send it over by the end of next week."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 699.0,
+      "end": 708.4,
+      "text": "Sounds good. If you can make the pricing work for a two-year term, that's easier to get through our CFO."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 708.8,
+      "end": 725.4,
+      "text": "Noted. I'll make sure the two-year option is the most attractive one. And we can phase the seat ramp too, so you're not paying for all two hundred and fifty on day one while finance and customer success are still onboarding."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 726.2,
+      "end": 741.4,
+      "text": "Oh, that would help a lot. Realistically, finance would come on in January and customer success in March. So a ramp of maybe a hundred and twenty seats, then the full number by the second quarter."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 742.6,
+      "end": 751.8,
+      "text": "That's very doable. I'll model it as a quarterly ramp and include it as the default option in the proposal."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 752.6,
+      "end": 762.9,
+      "text": "And could someone let me know when the performance fix ships? I'd like to merge my sub-workflows back together once it does."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 763.5,
+      "end": 772.0,
+      "text": "Yes, I'll keep you posted directly. I'll ping you on the shared Slack channel as soon as it's in production."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 773.4,
+      "end": 786.1,
+      "text": "Tom, Lisa, this was incredibly helpful. Thank you both for being so candid. We'll follow up with everything we discussed, and we'll see you in early November with your IT team."
+    },
+    {
+      "speaker": "tom.becker@northwindlogistics.com",
+      "start": 786.8,
+      "end": 795.0,
+      "text": "Thanks, everyone. Really appreciate how responsive you've been. Good luck with peak season prep on your side too, ha."
+    },
+    {
+      "speaker": "lisa.ortiz@northwindlogistics.com",
+      "start": 795.7,
+      "end": 797.6,
+      "text": "Thanks, all. Talk soon."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 798.3,
+      "end": 801.3,
+      "text": "Take care, both of you."
+    }
+  ],
+  "summary": {
+    "overview": "Arvin, David and Sarah met with Tom Becker and Lisa Ortiz from Northwind Logistics to understand how their operations team uses Acme Flow and what is blocking an expansion from 60 to roughly 250 seats. Northwind runs about 340 active workflows, mostly around shipment exceptions, carrier invoicing and driver onboarding, and their biggest pain is the slow editor on very large workflows and the lack of SSO. Tom shared that their IT security review requires SAML SSO and audit logs before any expansion is approved, with a budget decision due in mid-November. The team offered Northwind a spot in the AI builder beta and the SSO early-access program, and agreed to send a proposal and a security packet.",
+    "keywords": [
+      "Northwind Logistics",
+      "seat expansion",
+      "shipment exceptions",
+      "carrier invoicing",
+      "SAML SSO",
+      "audit logs",
+      "large workflows",
+      "security review",
+      "AI builder beta"
+    ],
+    "notes": [
+      {
+        "heading": "🤝 Account Context",
+        "start": 0.0,
+        "bullets": [
+          "Northwind has 60 seats today and is evaluating expansion to about 250",
+          "Operations team runs roughly 340 active workflows across 4 regional hubs",
+          "Tom Becker is VP of Operations; Lisa Ortiz manages operations systems"
+        ]
+      },
+      {
+        "heading": "🔧 Current Usage & Pain Points",
+        "start": 98.6,
+        "bullets": [
+          "Top workflows: shipment exception handling, carrier invoice reconciliation, and driver onboarding",
+          "Exception workflow alone saves an estimated 30 hours per week",
+          "Editor becomes very slow on workflows over 500 steps; Lisa has split some into sub-workflows to cope",
+          "Lack of version history makes changes risky"
+        ]
+      },
+      {
+        "heading": "🛡️ Expansion Blockers",
+        "start": 388.4,
+        "bullets": [
+          "IT security requires SAML SSO with Azure AD before approving more seats",
+          "Audit logs with at least 12 months of retention are required for compliance",
+          "Budget decision for the expansion is expected by mid-November",
+          "Finance and customer success teams are the next groups to onboard"
+        ]
+      },
+      {
+        "heading": "🤖 AI Builder Interest",
+        "start": 564.1,
+        "bullets": [
+          "Northwind is enthusiastic about the AI builder for onboarding finance and CS users who are not technical",
+          "Lisa wants AI-drafted workflows to go through her team's review before publishing",
+          "Northwind accepted an invite to the November AI builder beta"
+        ]
+      },
+      {
+        "heading": "📌 Next Steps",
+        "start": 679.1,
+        "bullets": [
+          "David will send an expansion proposal for 250 seats, including Enterprise plan pricing",
+          "Follow-up call scheduled for the first week of November with Northwind IT",
+          "Sarah will share the large-workflow performance fix timeline with Lisa"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Introductions and context",
+      "start": 0.0,
+      "end": 98.6,
+      "description": "Both teams introduce themselves and Tom outlines Northwind's operations footprint."
+    },
+    {
+      "title": "Current workflows and pain points",
+      "start": 98.6,
+      "end": 388.4,
+      "description": "Lisa walks through Northwind's key workflows and where Acme Flow falls short today."
+    },
+    {
+      "title": "Expansion requirements",
+      "start": 388.4,
+      "end": 564.1,
+      "description": "Tom explains the security and IT requirements blocking expansion to 250 seats."
+    },
+    {
+      "title": "AI builder and future needs",
+      "start": 564.1,
+      "end": 679.1,
+      "description": "Sarah previews the AI builder and Northwind shares how finance might use it."
+    },
+    {
+      "title": "Next steps",
+      "start": 679.1,
+      "end": 801.3,
+      "description": "The teams agree on proposal timing and a follow-up call before the budget decision."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Enroll Northwind in SSO early access and set up an Azure AD configuration session with their IT team",
+      "assignee": "arvin@acme.io",
+      "start": 517.5,
+      "completed": false,
+      "due_in_days": 10
+    },
+    {
+      "text": "Send Northwind the security packet with SOC 2 report, pen test summary, DPA and audit log design notes",
+      "assignee": "david.kim@acme.io",
+      "start": 542.4,
+      "completed": true,
+      "due_in_days": -1
+    },
+    {
+      "text": "Send Lisa the AI builder beta invite and a questionnaire about finance use cases",
+      "assignee": "sarah.chen@acme.io",
+      "start": 666.6,
+      "completed": false,
+      "due_in_days": 3
+    },
+    {
+      "text": "Send Northwind an expansion proposal for 250 seats on the Enterprise plan with contract length options",
+      "assignee": "david.kim@acme.io",
+      "start": 679.1,
+      "completed": false,
+      "due_in_days": 3
+    },
+    {
+      "text": "Notify Lisa in the shared Slack channel when the large-workflow performance fix ships",
+      "assignee": "sarah.chen@acme.io",
+      "start": 763.5,
+      "completed": false,
+      "due_in_days": 14
+    }
+  ]
+}

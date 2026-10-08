@@ -1,0 +1,515 @@
+{
+  "title": "Hiring Sync: Senior Frontend Engineer",
+  "days_ago": 17,
+  "start_hour": 11,
+  "start_minute": 30,
+  "platform": "teams",
+  "tags": [
+    "Hiring",
+    "Engineering"
+  ],
+  "participants": [
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "Hannah Lee",
+      "email": "hannah.lee@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Marcus Johnson",
+      "email": "marcus.johnson@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Priya Patel",
+      "email": "priya.patel@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "arvin@acme.io",
+      "start": 0.0,
+      "end": 19.4,
+      "text": "Hi everyone, thanks for making time. This role is really important for us, so I want to make sure we leave today with a decision on the three finalists and a plan to make the process faster. Hannah, do you want to give us the pipeline update first?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 20.9,
+      "end": 40.3,
+      "text": "Sure! So the role's been open for seven weeks now. We've had two hundred and fourteen applicants, I've done thirty-one recruiter screens, Marcus's team has run nine technical screens, and three candidates have completed the full onsite loop. Those are Maya Thompson, Ravi Shah, and Chris O'Neill."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 41.8,
+      "end": 51.0,
+      "text": "That's a pretty steep funnel. Do we know why so few make it from the recruiter screen to the technical screen?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 51.3,
+      "end": 70.6,
+      "text": "A lot of it is compensation. About a third of the people I screened were looking for numbers above our current band, especially candidates coming from big tech. Another chunk just didn't have enough depth in complex front-end state management, which is a hard requirement for the canvas work."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 71.2,
+      "end": 76.7,
+      "text": "How long is it taking candidates to get from application to onsite?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 77.1,
+      "end": 93.6,
+      "text": "Nineteen days on average. Our goal is fourteen. The biggest delays are scheduling the technical screen and waiting for feedback after each round. Honestly, feedback is the bigger issue. Some scorecards are taking three or four days to come in."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 94.2,
+      "end": 102.8,
+      "text": "Oof, that's on me partly. I was late on a couple of the design collaboration interviews during the sprint crunch."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 104.2,
+      "end": 119.2,
+      "text": "It's definitely not just you! It's across the board. But it does matter, because two candidates dropped out of the process last month after accepting other offers while they were waiting to hear from us."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 120.0,
+      "end": 128.2,
+      "text": "Yeah, that's painful. Let's come back to process at the end. First, let's talk about the three finalists."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 129.4,
+      "end": 145.1,
+      "text": "Okay, so let's start with Maya. Quick background: eight years of front-end experience, most recently she led the editor team at a design-tools startup, about a team of five. She's very strong on React and canvas rendering."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 146.4,
+      "end": 170.2,
+      "text": "I did her system design interview, and honestly, it was one of the best I've seen. I asked her to design the rendering layer for a workflow canvas with a thousand nodes, and she immediately went to virtualization, incremental rendering, and how to keep the undo stack from exploding in memory. Strong hire from me."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 171.2,
+      "end": 191.9,
+      "text": "Same from me. In the design collaboration interview, I gave her a messy Figma file with some inconsistent spacing and a missing hover state, and she not only spotted everything, she asked about our design tokens and how we handle dark mode. Honestly, she'd make my life so much easier."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 192.4,
+      "end": 213.2,
+      "text": "I did product sense, and she was great there too. I asked her how she'd improve our onboarding, and she asked about activation metrics before proposing anything. She came up with the idea of in-context app connection on her own, which is literally what Priya has been exploring for the onboarding redesign."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 214.1,
+      "end": 219.2,
+      "text": "Ha, that's a great sign. Any concerns at all from anyone?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 220.7,
+      "end": 240.9,
+      "text": "The only small one is that she's been more of a hands-on lead than a pure IC lately. But she was really clear that she wants to get back to writing code most of the day, and her coding interview was very strong, so I'm not worried."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 242.1,
+      "end": 255.1,
+      "text": "One thing to flag: she told me she has another offer pending, and her decision deadline is about a week from now. So if we want her, we need to move fast."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 256.7,
+      "end": 267.9,
+      "text": "Okay, that settles it for me. Unless anyone disagrees, I want to extend an offer to Maya. Hannah, can you get the offer out by Wednesday?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 269.0,
+      "end": 277.2,
+      "text": "Yes, I can have the offer approved and sent by Wednesday, as long as we agree on the numbers today."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 278.6,
+      "end": 288.1,
+      "text": "Okay, next is Ravi Shah. He's got six years of experience, mostly at a fintech company, and he's strong on testing and performance work."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 288.9,
+      "end": 304.5,
+      "text": "Ravi was solid. His coding interview was very clean, really good test coverage, he talked through edge cases without being prompted. I'd say hire, but not strong hire. He was a bit slower on the open-ended system design question."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 306.1,
+      "end": 324.9,
+      "text": "For product sense, he was more of a \"tell me what to build\" person. When I asked about onboarding, he wanted a spec before proposing anything. That's not necessarily bad, but for this role I think we need someone who'll push back on product decisions."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 325.9,
+      "end": 338.3,
+      "text": "I'd agree with that. He was very polite in the design session, but he didn't really question anything I showed him, even the parts that were deliberately confusing."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 339.8,
+      "end": 350.4,
+      "text": "So, a good engineer, but maybe not the right fit for this particular role, where the person is going to be shaping the canvas experience pretty independently."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 351.7,
+      "end": 364.9,
+      "text": "Yeah, that's how I'd put it. Honestly, I'd consider him for a mid-level or senior role on the platform squad down the road. He'd be great at infrastructure-heavy front-end work."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 366.2,
+      "end": 376.6,
+      "text": "Okay, let's keep Ravi warm as a backup. Hannah, can you let him know we're finalizing and that we'll have an answer within two weeks?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 376.9,
+      "end": 381.3,
+      "text": "Yep, I'll call him tomorrow. And then Chris O'Neill."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 382.3,
+      "end": 401.5,
+      "text": "Chris was a really good communicator, and his portfolio is impressive. But he struggled quite a bit with the state management exercise. He tried to put everything into a single global store, and when I asked about undo and redo, he didn't really have an answer."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 402.7,
+      "end": 412.9,
+      "text": "He was good in product sense, actually, probably second to Maya. But I agree the technical gap is a real concern for this role."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 413.9,
+      "end": 428.8,
+      "text": "Okay, so it's a no on Chris. Hannah, can you make sure both Chris and Ravi get thoughtful feedback, not just a template rejection? Our reputation with candidates matters a lot at our size."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 429.3,
+      "end": 437.9,
+      "text": "Absolutely. I'll write personalized feedback for both of them and have Marcus review the technical parts before I send anything."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 438.9,
+      "end": 453.3,
+      "text": "Okay, so let's talk numbers for Maya. Our senior band is one sixty-five to one eighty-five base. Her current base is around one seventy-five, and her competing offer is, she hinted, close to one ninety."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 454.4,
+      "end": 468.3,
+      "text": "I'd go to the top of the band. She's the best candidate we've seen in seven weeks, and if we lose her to another offer, we're probably looking at another six weeks minimum."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 468.9,
+      "end": 479.4,
+      "text": "Agreed. Let's do one eighty-five base, plus standard senior equity. Can we add a signing bonus to close the gap with the competing offer?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 479.8,
+      "end": 492.4,
+      "text": "We can do up to twenty thousand on a signing bonus without needing James's approval. I'd suggest fifteen thousand, which keeps a bit of room if she comes back to negotiate."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 493.8,
+      "end": 514.8,
+      "text": "That sounds right. Let's go with fifteen. And I'd like to personally do a sell call with her after the offer goes out. Walk her through the roadmap, the AI builder, why the canvas is such a big deal for us. Hannah, can you set that up for later this week?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 515.3,
+      "end": 520.3,
+      "text": "Yep, I'll find a thirty-minute slot with Maya for Thursday or Friday."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 521.7,
+      "end": 537.7,
+      "text": "Could I join that call too? Or maybe have a separate chat with her? I think it'd help to show her how closely design and engineering work together here. That was something she asked a lot about."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 538.4,
+      "end": 548.6,
+      "text": "Great idea. Let's do it as a separate fifteen-minute chat so the sell call stays focused. Hannah, can you add that too?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 549.8,
+      "end": 551.8,
+      "text": "Sure, no problem."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 553.2,
+      "end": 565.8,
+      "text": "Okay, last topic. Process. We lost two candidates last month because we were too slow, and we're nineteen days to onsite against a goal of fourteen. What do we change?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 566.3,
+      "end": 583.8,
+      "text": "First thing, the take-home. It's currently about four hours of work, which is too long for senior candidates who have other options. I'd cut it to two hours and focus it entirely on state management, since that's where we actually learn the most."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 584.7,
+      "end": 592.7,
+      "text": "That would help a lot. I've had at least four candidates tell me the take-home was the reason they withdrew."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 593.6,
+      "end": 608.9,
+      "text": "Okay, I'll rewrite the take-home exercise this week and have the new version ready by next Monday. I'll ask Aisha to do a dry run so we can make sure it actually fits in two hours."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 609.8,
+      "end": 624.8,
+      "text": "The other thing is scorecards. Right now we all write free-form notes, which makes it really hard to compare candidates. Could we have a structured rubric for each interview, with a few specific criteria and a one-to-four score?"
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 625.7,
+      "end": 636.5,
+      "text": "Yes, a hundred percent. Hannah, could you draft a rubric for each stage, and then each interviewer can review the one for their own interview?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 636.8,
+      "end": 643.3,
+      "text": "Sure, I'll draft rubrics for all four stages and send them out by Friday for review."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 643.7,
+      "end": 657.9,
+      "text": "And for feedback timing, can we just agree on twenty-four hours as a hard rule? I'll set myself a calendar block right after every interview to write it up while it's fresh."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 658.5,
+      "end": 668.6,
+      "text": "Yes, please. I'll also set up automated reminders in the applicant tracking system, so everyone gets nudged at twelve hours and again at twenty-four."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 669.8,
+      "end": 681.0,
+      "text": "Great. And let's keep sourcing in parallel in case Maya says no. Hannah, can you keep the role open and keep scheduling recruiter screens for now?"
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 682.0,
+      "end": 692.8,
+      "text": "Yep, I'll keep the pipeline warm, and I'll focus outreach on people with editor or canvas experience, since that's clearly the profile that works best."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 693.9,
+      "end": 718.9,
+      "text": "Okay, let me recap. We're making an offer to Maya at one eighty-five base, standard equity, and a fifteen thousand signing bonus. Ravi stays warm as a backup, Chris is a no. Hannah sends the offer by Wednesday and schedules the sell calls. Marcus rewrites the take-home, Hannah drafts the rubrics, and we're all on a twenty-four-hour feedback rule from today."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 720.3,
+      "end": 723.8,
+      "text": "Sounds good to me. Fingers crossed on Maya."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 725.2,
+      "end": 728.1,
+      "text": "Same, she'd be a great addition."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 728.9,
+      "end": 731.6,
+      "text": "Agreed! Really excited about this one."
+    },
+    {
+      "speaker": "hannah.lee@acme.io",
+      "start": 732.3,
+      "end": 740.2,
+      "text": "Thanks, everyone. I'll keep you posted in the hiring channel as soon as I hear back from Maya."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 740.8,
+      "end": 747.9,
+      "text": "Thanks, all. Great discussion, and let's make this the last hiring loop that takes seven weeks."
+    }
+  ],
+  "summary": {
+    "overview": "The hiring panel met to review progress on the Senior Frontend Engineer role, which has been open for seven weeks and is critical for the onboarding redesign and the AI builder canvas. Hannah reported 214 applicants, 31 recruiter screens and three candidates who completed the full onsite loop. The panel agreed to extend an offer to Maya Thompson, who scored strongly across the technical, design collaboration and product sense interviews, and to keep Ravi Shah warm as a backup. The group also decided to tighten the take-home exercise, add a structured scorecard rubric, and require feedback within 24 hours to speed up the process.",
+    "keywords": [
+      "senior frontend engineer",
+      "hiring pipeline",
+      "onsite loop",
+      "offer decision",
+      "Maya Thompson",
+      "take-home exercise",
+      "scorecard rubric",
+      "compensation band",
+      "time to hire"
+    ],
+    "notes": [
+      {
+        "heading": "📋 Pipeline Status",
+        "start": 0.0,
+        "bullets": [
+          "Role open for 7 weeks; 214 applicants and 31 recruiter screens",
+          "9 technical screens and 3 completed onsite loops",
+          "Average time from application to onsite is 19 days, above the 14-day goal",
+          "Referrals make up 3 of the 9 technical-screen candidates"
+        ]
+      },
+      {
+        "heading": "⭐ Maya Thompson",
+        "start": 129.4,
+        "bullets": [
+          "Eight years of experience, most recently leading the editor team at a design-tools startup",
+          "Strong hire from all four interviewers, especially on canvas performance and state management",
+          "Asked insightful questions about onboarding activation during the product sense interview",
+          "Currently has another offer pending, with a decision deadline in about a week"
+        ]
+      },
+      {
+        "heading": "👥 Other Finalists",
+        "start": 278.6,
+        "bullets": [
+          "Ravi Shah: solid technical skills and strong testing discipline, but less product intuition; keep warm as a backup",
+          "Chris O'Neill: strong communication but struggled with the state management exercise; decline",
+          "Hannah will send personalized feedback to both candidates"
+        ]
+      },
+      {
+        "heading": "💵 Offer Details",
+        "start": 438.9,
+        "bullets": [
+          "Base salary at $185K, the top of the senior band, plus standard equity",
+          "Additional $15K signing bonus to compete with her pending offer",
+          "Arvin will join a sell call with Maya to talk about the roadmap and the AI builder"
+        ]
+      },
+      {
+        "heading": "⚙️ Process Changes",
+        "start": 553.2,
+        "bullets": [
+          "Shorten the take-home exercise from about 4 hours to 2 hours and focus it on state management",
+          "Introduce a structured scorecard rubric for every interview stage",
+          "Require interview feedback within 24 hours, with automated reminders",
+          "Re-open sourcing in parallel in case Maya declines"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Pipeline status",
+      "start": 0.0,
+      "end": 129.4,
+      "description": "Hannah shares where the Senior Frontend Engineer pipeline stands after seven weeks."
+    },
+    {
+      "title": "Candidate debrief: Maya Thompson",
+      "start": 129.4,
+      "end": 278.6,
+      "description": "The panel reviews Maya's interviews and agrees she is the strongest candidate."
+    },
+    {
+      "title": "Candidate debrief: Ravi and Chris",
+      "start": 278.6,
+      "end": 438.9,
+      "description": "The panel discusses the other two finalists and decides on next steps."
+    },
+    {
+      "title": "Offer and compensation",
+      "start": 438.9,
+      "end": 553.2,
+      "description": "The panel agrees on an offer package for Maya within the approved band."
+    },
+    {
+      "title": "Process improvements",
+      "start": 553.2,
+      "end": 693.9,
+      "description": "The team agrees on changes to the take-home, scorecards and feedback timelines."
+    },
+    {
+      "title": "Wrap-up",
+      "start": 693.9,
+      "end": 747.9,
+      "description": "Arvin recaps decisions and next steps."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Get Maya Thompson's offer approved and sent by Wednesday",
+      "assignee": "hannah.lee@acme.io",
+      "start": 269.0,
+      "completed": true,
+      "due_in_days": -15
+    },
+    {
+      "text": "Send personalized feedback to Ravi Shah and Chris O'Neill, with technical notes reviewed by Marcus",
+      "assignee": "hannah.lee@acme.io",
+      "start": 429.3,
+      "completed": true,
+      "due_in_days": -12
+    },
+    {
+      "text": "Schedule a 30-minute sell call between Arvin and Maya Thompson",
+      "assignee": "hannah.lee@acme.io",
+      "start": 515.3,
+      "completed": true,
+      "due_in_days": -13
+    },
+    {
+      "text": "Rewrite the frontend take-home exercise to a 2-hour state management task and dry-run it with Aisha",
+      "assignee": "marcus.johnson@acme.io",
+      "start": 593.6,
+      "completed": false,
+      "due_in_days": -10
+    },
+    {
+      "text": "Draft structured scorecard rubrics for all four interview stages and send them out for review",
+      "assignee": "hannah.lee@acme.io",
+      "start": 636.8,
+      "completed": false,
+      "due_in_days": -11
+    }
+  ]
+}

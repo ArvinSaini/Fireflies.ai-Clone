@@ -1,0 +1,490 @@
+{
+  "title": "1:1 Arvin / Sarah",
+  "days_ago": 1,
+  "start_hour": 16,
+  "start_minute": 0,
+  "platform": "zoom",
+  "tags": [
+    "1:1",
+    "Product"
+  ],
+  "participants": [
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "arvin@acme.io",
+      "start": 0.0,
+      "end": 4.7,
+      "text": "Hey Sarah, how's it going? How was your weekend?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 5.4,
+      "end": 18.3,
+      "text": "Pretty good, thanks! I finally went on that hike up at Mount Tam I'd been talking about for months. Legs are still a little sore, honestly. How about you?"
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 19.0,
+      "end": 33.9,
+      "text": "Nice! Mine was quiet, mostly just catching up on sleep, which I needed. Okay, so I have a few things on my list, but I always want to start with yours. What's on your mind?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 35.1,
+      "end": 52.9,
+      "text": "Sure. Let me start with some wins, because it's been a good couple of weeks. The Northwind call went really well, I think. We came out with a really clear picture of what's blocking the expansion, and the MercuryGate thing was a great find."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 53.7,
+      "end": 70.7,
+      "text": "Totally agree. That call was one of the best customer conversations we've had this quarter, and I think a big part of it was how well you prepped. Your question about what hurts the most opened up the whole version history thread."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 72.0,
+      "end": 85.5,
+      "text": "Thanks, that's nice to hear. And the connector shortlist is done. We landed on twelve, with HubSpot, NetSuite and MercuryGate at the top. Marcus's team has already started on the first three."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 86.3,
+      "end": 89.7,
+      "text": "Great. And how's the onboarding experiment looking?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 91.2,
+      "end": 108.1,
+      "text": "The first release, the role question and the template gallery, passed QA yesterday. We're turning on the A/B test on Monday at fifty percent of new signups, and Marcus's team is about halfway through the in-context app connection work for the second release."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 109.7,
+      "end": 122.2,
+      "text": "That's great progress, honestly faster than I expected after the design review. Let's make sure the dashboards are ready before we flip it on, so we're not scrambling to read the results."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 122.9,
+      "end": 143.1,
+      "text": "So, the thing I wanted to bring up. I'm feeling pretty stretched right now. I'm on the AI builder, the onboarding experiment, and enterprise readiness, and they're all hitting crunch time at the same moment. I've been working late most nights for the past two weeks."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 144.2,
+      "end": 157.2,
+      "text": "I really appreciate you telling me that. And honestly, I should've caught it earlier. Which of the three is taking the most time relative to how much it actually needs you?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 158.7,
+      "end": 178.6,
+      "text": "Honestly, enterprise readiness. The SSO and audit log work is mostly technical at this point. The product decisions are made, and what's left is coordinating between Ben, the security folks and the customers in early access. I end up being a message relay a lot of the time."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 179.8,
+      "end": 193.4,
+      "text": "That makes sense. What if Marcus's team owns the coordination for SSO and audit logs going forward? Ben is basically running it already, and he'd probably appreciate having direct contact with the customers."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 194.7,
+      "end": 205.6,
+      "text": "That would help a lot. I'd still want to be in the loop on anything that changes scope, but the day-to-day coordination could definitely move."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 206.1,
+      "end": 216.9,
+      "text": "Okay. I'll talk to Marcus tomorrow and make the handoff official, and we'll announce it in the roadmap channel so everyone knows who to go to."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 217.2,
+      "end": 224.3,
+      "text": "Thank you. I think that frees up maybe a day a week, which is huge right now."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 224.7,
+      "end": 228.7,
+      "text": "What else is eating time that feels low value?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 230.0,
+      "end": 239.0,
+      "text": "Status meetings, honestly. I'm in three different weekly status meetings that cover overlapping things. Each one is thirty minutes, plus prep."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 239.6,
+      "end": 252.9,
+      "text": "Yeah, that's on me, I think a couple of those were my idea. What if we replace two of them with a written weekly update? You post it on Friday, and people comment async."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 253.4,
+      "end": 261.2,
+      "text": "I'd love that. I can write a short weekly update template and try it starting this Friday."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 262.6,
+      "end": 273.6,
+      "text": "Perfect. And please, if you're still working late in two weeks, tell me. I'd rather move a deadline than burn you out before the beta."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 274.3,
+      "end": 276.3,
+      "text": "I will, I promise."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 277.8,
+      "end": 285.7,
+      "text": "Okay, let's talk about the AI builder beta. We're about six weeks out. Where are we on the cohort?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 287.2,
+      "end": 303.3,
+      "text": "I've got eighteen confirmed out of twenty. Northwind is in, five of the research participants are in, and the rest are a mix of mid-market accounts that David and Nina recommended. I'm waiting on two more replies."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 304.2,
+      "end": 311.7,
+      "text": "Good. And how are we going to know if the beta is working? What are the success criteria?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 312.3,
+      "end": 331.0,
+      "text": "I'm thinking two main ones. First, sixty percent of beta users generate at least one workflow per week. And second, at least forty percent of AI drafts actually get published. If people generate drafts and then throw them away, that's a sign the quality isn't there."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 331.9,
+      "end": 343.1,
+      "text": "I like those. Maybe add a qualitative piece too. Like, weekly feedback calls with a handful of customers so we hear the \"why\" behind the numbers."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 344.6,
+      "end": 356.2,
+      "text": "Yeah, I was thinking five customers, thirty minutes each, every week for the first month. I'll set up the schedule and the interview guide next week."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 357.1,
+      "end": 371.6,
+      "text": "Great. And one more thing. Marcus flagged that rate limiting and cost tracking need to be in place before the beta. Can you make sure that's tracked as a launch blocker on your checklist?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 372.2,
+      "end": 378.2,
+      "text": "Yep, it's already on there, along with the destructive-action review step and queue-depth alerting."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 379.4,
+      "end": 386.7,
+      "text": "Good. What's your biggest worry about the beta right now, if you had to pick one thing?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 387.0,
+      "end": 407.4,
+      "text": "Honestly, draft quality on messy, real-world prompts. In the research sessions people typed pretty clean requests because we gave them examples. Real users are going to type things like \"do the invoice thing but for Canada,\" and I'm not sure how the model will handle that kind of ambiguity."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 407.8,
+      "end": 420.6,
+      "text": "That's a great worry to have. Maybe the builder should ask a clarifying question when a prompt is ambiguous, instead of guessing. Something like \"Which system do your Canadian invoices come from?\""
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 421.1,
+      "end": 438.4,
+      "text": "Yeah, I like that a lot. It also makes the whole thing feel more like a collaborator than a vending machine. I'll raise it with Marcus and Priya as a possible beta feature, but probably as a fast follow rather than a blocker."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 438.8,
+      "end": 447.5,
+      "text": "Before we get into growth, anything on the team side? How's the collaboration with Priya and Elena going on the launch stuff?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 448.1,
+      "end": 473.8,
+      "text": "Really well with Priya. We've basically got a rhythm now where she shares rough sketches on Tuesday and we review together on Thursday. With Elena it's good too, but I'm a little worried about the launch messaging getting ahead of the product. The \"Describe it. Done.\" theme is great, but some of the early copy implies the AI builds the workflow perfectly every time."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 474.5,
+      "end": 490.9,
+      "text": "Yeah, I saw that draft too. I think that's exactly the kind of thing you should flag early. Can you leave comments on the messaging doc, with specific examples from the research sessions about where drafts usually need editing?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 492.2,
+      "end": 503.8,
+      "text": "Sure, I'll go through the messaging framework this week and add comments with real examples. I'd rather we set expectations right than deal with disappointed beta users."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 504.3,
+      "end": 516.2,
+      "text": "Perfect. And how are you finding the frontend hiring loop? I know you're doing the product sense interview for the second senior frontend opening, now that Maya's started."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 517.0,
+      "end": 534.6,
+      "text": "It's going okay. I've done three interviews so far. One candidate was really strong, she asked better questions about our onboarding than some people on our team, honestly. The other two were fine technically but didn't seem very curious about the user."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 535.6,
+      "end": 552.1,
+      "text": "That's useful. Make sure you get your written feedback into the system within a day, Hannah mentioned that even with the twenty-four-hour rule, a couple of scorecards have been coming in late across the loop, and it's slowing down decisions."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 553.3,
+      "end": 560.7,
+      "text": "Oh, that's fair, mine for the last candidate was two days late. I'll be quicker about it."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 561.5,
+      "end": 567.3,
+      "text": "No worries, it's a team-wide thing, not just you. Okay, let's switch gears."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 568.3,
+      "end": 584.1,
+      "text": "Okay, last thing. Last time, you mentioned you wanted to talk about growth and the path to senior PM. I've been thinking about it, so let me share some feedback first, and then we can talk about timing."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 585.7,
+      "end": 590.6,
+      "text": "Sounds good. Please be direct, I'd rather hear it now."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 591.4,
+      "end": 610.5,
+      "text": "So, strengths first. Your customer empathy and research rigor are honestly the best on the team. The onboarding research and the Northwind prep are great examples. And people across engineering and design really trust you, which matters a lot at the senior level."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 611.8,
+      "end": 615.2,
+      "text": "Thank you. That's really nice to hear."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 616.4,
+      "end": 637.3,
+      "text": "The main growth area I see is communicating trade-offs upward, earlier. For example, with the marketplace scope, you had the curated connector idea in your head for a week before the roadmap meeting. If you'd brought it to James and me earlier, we'd have saved a lot of back-and-forth."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 637.8,
+      "end": 646.1,
+      "text": "Yeah, that's fair. I think I tend to wait until I'm really confident in a recommendation before sharing it."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 646.7,
+      "end": 659.9,
+      "text": "Which is a great instinct for customer-facing stuff. But with leadership, a rough \"here's what I'm thinking, here's the trade-off\" early on is really valuable, even if it's not polished."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 660.2,
+      "end": 673.3,
+      "text": "Okay. I'll try sending you and James a short \"early thinking\" note whenever I'm considering a big scope or priority change. Maybe that becomes a section in the weekly update."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 674.0,
+      "end": 694.3,
+      "text": "I love that, that's a great way to build the habit. On timing, I think you're on track for the January cycle. I'll draft the promotion case over the next few weeks and share it with you before it goes to James, so you can add anything I've missed."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 695.7,
+      "end": 700.4,
+      "text": "That would be amazing. Thank you, Arvin, I really appreciate it."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 702.0,
+      "end": 707.1,
+      "text": "Of course, you've earned it. Anything else before we wrap?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 708.1,
+      "end": 714.0,
+      "text": "No, I think that's everything. This was really helpful, especially the workload stuff."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 715.0,
+      "end": 722.1,
+      "text": "Great. Take care of yourself this week, and see you at the roadmap sync on Thursday."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 723.6,
+      "end": 725.4,
+      "text": "See you then. Bye!"
+    }
+  ],
+  "summary": {
+    "overview": "Arvin and Sarah held their biweekly 1:1, covering recent wins, Sarah's workload, the AI builder beta plan, and her path to a Senior Product Manager promotion. Sarah shared that the Northwind discovery call and the connector shortlist went well, but that she is stretched across the AI builder, the onboarding experiment and enterprise readiness. They agreed to move ownership of SSO and audit log coordination to Marcus's team, freeing up about a day a week. Arvin gave feedback on Sarah's stakeholder communication and committed to drafting a promotion case for the January review cycle.",
+    "keywords": [
+      "1:1",
+      "workload",
+      "AI builder beta",
+      "promotion",
+      "Senior PM",
+      "stakeholder communication",
+      "beta cohort",
+      "feedback",
+      "career growth"
+    ],
+    "notes": [
+      {
+        "heading": "🎉 Recent Wins",
+        "start": 0.0,
+        "bullets": [
+          "Northwind discovery call surfaced clear expansion blockers and a MercuryGate connector opportunity",
+          "Connector shortlist for the marketplace was finalized with twelve picks",
+          "First onboarding release passed QA; the A/B test starts Monday"
+        ]
+      },
+      {
+        "heading": "⚖️ Workload & Priorities",
+        "start": 122.9,
+        "bullets": [
+          "Sarah is spread across three major initiatives and working late most evenings",
+          "SSO and audit log coordination will move to Marcus's team",
+          "Sarah keeps ownership of the AI builder beta and the onboarding experiment",
+          "Weekly status updates will move to an async written format"
+        ]
+      },
+      {
+        "heading": "🤖 AI Builder Beta",
+        "start": 277.8,
+        "bullets": [
+          "Beta cohort of 20 customers, including Northwind and five research participants",
+          "Success criteria: 60% of beta users generate a workflow weekly, and at least 40% of drafts get published",
+          "Weekly feedback calls with five beta customers during the first month"
+        ]
+      },
+      {
+        "heading": "🌱 Career Growth",
+        "start": 568.3,
+        "bullets": [
+          "Sarah wants to be considered for Senior PM in the January review cycle",
+          "Strengths: customer empathy, research rigor, and cross-team trust",
+          "Growth area: proactively communicating trade-offs to leadership before decisions are made",
+          "Arvin will draft the promotion case and share it with Sarah first"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Check-in and recent wins",
+      "start": 0.0,
+      "end": 122.9,
+      "description": "Arvin and Sarah catch up and review the past two weeks' wins."
+    },
+    {
+      "title": "Workload and priorities",
+      "start": 122.9,
+      "end": 277.8,
+      "description": "Sarah raises concerns about her workload and they agree to shift ownership of enterprise coordination."
+    },
+    {
+      "title": "AI builder beta planning",
+      "start": 277.8,
+      "end": 438.8,
+      "description": "They discuss the beta cohort, success criteria and the launch timeline."
+    },
+    {
+      "title": "Team and cross-functional topics",
+      "start": 438.8,
+      "end": 568.3,
+      "description": "They discuss collaboration with design and marketing and the frontend hiring loop."
+    },
+    {
+      "title": "Career growth and feedback",
+      "start": 568.3,
+      "end": 725.4,
+      "description": "Arvin shares feedback and they discuss the path to Senior PM."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Talk to Marcus about moving SSO and audit log coordination to his team and announce the handoff",
+      "assignee": "arvin@acme.io",
+      "start": 206.1,
+      "completed": false,
+      "due_in_days": 1
+    },
+    {
+      "text": "Create a weekly async product update template and publish the first update on Friday",
+      "assignee": "sarah.chen@acme.io",
+      "start": 253.4,
+      "completed": false,
+      "due_in_days": 2
+    },
+    {
+      "text": "Set up weekly feedback calls with five beta customers and write the interview guide",
+      "assignee": "sarah.chen@acme.io",
+      "start": 344.6,
+      "completed": false,
+      "due_in_days": 9
+    },
+    {
+      "text": "Review the Fall Launch messaging framework and add comments on AI accuracy claims with research examples",
+      "assignee": "sarah.chen@acme.io",
+      "start": 492.2,
+      "completed": false,
+      "due_in_days": 6
+    },
+    {
+      "text": "Draft Sarah's Senior PM promotion case for the January review cycle and share it with her first",
+      "assignee": "arvin@acme.io",
+      "start": 674.0,
+      "completed": false,
+      "due_in_days": 21
+    }
+  ]
+}

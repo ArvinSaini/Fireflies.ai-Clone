@@ -1,0 +1,518 @@
+{
+  "title": "Q4 Product Roadmap Planning",
+  "days_ago": 2,
+  "start_hour": 10,
+  "start_minute": 30,
+  "platform": "google_meet",
+  "tags": [
+    "Product",
+    "Planning"
+  ],
+  "participants": [
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Marcus Johnson",
+      "email": "marcus.johnson@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Priya Patel",
+      "email": "priya.patel@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "James Wilson",
+      "email": "james.wilson@acme.io",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "arvin@acme.io",
+      "start": 0.0,
+      "end": 19.5,
+      "text": "Okay, I think everyone's here. Thanks for jumping on, folks. The goal today is simple: walk out of this call with an agreed Q4 roadmap that we can share with the wider team on Monday. Sarah, do you want to kick us off with the Q3 recap?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 21.0,
+      "end": 40.5,
+      "text": "Sure. So, quick headline numbers. Weekly active workflows grew eighteen percent quarter over quarter, we're sitting at roughly forty-one thousand now. Net revenue retention came in at a hundred and twelve percent, which is good, but it's a bit below the one fifteen we were targeting."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 40.9,
+      "end": 46.0,
+      "text": "What's driving the gap on retention? Is it contraction or actual churn?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 47.0,
+      "end": 63.2,
+      "text": "Mostly churn, honestly. We lost three mid-market accounts in September, and in all three exit interviews the top reason was the same thing: no SSO and no audit logs. Their security teams just wouldn't sign off on a renewal."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 64.6,
+      "end": 80.5,
+      "text": "Yeah, that lines up with what we're seeing in support tickets too. We've had, I think, twenty-two tickets this quarter asking about SAML or Okta, and a handful asking whether we can export an activity log."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 81.5,
+      "end": 94.2,
+      "text": "Right, and that's been on our list for, what, two quarters now? I think we have to stop deferring it. It's not a nice-to-have anymore if it's literally costing us renewals."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 94.8,
+      "end": 103.3,
+      "text": "Agreed. I'd rather lose a shiny feature than lose another Northwind-sized account. What was the combined ARR on those three?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 104.6,
+      "end": 116.2,
+      "text": "About a hundred and eighty thousand dollars combined. Not catastrophic, but it's a pattern, and we have at least six more accounts in that segment renewing in Q1."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 116.5,
+      "end": 133.6,
+      "text": "Okay, so let's move into the themes. Going in, I had four candidates on the board. One, the AI-assisted builder. Two, enterprise readiness, so SSO, SCIM and audit logs. Three, the integrations marketplace. And four, the mobile app that sales keeps asking about."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 134.6,
+      "end": 150.7,
+      "text": "Can I say something about mobile? From the research sessions we ran in August, almost nobody builds workflows on their phone. What they want on mobile is approvals and notifications. That's a much smaller thing than a full app."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 151.5,
+      "end": 162.2,
+      "text": "That's a really good point. So maybe mobile becomes push notifications plus approvals inside the existing responsive web app, rather than a native app this quarter."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 163.3,
+      "end": 173.3,
+      "text": "I'd love that, honestly. A native app would eat at least two engineers for the whole quarter, and we don't have that slack."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 174.1,
+      "end": 190.2,
+      "text": "Fine by me. Let's park native mobile for Q1 and revisit with real usage data. What about the AI builder? I'm hearing a lot of excitement about it from the board, but I want to make sure it's not just hype."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 191.0,
+      "end": 215.1,
+      "text": "So the prototype we tested with eight customers was, um, honestly the best reaction we've had to anything this year. Six out of eight said they'd use it weekly. The main use case is someone typing \"when a deal closes in Salesforce, create a project in Asana and ping the channel\" and getting a draft workflow back."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 216.5,
+      "end": 231.0,
+      "text": "And the drafts don't have to be perfect. In testing, people were totally happy to tweak a draft. What they hated was the blank canvas. Starting from zero is the biggest drop-off point in our funnel."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 232.2,
+      "end": 246.7,
+      "text": "That matches the activation data too. Forty percent of new signups never publish their first workflow. If the AI builder moves that even ten points, it's the single biggest lever we have on growth."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 248.1,
+      "end": 260.8,
+      "text": "Okay, I'm convinced. Before we move on though, how are we thinking about pricing for it? Is the AI builder part of every plan, or is it an add-on?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 261.7,
+      "end": 278.8,
+      "text": "My recommendation is that it's included on Pro and Business with a monthly cap on generations, say two hundred on Pro, and unlimited on Enterprise. Free users get maybe ten generations so they can feel the magic during onboarding."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 279.2,
+      "end": 297.7,
+      "text": "From a cost side, that's fine. Each generation costs us roughly two cents in model calls right now. Even at two hundred generations, that's four dollars per seat per month at the very worst case, and most people will use a fraction of that."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 298.7,
+      "end": 309.7,
+      "text": "Okay, that's reasonable. I don't want to make it an add-on in the first version. It should feel like part of the product, not a tollbooth."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 310.8,
+      "end": 327.4,
+      "text": "One thing I'd add on the design side is guardrails. When the AI drafts a workflow that touches something destructive, like deleting records or sending emails to customers, we should force a review step before it can be published."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 327.9,
+      "end": 341.4,
+      "text": "Yes, a hundred percent. I don't want our first AI incident to be someone accidentally emailing their whole customer list. Let's make the review step a hard requirement for the beta."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 342.6,
+      "end": 351.5,
+      "text": "Good. So, AI builder stays. Enterprise readiness stays because of retention. So the marketplace is the one we need to talk about."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 352.1,
+      "end": 369.4,
+      "text": "Right, so let me put some numbers on capacity before we commit. We've got three squads, eleven engineers total, and after on-call and maintenance we really have about fourteen engineer-weeks per month of roadmap capacity. That's roughly forty-two engineer-weeks for the quarter."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 370.7,
+      "end": 374.7,
+      "text": "And how do the estimates break down against that?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 375.3,
+      "end": 393.8,
+      "text": "Rough sizing: the AI builder is about sixteen engineer-weeks for a beta. Enterprise readiness, SSO plus SCIM plus audit logs, is around fourteen. A full marketplace with third-party submissions, a review flow, and billing is easily twenty plus. So we're about eight to ten weeks over."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 394.7,
+      "end": 407.9,
+      "text": "What if the marketplace v1 is just a curated set of connectors that we build ourselves? No third-party submissions, no review queue, no revenue share. Basically a nicer browse page for integrations."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 408.2,
+      "end": 420.4,
+      "text": "That's way more manageable. If we pick, say, twelve connectors and reuse the connector SDK we already have, I think that's eight to ten engineer-weeks. That fits."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 421.2,
+      "end": 431.9,
+      "text": "And I can design the browse experience so it scales to the open marketplace later. We don't want to throw it away in Q1."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 432.6,
+      "end": 447.3,
+      "text": "Love it. So marketplace v1 is twelve curated connectors, and public submissions move to Q1. Sarah, can you pull the list of the most requested integrations from the feedback board so we're picking the right twelve?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 448.3,
+      "end": 460.2,
+      "text": "Yep, I'll pull that together. I'll have a ranked list of the top twenty requested integrations with counts by Friday, and then we can pick twelve from it."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 460.8,
+      "end": 469.6,
+      "text": "Just make sure HubSpot and NetSuite are on there. Those come up in literally every sales call David's team runs."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 470.6,
+      "end": 477.3,
+      "text": "They're both in the top five already, so I don't think that'll be an issue."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 478.0,
+      "end": 492.1,
+      "text": "One risk I want to flag: the AI builder depends on the new workflow schema migration landing first. If that slips, the AI builder slips. The migration is currently scheduled to finish by October 24th."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 492.4,
+      "end": 497.2,
+      "text": "Okay. Is there anything we can do to de-risk that?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 498.3,
+      "end": 515.1,
+      "text": "I'd like to put Aisha on it full time for the next two weeks instead of splitting her across the integrations work. I'll write up a short risk doc with the dependency chain so everyone can see where the critical path is."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 516.0,
+      "end": 525.4,
+      "text": "Great, please do. Marcus, let's get that risk doc out by end of next week so we're not surprised in November."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 527.0,
+      "end": 534.0,
+      "text": "Sounds good. I'll get it out by Thursday and drop it in the roadmap channel."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 535.0,
+      "end": 548.1,
+      "text": "Let's talk dates. I'd propose the AI builder goes to a private beta with around twenty customers by November 20th. That gives us a few weeks of real usage before the holidays."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 548.8,
+      "end": 558.8,
+      "text": "That works. And I'd like the beta to include at least five of the accounts from the research sessions since they already understand the concept."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 559.7,
+      "end": 566.3,
+      "text": "What's the plan for enterprise readiness dates? Our sales team is going to ask immediately."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 566.8,
+      "end": 578.5,
+      "text": "SAML SSO is the most contained piece, so I'd say general availability by November 30th. SCIM and audit logs are a bit more involved, so December 15th for both."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 579.1,
+      "end": 590.3,
+      "text": "Okay, I can live with that. Can we at least tell prospects that SSO is coming in November? That alone might unblock a couple of deals."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 591.3,
+      "end": 601.3,
+      "text": "I think that's fair, as long as we say \"planned\" and not \"committed.\" I don't want a repeat of the reporting dashboard situation last spring."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 602.9,
+      "end": 604.7,
+      "text": "Ha, fair. Lesson learned."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 605.4,
+      "end": 620.3,
+      "text": "For the marketplace, I'd need about three weeks of design before engineering really starts, so if I start the browse page and connector detail page designs next week, engineering can pick it up mid-November."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 621.2,
+      "end": 628.6,
+      "text": "That timing works. Then I'd target the week of December 8th to ship the marketplace with twelve connectors."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 629.8,
+      "end": 639.5,
+      "text": "Great. Priya, can you share early wireframes for the marketplace by the end of next week? Even rough ones help Marcus's team plan."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 641.0,
+      "end": 649.9,
+      "text": "Yeah, I'll have low-fi wireframes in Figma by next Friday, and I'll set up a review with Sarah and Marcus right after."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 650.8,
+      "end": 664.7,
+      "text": "One more ask from me. I'd like a customer-facing version of the roadmap by end of October. Something David's team can show in calls and Elena can use in the fall launch content."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 665.3,
+      "end": 677.0,
+      "text": "Totally. I'll own that. I'll write the internal roadmap doc first, share it with the whole company on Monday, and then do a trimmed customer-facing version by October 31st."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 677.6,
+      "end": 685.8,
+      "text": "Perfect. And loop in Elena on the external version so the messaging lines up with the launch campaign."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 686.4,
+      "end": 702.1,
+      "text": "Will do. Okay, let me recap so we're all aligned. Three themes: AI builder, enterprise readiness, and a curated marketplace v1. Native mobile is deferred to Q1, with approvals and notifications going into the web app instead."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 702.6,
+      "end": 714.9,
+      "text": "And the dates are migration by October 24th, AI builder beta November 20th, SSO November 30th, marketplace the week of December 8th, and SCIM plus audit logs by December 15th."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 715.3,
+      "end": 722.1,
+      "text": "Yep, that's what I've got. I'll make sure the squad boards reflect that by tomorrow."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 722.7,
+      "end": 725.1,
+      "text": "All good on my end."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 725.9,
+      "end": 733.7,
+      "text": "Great work, everyone. This is the most focused roadmap we've had in a while. Let's keep it that way."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 734.5,
+      "end": 741.2,
+      "text": "Thanks all. I'll send the notes and the recording link right after this. Talk soon."
+    }
+  ],
+  "summary": {
+    "overview": "The team aligned on the Q4 roadmap for Acme Flow, choosing three themes: the AI-assisted workflow builder, enterprise readiness (SSO, SCIM and audit logs), and a first version of the integrations marketplace. Sarah walked through Q3 results, including 18% growth in weekly active workflows and the churn signal from mid-market accounts asking for SSO. Marcus flagged that engineering capacity covers roughly two and a half themes, so the marketplace was scoped down to a curated set of twelve connectors. James asked for a customer-facing roadmap by the end of October, and the group agreed on a beta of the AI builder by November 20th.",
+    "keywords": [
+      "Q4 roadmap",
+      "AI workflow builder",
+      "enterprise SSO",
+      "audit logs",
+      "integrations marketplace",
+      "engineering capacity",
+      "November beta",
+      "mid-market churn"
+    ],
+    "notes": [
+      {
+        "heading": "📊 Q3 Recap",
+        "start": 0.0,
+        "bullets": [
+          "Weekly active workflows grew 18% quarter over quarter, to about 41,000",
+          "Net revenue retention landed at 112%, slightly below the 115% target",
+          "Three mid-market accounts churned citing missing SSO and audit logs"
+        ]
+      },
+      {
+        "heading": "🎯 Q4 Themes",
+        "start": 116.5,
+        "bullets": [
+          "Theme one is the AI-assisted workflow builder that drafts workflows from plain-English prompts",
+          "Theme two is enterprise readiness, covering SAML SSO, SCIM provisioning and audit logs",
+          "Theme three is a v1 integrations marketplace, scoped to a curated set of connectors"
+        ]
+      },
+      {
+        "heading": "⚙️ Capacity & Scope",
+        "start": 352.1,
+        "bullets": [
+          "Engineering has about 14 engineer-weeks per month across three squads",
+          "Capacity covers roughly two and a half themes, so the marketplace is cut to twelve curated connectors",
+          "Public third-party connector submissions are deferred to Q1"
+        ]
+      },
+      {
+        "heading": "🗓️ Milestones",
+        "start": 535.0,
+        "bullets": [
+          "Workflow schema migration completes by October 24",
+          "AI builder private beta with 20 customers by November 20",
+          "SAML SSO GA by November 30, SCIM and audit logs by December 15",
+          "Marketplace v1 with 12 connectors ships the week of December 8"
+        ]
+      },
+      {
+        "heading": "✅ Next Steps",
+        "start": 650.8,
+        "bullets": [
+          "James wants a customer-facing roadmap by the end of October",
+          "Arvin will draft the internal roadmap doc and share it with the company on Monday",
+          "Use the word \"planned\" rather than \"committed\" for external dates"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Q3 recap and metrics",
+      "start": 0.0,
+      "end": 116.5,
+      "description": "Sarah reviews Q3 adoption metrics and the churn signals that shape Q4 priorities."
+    },
+    {
+      "title": "Choosing Q4 themes",
+      "start": 116.5,
+      "end": 352.1,
+      "description": "The group debates candidate themes and lands on the AI builder, enterprise readiness, and the marketplace."
+    },
+    {
+      "title": "Capacity and scoping",
+      "start": 352.1,
+      "end": 535.0,
+      "description": "Marcus lays out engineering capacity and the team scopes down the marketplace to fit."
+    },
+    {
+      "title": "Timeline and milestones",
+      "start": 535.0,
+      "end": 650.8,
+      "description": "The team sets milestones for the AI builder beta, SSO, and the marketplace launch."
+    },
+    {
+      "title": "Customer-facing roadmap and wrap-up",
+      "start": 650.8,
+      "end": 741.2,
+      "description": "James requests a public roadmap and the group recaps owners and next steps."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Pull the top requested integrations from the feedback board and propose the twelve marketplace connectors",
+      "assignee": "sarah.chen@acme.io",
+      "start": 432.6,
+      "completed": false,
+      "due_in_days": 5
+    },
+    {
+      "text": "Write a risk doc covering the schema migration dependency and the AI builder critical path",
+      "assignee": "marcus.johnson@acme.io",
+      "start": 498.3,
+      "completed": true,
+      "due_in_days": 2
+    },
+    {
+      "text": "Share early wireframes for the marketplace browse page and connector detail page",
+      "assignee": "priya.patel@acme.io",
+      "start": 629.8,
+      "completed": false,
+      "due_in_days": 6
+    },
+    {
+      "text": "Draft the internal Q4 roadmap doc and share it with the company on Monday",
+      "assignee": "arvin@acme.io",
+      "start": 665.3,
+      "completed": false,
+      "due_in_days": 2
+    },
+    {
+      "text": "Create a customer-facing version of the Q4 roadmap for sales and marketing",
+      "assignee": "arvin@acme.io",
+      "start": 665.3,
+      "completed": false,
+      "due_in_days": 23
+    }
+  ]
+}

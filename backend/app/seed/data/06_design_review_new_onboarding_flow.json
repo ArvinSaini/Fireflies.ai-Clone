@@ -1,0 +1,495 @@
+{
+  "title": "Design Review: New Onboarding Flow",
+  "days_ago": 12,
+  "start_hour": 13,
+  "start_minute": 0,
+  "platform": "google_meet",
+  "tags": [
+    "Design",
+    "Product"
+  ],
+  "participants": [
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "Priya Patel",
+      "email": "priya.patel@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Marcus Johnson",
+      "email": "marcus.johnson@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Elena Rodriguez",
+      "email": "elena.rodriguez@acme.io",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "arvin@acme.io",
+      "start": 0.0,
+      "end": 16.1,
+      "text": "Okay, I think we're all here. Priya, thanks for putting this together. I know you've been heads down on it for a few weeks. The floor is yours, and folks, please hold the bigger questions until she's through the main flow."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 16.7,
+      "end": 35.3,
+      "text": "Thanks, Arvin. So, quick context before I show anything. Right now only forty-one percent of new signups publish their first workflow within seven days. And we know from the data that if someone doesn't publish in the first week, they almost never come back."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 36.1,
+      "end": 45.7,
+      "text": "And that forty-one percent has been flat for three quarters now, despite all the small tweaks we've made to the wizard."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 46.4,
+      "end": 60.4,
+      "text": "Exactly. So for this project, I ran twelve interviews with recent signups, half who activated and half who didn't, and I looked at the funnel data with Sarah. Two things really jumped out."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 61.1,
+      "end": 81.0,
+      "text": "First, thirty-eight percent of people drop off at the \"connect your apps\" step. That's by far the biggest leak in the funnel. In interviews, people said they didn't want to give us access to their Google or Salesforce account before they even knew what the product could do for them."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 81.5,
+      "end": 89.6,
+      "text": "That makes total sense. I wouldn't hand over OAuth permissions to a tool I'd known for ninety seconds either."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 90.8,
+      "end": 108.8,
+      "text": "Right. And the second finding is that users who start from a template are two point three times more likely to activate than users who start from a blank canvas. But today, templates are buried behind a tab most people never click."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 109.8,
+      "end": 118.6,
+      "text": "Wow, two point three times. That's a huge difference. That's also a really nice stat for marketing, by the way."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 118.9,
+      "end": 133.5,
+      "text": "Ha, yes, you can have it. So the design principles I worked from were: show value before asking for permissions, get people to a template as fast as possible, and cut the number of steps."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 134.8,
+      "end": 151.2,
+      "text": "Okay, let me share my screen. So, step one. Right after signup, we ask one question: \"What kind of work do you do?\" There are six options, things like operations, sales, marketing, finance, IT and \"something else.\" It's one click, no typing."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 152.4,
+      "end": 157.5,
+      "text": "Why six? I remember the earlier version had something like ten."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 157.9,
+      "end": 173.3,
+      "text": "In testing, ten options made people hesitate, and the extra roles were really just sub-flavors of the main six. Six fits on one screen on a laptop without scrolling, and \"something else\" catches the rest."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 174.9,
+      "end": 195.3,
+      "text": "Step two is the template gallery. Based on the role, we show the six to nine most relevant templates. For operations, that's stuff like \"route support escalations to Slack\" or \"sync new orders to a spreadsheet.\" Each card shows the apps it uses and a one-line description of what it does."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 196.5,
+      "end": 205.4,
+      "text": "I really like that the cards show the app logos. It makes it instantly obvious whether it's relevant to you."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 206.8,
+      "end": 226.3,
+      "text": "Thanks! And at the top of the gallery there's a prompt box that says \"Or describe what you want to automate.\" Right now that would just search templates, but once the AI builder ships, it becomes the entry point to the AI draft. So the design is ready for it."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 227.0,
+      "end": 235.5,
+      "text": "Oh, that's nice. So the AI builder doesn't need its own onboarding at all, it just slots in there."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 236.0,
+      "end": 260.3,
+      "text": "Exactly. And step three is the first workflow itself. You land on the canvas with the template already loaded. And this is the key change: you connect apps inside the workflow, step by step, right when they're needed. So you see a \"Connect Slack\" button right on the Slack step, with a short explanation of why we need it."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 261.6,
+      "end": 268.9,
+      "text": "That feels so much less scary. It's like asking permission at the moment it actually makes sense."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 269.5,
+      "end": 285.3,
+      "text": "That's the idea. And then there's a big \"Test it\" button that runs the workflow with sample data, so you can see it work before you even publish. We celebrate the first successful run with a little confetti moment."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 286.2,
+      "end": 294.2,
+      "text": "Ha, of course there's confetti. I love it, honestly. Okay, this is really strong. Let's open it up for feedback."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 295.3,
+      "end": 309.1,
+      "text": "My first question is about the connect step. If someone can skip connecting apps, can they still publish a workflow? Because a workflow that isn't connected to anything doesn't actually do anything."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 310.0,
+      "end": 324.7,
+      "text": "That's the biggest open question. My proposal is that connecting is skippable, but strongly encouraged. You can test with sample data without connecting anything, but to publish you have to connect at least the trigger app."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 326.0,
+      "end": 338.8,
+      "text": "From an engineering perspective, sample data is the tricky part. Every connector would need a realistic sample payload for its triggers. We have that for maybe sixty percent of connectors today."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 340.0,
+      "end": 349.0,
+      "text": "Could we limit the onboarding templates to connectors that already have sample data? That keeps scope sane for the first version."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 350.2,
+      "end": 357.5,
+      "text": "Yes, that works. Honestly the top twenty templates mostly use the same eight or nine apps anyway."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 358.3,
+      "end": 369.6,
+      "text": "Okay, then I'm comfortable. I'll audit which connectors are missing sample payloads and send Priya the list, so she can pick templates that work out of the box."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 371.0,
+      "end": 386.0,
+      "text": "One thought on the role question. A lot of our buyers wear multiple hats, especially at smaller companies. Like, I'm marketing but I also do half of our operations stuff. Can people select more than one?"
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 386.9,
+      "end": 402.2,
+      "text": "Hmm, that's a good point. I was worried multi-select would make the gallery feel less focused, but we could blend the top templates from each selected role. Let me try it and see how it looks."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 403.1,
+      "end": 413.0,
+      "text": "I'd also want a \"start from scratch\" option somewhere. Power users who've used other automation tools get annoyed if we force them through templates."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 413.5,
+      "end": 426.8,
+      "text": "Yep, there's actually a small \"start from a blank canvas\" link at the bottom of the gallery. I'll make it a bit more visible, maybe move it up next to the prompt box."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 427.4,
+      "end": 436.8,
+      "text": "What happens to someone who skips everything and lands on the dashboard with nothing? Right now, the empty dashboard is pretty depressing."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 437.8,
+      "end": 453.1,
+      "text": "Ha, yeah, it is. I haven't redesigned the dashboard empty state yet. That's a good catch. I'll do a pass on empty states for the dashboard and the workflow list, and I'll bring them to next week's design crit."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 454.1,
+      "end": 467.1,
+      "text": "One more thing from me. Have we thought about accessibility on the template gallery? Those cards are pretty dense with logos, and I want to make sure screen readers get something meaningful."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 468.4,
+      "end": 487.5,
+      "text": "Yes, every card has a proper label that reads out the template name, the apps involved and the description. And the whole gallery is keyboard navigable. I tested it with VoiceOver last week, though I'd love for someone on the frontend team to double check it in code review."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 488.9,
+      "end": 500.2,
+      "text": "And what about people signing up on mobile? About eighteen percent of signups come from a phone, usually from a link in an email or a social post."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 500.7,
+      "end": 521.6,
+      "text": "For mobile, steps one and two work fine, the gallery just becomes a single column. But building a workflow on a phone isn't a great experience, so on step three we show a message saying \"Your workflow is saved, pick up on your computer,\" and we email them a link to continue."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 522.1,
+      "end": 535.4,
+      "text": "That's smart. It's honest about the limitation, and the email gives us a second chance to bring them back. Can we track how many people actually come back through that email?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 535.8,
+      "end": 546.1,
+      "text": "Yep, I'll add that as a tracked event in the experiment plan. It'll tell us whether mobile signups deserve their own flow later on."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 546.5,
+      "end": 551.0,
+      "text": "Okay, Marcus, let's talk scope. How big is this?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 551.3,
+      "end": 576.2,
+      "text": "My rough gut check is about three sprints for one squad. The role question and the gallery are fairly straightforward, maybe one sprint. The in-context app connection is the big piece, because today the OAuth flow assumes you're in the settings page, not in the middle of a canvas. That's probably a sprint and a half on its own."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 577.3,
+      "end": 583.2,
+      "text": "Is there anything we could cut to get a first version out sooner?"
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 583.7,
+      "end": 598.2,
+      "text": "We could ship the role question and the gallery first, with the old connect step, and then ship in-context connection as a second release. That gets the template benefit out about six weeks earlier."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 598.8,
+      "end": 613.8,
+      "text": "I'm a little nervous about that, because the connect step is the biggest drop-off. But I see the logic, and it would let us measure the impact of each change separately, which is actually kind of nice."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 614.4,
+      "end": 629.7,
+      "text": "I like that. Two releases, two measurable changes. And let's ship both behind an A/B test, fifty percent of new signups. Sarah, can you write up the experiment plan with the metrics and the sample size we need?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 630.6,
+      "end": 651.5,
+      "text": "Yep. The primary metric would be seven-day first-workflow activation. Our target is to go from forty-one percent to fifty-five. Secondary would be drop-off at the connect step and day-thirty retention. I'll have the experiment plan written up by Friday, including how long we need to run it to get significance."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 652.0,
+      "end": 663.1,
+      "text": "Sounds good. And I'll break the work into tickets for the first release so we can start next sprint. I'll get that done by Monday."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 664.6,
+      "end": 673.1,
+      "text": "Is there anything you need from marketing? For instance, the onboarding emails probably need to match the new flow."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 673.9,
+      "end": 682.9,
+      "text": "Oh, yes, definitely. The welcome email currently tells people to \"connect your apps first,\" which would directly contradict the new flow."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 683.6,
+      "end": 695.1,
+      "text": "Okay, I'll rewrite the welcome sequence to match the new flow, all four emails, and I'll send the drafts to Priya so the tone and visuals line up."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 696.3,
+      "end": 715.6,
+      "text": "Okay, let me summarize. The three-step flow is approved in principle. Role question with multi-select, personalized template gallery with the prompt box, and in-context app connection. Connecting is skippable but required to publish. We ship in two releases behind an A/B test, and the target is fifty-five percent activation."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 716.9,
+      "end": 725.8,
+      "text": "Yep, that's it. And I'll update the designs with multi-select, the more visible blank canvas link, and the new empty states."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 727.3,
+      "end": 734.8,
+      "text": "This is a really great piece of work, Priya. Honestly the clearest design review we've had this year."
+    },
+    {
+      "speaker": "marcus.johnson@acme.io",
+      "start": 736.0,
+      "end": 742.0,
+      "text": "Agreed. Super easy to estimate when the flow is this well thought through."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 743.6,
+      "end": 751.6,
+      "text": "Aw, thank you all. That means a lot. I'll post the updated Figma link in the channel by tomorrow."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 752.6,
+      "end": 757.7,
+      "text": "Thanks, everyone. Great session. Let's go get that activation number up."
+    }
+  ],
+  "summary": {
+    "overview": "Priya presented the redesigned onboarding flow for Acme Flow, which replaces the current six-step setup wizard with a three-step flow built around a \"pick your first workflow\" moment. The design introduces a role question, a template gallery personalized by role and connected apps, and an optional AI prompt box that will light up once the AI builder ships. The team debated whether to require connecting an app during onboarding, and agreed to make it skippable but strongly encouraged, based on research showing 38% drop-off at the current connect step. Marcus estimated the build at about three sprints, and the group agreed to ship behind an A/B test targeting a lift in first-workflow activation from 41% to 55%.",
+    "keywords": [
+      "onboarding redesign",
+      "activation rate",
+      "template gallery",
+      "role-based personalization",
+      "connect app step",
+      "A/B test",
+      "empty states",
+      "AI prompt box",
+      "drop-off"
+    ],
+    "notes": [
+      {
+        "heading": "🔍 Research Findings",
+        "start": 0.0,
+        "bullets": [
+          "Only 41% of new signups publish a first workflow within 7 days",
+          "38% of users drop off at the current \"connect your apps\" step",
+          "Users who start from a template are 2.3x more likely to activate",
+          "Interviewees want to see value before granting app permissions"
+        ]
+      },
+      {
+        "heading": "🧭 New Flow Overview",
+        "start": 134.8,
+        "bullets": [
+          "Six-step wizard reduced to three steps: role question, template gallery, and first workflow",
+          "Template gallery is personalized by role and any apps detected from the email domain",
+          "Optional AI prompt box sits at the top of the gallery and activates once the AI builder ships",
+          "Connecting apps happens in context, inside the first workflow, instead of upfront"
+        ]
+      },
+      {
+        "heading": "💬 Feedback & Decisions",
+        "start": 295.3,
+        "bullets": [
+          "Connect-app step becomes skippable but strongly encouraged; test runs use sample data when apps aren't connected",
+          "Keep the role question but allow multiple selections",
+          "Add a \"start from scratch\" link for power users who want a blank canvas",
+          "Rework empty states on the dashboard for users who skip the template"
+        ]
+      },
+      {
+        "heading": "🧪 Build & Test Plan",
+        "start": 546.5,
+        "bullets": [
+          "Marcus estimates about three sprints for the full flow, including in-context app connection",
+          "Ship behind an A/B test with 50% of new signups",
+          "Primary metric: 7-day first-workflow activation, target 41% to 55%",
+          "Secondary metrics: connect-step drop-off and day-30 retention"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Problem and research recap",
+      "start": 0.0,
+      "end": 134.8,
+      "description": "Priya recaps the activation problem and the research that informed the redesign."
+    },
+    {
+      "title": "Walkthrough of the new flow",
+      "start": 134.8,
+      "end": 295.3,
+      "description": "Priya walks through the three-step flow, from role question to template gallery to first workflow."
+    },
+    {
+      "title": "Feedback and debate",
+      "start": 295.3,
+      "end": 546.5,
+      "description": "The team debates the connect-app step, the role question, and the empty-state experience."
+    },
+    {
+      "title": "Scope, estimate and testing plan",
+      "start": 546.5,
+      "end": 696.3,
+      "description": "Marcus estimates the build and the team agrees on an A/B test with clear success metrics."
+    },
+    {
+      "title": "Wrap-up",
+      "start": 696.3,
+      "end": 757.7,
+      "description": "Arvin summarizes decisions and next steps for the redesign."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Audit which connectors are missing sample trigger payloads and send the list to Priya",
+      "assignee": "marcus.johnson@acme.io",
+      "start": 358.3,
+      "completed": true,
+      "due_in_days": -8
+    },
+    {
+      "text": "Design new empty states for the dashboard and workflow list and bring them to design crit",
+      "assignee": "priya.patel@acme.io",
+      "start": 437.8,
+      "completed": true,
+      "due_in_days": -5
+    },
+    {
+      "text": "Write the onboarding A/B experiment plan with metrics, target lift and required sample size",
+      "assignee": "sarah.chen@acme.io",
+      "start": 630.6,
+      "completed": false,
+      "due_in_days": -7
+    },
+    {
+      "text": "Break the onboarding redesign's first release into tickets for next sprint",
+      "assignee": "marcus.johnson@acme.io",
+      "start": 652.0,
+      "completed": false,
+      "due_in_days": -9
+    },
+    {
+      "text": "Rewrite the four-email welcome sequence to match the new onboarding flow and share with Priya",
+      "assignee": "elena.rodriguez@acme.io",
+      "start": 683.6,
+      "completed": false,
+      "due_in_days": -3
+    }
+  ]
+}

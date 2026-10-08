@@ -1,0 +1,547 @@
+{
+  "title": "Sales Pipeline Review",
+  "days_ago": 9,
+  "start_hour": 15,
+  "start_minute": 30,
+  "platform": "teams",
+  "tags": [
+    "Sales",
+    "Planning"
+  ],
+  "participants": [
+    {
+      "name": "David Kim",
+      "email": "david.kim@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "James Wilson",
+      "email": "james.wilson@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Nina Alvarez",
+      "email": "nina.alvarez@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 0.0,
+      "end": 23.5,
+      "text": "Alright, thanks, everybody, for joining. Let's dive right in. Headline numbers first: weighted pipeline for Q4 is one point four two million against a bookings target of one point one million. So on paper we've got coverage of about one point three times, which is a bit thin for my liking. I'd normally want closer to two."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 24.2,
+      "end": 28.4,
+      "text": "What have we actually closed so far this quarter?"
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 29.5,
+      "end": 40.2,
+      "text": "A hundred and eighty-six thousand across eleven deals. Mostly smaller Business plan deals and a couple of expansions. The big ones are all still in play."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 41.0,
+      "end": 53.7,
+      "text": "And just to flag, the sales cycle has gotten longer. Average is fifty-three days this quarter, up from forty-one in Q2. Most of that extra time is in the security review stage."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 55.1,
+      "end": 62.9,
+      "text": "That's a pretty big jump. Is that because we're moving upmarket, or is something else going on?"
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 64.0,
+      "end": 78.5,
+      "text": "It's mostly upmarket. Deals over fifty thousand pull in IT and security, and those reviews take three to four weeks on average. And when we don't have SSO, a lot of those reviews just stall."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 79.8,
+      "end": 87.8,
+      "text": "Okay, that's helpful context. Let's look at the big deals and figure out where we can actually help."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 88.4,
+      "end": 106.7,
+      "text": "So the three biggest. Number one is Northwind Logistics, the expansion from sixty to around two hundred and fifty seats. If it closes on the Enterprise plan, it's about a hundred and forty-five thousand in ACV. Tom Becker, their VP of Ops, is a strong champion."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 107.9,
+      "end": 117.4,
+      "text": "We're actually doing a discovery call with them next week. Arvin and I want to understand their workflows better before the expansion."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 118.1,
+      "end": 131.1,
+      "text": "Perfect timing. The blocker there is their IT security team. They want SAML SSO on Azure AD and audit logs before approving any more seats, and the budget decision is mid-November."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 132.2,
+      "end": 133.9,
+      "text": "And number two?"
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 134.3,
+      "end": 149.3,
+      "text": "That's mine. Brightline Health. It's a new logo, about a hundred and twenty thousand ACV on Enterprise. They're a regional healthcare network, eight hospitals, and they want to automate patient intake and referral routing workflows."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 150.3,
+      "end": 156.6,
+      "text": "Healthcare is new territory for us. Are there compliance requirements we can't meet?"
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 157.0,
+      "end": 175.2,
+      "text": "Two big ones. They need SSO, and they need us to sign a BAA, a business associate agreement, because some of the workflows would touch patient data. Legal has the BAA template, but it's been sitting with them for two weeks."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 175.7,
+      "end": 187.7,
+      "text": "I'll chase legal on that personally. Two weeks is too long for a deal that size. Nina, send me the thread and I'll get them to commit to a date."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 189.0,
+      "end": 195.9,
+      "text": "Thank you, that would really help. I'll forward you the thread right after this call."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 196.9,
+      "end": 211.5,
+      "text": "And number three is Cobalt Retail. It's a renewal plus an upsell, about eighty-eight thousand ACV total. The issue there is that our champion, their director of operations, left the company two weeks ago."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 212.7,
+      "end": 216.1,
+      "text": "Oh no. Do we know who's taking over?"
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 216.8,
+      "end": 232.8,
+      "text": "Sort of. There's an interim person, Megan, who I've only spoken to once. She's open, but she doesn't know the product well, and I'm worried she's going to treat the renewal as a chance to re-evaluate everything."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 233.4,
+      "end": 245.6,
+      "text": "Could we offer her a workshop or some kind of value review? Show her exactly what Cobalt is getting out of the product today, in hours saved and workflows run."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 245.9,
+      "end": 259.7,
+      "text": "Yeah, that's a good idea. Sarah, could your team pull usage data for Cobalt? Number of workflows, executions per month, that kind of thing. I'd love to build a value review deck around it."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 260.8,
+      "end": 267.4,
+      "text": "Sure, I'll pull the Cobalt usage report this week and send it to you by Thursday."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 268.2,
+      "end": 274.3,
+      "text": "Amazing. And I'll book the value review with Megan for the week after."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 275.9,
+      "end": 286.2,
+      "text": "Before we move on, what about the mid-tier deals? The ones between twenty-five and fifty thousand. That's usually where our quarter is actually made."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 287.7,
+      "end": 306.4,
+      "text": "Yeah, so there are fourteen deals in that band, about four hundred and twenty thousand in total weighted pipeline. The healthiest ones are Pinecrest Software, Harbor Freight Partners and Quill Education. All three are in the proposal stage and none of them need SSO."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 307.2,
+      "end": 321.3,
+      "text": "Pinecrest is the one I'm most confident in. Their ops lead built six workflows during the trial and they've already asked for an order form. I'd put that at eighty percent to close this month."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 322.3,
+      "end": 325.9,
+      "text": "Great. What's the risk on the others?"
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 326.9,
+      "end": 339.5,
+      "text": "Harbor Freight is comparing us against two bigger automation platforms. They like our pricing, but they're worried about the number of native connectors. They specifically asked about MercuryGate and SAP."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 340.2,
+      "end": 350.5,
+      "text": "Interesting, MercuryGate keeps coming up with logistics customers. That's a good data point for the marketplace connector shortlist we're putting together for Q4."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 351.9,
+      "end": 364.9,
+      "text": "Yeah, I'll make a note of it. Nina, can you send me the exact list of connectors Harbor Freight asked about? It helps to have the deal context attached."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 365.9,
+      "end": 377.8,
+      "text": "Sure, I'll drop it in Slack. And Quill Education is mostly a timing thing. They're a school district network, so everything goes through a board approval in early December."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 378.7,
+      "end": 385.5,
+      "text": "So realistically Quill is a December close at best. I've got it at fifty percent."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 385.9,
+      "end": 397.9,
+      "text": "Okay. And what about discounting? I've seen a few deals come through with twenty-five percent off. I want to make sure we're not training the market to expect that."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 398.8,
+      "end": 411.7,
+      "text": "That's fair. Most of those were multi-year deals where the discount was traded for a longer commitment. But I'll tighten it up. Anything over twenty percent will need your approval going forward."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 413.1,
+      "end": 424.4,
+      "text": "Good. Let's make that the policy and write it down so the whole team knows. I don't want reps finding out about it from a rejected order form."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 424.7,
+      "end": 432.0,
+      "text": "So zooming out, how much of the pipeline is directly blocked on SSO or audit logs?"
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 432.6,
+      "end": 445.3,
+      "text": "I tagged every opportunity where security came up as a blocker. It's about three hundred and ten thousand in weighted pipeline. So more than a fifth of everything."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 446.6,
+      "end": 450.4,
+      "text": "That's significant. Arvin, where are we on SSO?"
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 451.6,
+      "end": 464.6,
+      "text": "The Okta flow is coming together in a spike, and Azure AD testing is next on the list. We're planning general availability by November 30th. Audit logs are planned for mid-December."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 465.3,
+      "end": 473.1,
+      "text": "Mid-December is tight for Q4 closes, but it could work if the customer can test SSO before then."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 473.5,
+      "end": 489.3,
+      "text": "That's what I was going to suggest. We set up an early-access program. Customers in late-stage deals get SSO in their workspace a few weeks before GA. That way their security teams can test with their real identity provider."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 490.0,
+      "end": 497.2,
+      "text": "That would be a game changer for Brightline. Their security lead basically said \"show me, don't tell me.\""
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 497.5,
+      "end": 508.0,
+      "text": "Okay. I'll put together a short early-access plan with eligibility criteria and the onboarding process, and share it with David and Nina by Monday."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 509.2,
+      "end": 515.3,
+      "text": "Perfect. And in the meantime, can we tell prospects SSO is coming in November?"
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 516.2,
+      "end": 524.2,
+      "text": "You can say it's planned for November. Please don't say committed. And let's not mention a specific day."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 524.5,
+      "end": 530.5,
+      "text": "Agreed. We've been burned before by over-committing on dates. Better to under-promise here."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 531.0,
+      "end": 541.6,
+      "text": "Okay, last topic. Funnel conversion. Demo-to-trial conversion has dropped from thirty-four percent to twenty-seven percent over the past two months. Nina dug into it a bit."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 542.7,
+      "end": 562.7,
+      "text": "Yeah. So I listened to about fifteen call recordings and looked at trial behavior. The demo goes great, people are excited. But when they start their trial, they land on an empty canvas and they just don't know where to start. Like, half of trial users never create a single workflow."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 563.2,
+      "end": 573.3,
+      "text": "That's the same pattern we see in self-serve signups. It's the blank canvas problem. It's literally the main reason we're building the AI builder."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 574.2,
+      "end": 593.3,
+      "text": "Right. So what if, once the beta is live, we run a guided trial for sales-led prospects? During the demo, the rep types the prospect's own use case into the AI builder, and the draft is waiting in their workspace when they start the trial."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 594.8,
+      "end": 601.0,
+      "text": "Oh, I love that. They'd start the trial with something real instead of nothing."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 601.3,
+      "end": 613.9,
+      "text": "Let's definitely test that. Nina, can you design the experiment? Maybe twenty prospects in the guided group and twenty in the control group, and we compare trial activation and conversion."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 615.2,
+      "end": 623.1,
+      "text": "Yep, I'll write up the experiment design and share it in the sales channel by next Wednesday."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 624.0,
+      "end": 629.4,
+      "text": "Okay, so what's the forecast? What number do I give the board?"
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 630.4,
+      "end": 646.5,
+      "text": "My commit is one point oh five million, so slightly under target. Best case is one point two five if Northwind and Brightline both close in December. Worst case, if both slip, we're closer to eight hundred and fifty thousand."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 646.9,
+      "end": 661.4,
+      "text": "Okay. I'll give the board one point oh five as the commit and talk about the SSO dependency as the swing factor. Honestly, that's a pretty clear story. The product work directly unlocks revenue."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 661.8,
+      "end": 668.8,
+      "text": "Agreed. And it's a great argument for keeping the enterprise readiness work protected on the roadmap."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 669.6,
+      "end": 685.1,
+      "text": "Okay, let's wrap. James is chasing legal on the Brightline BAA, Sarah's pulling the Cobalt usage report, Arvin's putting together the early-access plan, Nina's designing the guided trial experiment, and I'll book the value review with Cobalt."
+    },
+    {
+      "speaker": "james.wilson@acme.io",
+      "start": 686.5,
+      "end": 704.3,
+      "text": "Sounds good. Let's do this review every two weeks through the end of the quarter. And next time, I'd like to see the pipeline broken out by segment too, so we can tell the board how the mid-market motion is trending versus enterprise."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 705.9,
+      "end": 717.7,
+      "text": "Makes sense. Nina and I will add a segment view to the pipeline dashboard before the next review, along with the updated close probabilities for the top ten deals."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 718.1,
+      "end": 723.2,
+      "text": "Will do. I'll send a recurring invite. Thanks, everyone, great discussion."
+    },
+    {
+      "speaker": "nina.alvarez@acme.io",
+      "start": 724.3,
+      "end": 725.8,
+      "text": "Thanks, all!"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 727.4,
+      "end": 728.9,
+      "text": "Thanks, David."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 730.2,
+      "end": 731.9,
+      "text": "Thanks, team."
+    }
+  ],
+  "summary": {
+    "overview": "David and Nina walked James, Arvin and Sarah through the Q4 sales pipeline, which stands at $1.42M in weighted pipeline against a $1.1M bookings target. The three largest opportunities are Northwind Logistics' expansion, a new Enterprise deal with Brightline Health, and a renewal-plus-upsell with Cobalt Retail, and all three depend on SSO or audit logs. The team identified $310K of pipeline at risk from security requirements and agreed to use the SSO early-access program to unblock it. They also discussed a drop in demo-to-trial conversion from 34% to 27% and decided to test a guided trial with the AI builder once the beta is live.",
+    "keywords": [
+      "Q4 pipeline",
+      "weighted pipeline",
+      "bookings target",
+      "Brightline Health",
+      "Cobalt Retail",
+      "Northwind expansion",
+      "SSO early access",
+      "demo-to-trial conversion",
+      "deal risk"
+    ],
+    "notes": [
+      {
+        "heading": "📈 Pipeline Snapshot",
+        "start": 0.0,
+        "bullets": [
+          "Weighted pipeline of $1.42M against a $1.1M Q4 bookings target",
+          "47 open opportunities, 9 of them over $50K",
+          "Q4 closed-won so far: $186K across 11 deals",
+          "Average sales cycle has stretched from 41 to 53 days"
+        ]
+      },
+      {
+        "heading": "🏆 Top Deals",
+        "start": 88.4,
+        "bullets": [
+          "Northwind Logistics expansion: about $145K ACV, blocked on SSO and audit logs, decision mid-November",
+          "Brightline Health new Enterprise deal: $120K ACV, needs SSO plus a signed BAA",
+          "Cobalt Retail renewal and upsell: $88K ACV, champion recently left the company"
+        ]
+      },
+      {
+        "heading": "⚠️ Deal Risks",
+        "start": 424.7,
+        "bullets": [
+          "About $310K of pipeline is directly blocked by missing SSO or audit logs",
+          "SSO early access will be offered to Northwind, Brightline and two smaller accounts",
+          "Sales can describe SSO as \"planned for November,\" not committed"
+        ]
+      },
+      {
+        "heading": "🔄 Funnel & Forecast",
+        "start": 531.0,
+        "bullets": [
+          "Demo-to-trial conversion dropped from 34% to 27% over the past two months",
+          "Trials stall when prospects face a blank canvas after the demo",
+          "Plan to test a guided trial with the AI builder once the beta launches",
+          "Q4 commit forecast set at $1.05M, with $1.25M as best case"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Pipeline overview",
+      "start": 0.0,
+      "end": 88.4,
+      "description": "David presents the overall Q4 pipeline numbers against target."
+    },
+    {
+      "title": "Top deals deep dive",
+      "start": 88.4,
+      "end": 424.7,
+      "description": "The team reviews Northwind, Brightline Health and Cobalt Retail in detail."
+    },
+    {
+      "title": "Risks and the SSO dependency",
+      "start": 424.7,
+      "end": 531.0,
+      "description": "The team quantifies deals at risk from missing SSO and agrees on an early-access strategy."
+    },
+    {
+      "title": "Conversion and forecast",
+      "start": 531.0,
+      "end": 669.6,
+      "description": "David and Nina review funnel conversion and the team agrees on the Q4 forecast."
+    },
+    {
+      "title": "Wrap-up",
+      "start": 669.6,
+      "end": 731.9,
+      "description": "David recaps action items and the next review date."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Follow up with legal to get a committed date on the Brightline Health BAA",
+      "assignee": "james.wilson@acme.io",
+      "start": 175.7,
+      "completed": true,
+      "due_in_days": -6
+    },
+    {
+      "text": "Pull a Cobalt Retail usage report with workflow counts and monthly executions for the value review",
+      "assignee": "sarah.chen@acme.io",
+      "start": 260.8,
+      "completed": false,
+      "due_in_days": -5
+    },
+    {
+      "text": "Schedule a value review session with Megan at Cobalt Retail",
+      "assignee": "david.kim@acme.io",
+      "start": 268.2,
+      "completed": false,
+      "due_in_days": -2
+    },
+    {
+      "text": "Put together the SSO early-access plan with eligibility criteria and onboarding steps",
+      "assignee": "arvin@acme.io",
+      "start": 497.5,
+      "completed": true,
+      "due_in_days": -5
+    },
+    {
+      "text": "Design the guided-trial experiment comparing AI builder drafts against a control group",
+      "assignee": "nina.alvarez@acme.io",
+      "start": 615.2,
+      "completed": false,
+      "due_in_days": -2
+    }
+  ]
+}

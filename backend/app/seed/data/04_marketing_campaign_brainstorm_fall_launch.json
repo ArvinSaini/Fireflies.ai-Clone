@@ -1,0 +1,474 @@
+{
+  "title": "Marketing Campaign Brainstorm: Fall Launch",
+  "days_ago": 6,
+  "start_hour": 11,
+  "start_minute": 0,
+  "platform": "google_meet",
+  "tags": [
+    "Marketing",
+    "Planning"
+  ],
+  "participants": [
+    {
+      "name": "Elena Rodriguez",
+      "email": "elena.rodriguez@acme.io",
+      "role": "host"
+    },
+    {
+      "name": "Arvin Saini",
+      "email": "arvin@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Sarah Chen",
+      "email": "sarah.chen@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "David Kim",
+      "email": "david.kim@acme.io",
+      "role": "attendee"
+    },
+    {
+      "name": "Priya Patel",
+      "email": "priya.patel@acme.io",
+      "role": "attendee"
+    }
+  ],
+  "segments": [
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 0.0,
+      "end": 22.9,
+      "text": "Alright, welcome, everyone! I'm so excited for this one. So the goal today is to brainstorm the Fall Launch campaign. We've got two big stories this quarter, the AI-assisted builder and the enterprise features, and I want to figure out whether that's one campaign or two, plus nail down the theme, the channels, and the big moments."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 23.8,
+      "end": 40.4,
+      "text": "Love it. My strong vote would be one campaign. The AI builder is the headline, and enterprise readiness is the \"and you can trust it at scale\" proof point. Two campaigns in one quarter will split our attention and our budget."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 41.2,
+      "end": 59.3,
+      "text": "Yeah, I lean the same way. Okay, so let's talk audience first. My proposal is that we go after operations leaders at mid-market companies, roughly two hundred to two thousand employees. That's where our best retention is and where the SSO story matters most."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 60.6,
+      "end": 80.2,
+      "text": "Totally agree, and I'd add a second persona: the IT or security buyer. In basically every mid-market deal I'm in right now, they show up in the last two weeks and they can kill the deal. If our campaign gives them something to read, it makes my life so much easier."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 81.7,
+      "end": 98.1,
+      "text": "That's a great point. So primary is ops leaders, secondary is IT and security. For goals, I'm thinking fifteen hundred MQLs for the quarter, plus three hundred signups to the AI builder waitlist. Does that feel ambitious enough?"
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 98.5,
+      "end": 110.9,
+      "text": "The waitlist number feels low to me, honestly. When we teased it in the newsletter last month, we got almost two hundred replies without even asking. I'd push for five hundred."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 111.7,
+      "end": 120.1,
+      "text": "Okay, I like that energy. Let's say five hundred waitlist signups as a stretch, three hundred as the commit."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 121.2,
+      "end": 133.7,
+      "text": "Okay, theme. I put a few options in the doc. \"Workflows at the speed of thought,\" \"Just say the word,\" and \"Describe it. Done.\" I'm curious what everyone's gut reaction is."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 134.4,
+      "end": 149.6,
+      "text": "\"Describe it. Done.\" for sure. It's short, it's a little bit cheeky, and it actually describes the product. You literally describe the workflow and it's done. Visually, I can do a lot with the period too."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 150.6,
+      "end": 163.6,
+      "text": "I like it too, but I'm slightly nervous about \"done.\" If a prospect types a prompt in a demo and the draft needs tweaking, it feels like we overpromised."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 164.9,
+      "end": 177.4,
+      "text": "That's fair. Maybe the subhead does the honest work. Something like \"Describe it. Done. Then make it yours.\" Or the body copy explains that you can review and edit everything."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 178.7,
+      "end": 196.8,
+      "text": "I think that's right. The headline can be bold as long as the next line is honest. And honestly, in testing, people were thrilled with drafts that were eighty percent there. That still feels like magic compared to a blank canvas."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 198.1,
+      "end": 214.5,
+      "text": "Okay, so \"Describe it. Done.\" is the theme, and we make the review-and-edit piece really clear in the subhead and the product messaging. I'll write up a messaging framework this week with the headline, three pillars, and proof points for each."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 215.8,
+      "end": 223.7,
+      "text": "I'll aim to have the draft in the shared drive by Thursday so everyone can comment before Monday."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 224.4,
+      "end": 237.4,
+      "text": "For the pillars, my suggestion would be speed, control, and scale. Speed is the AI builder, control is the review step and audit logs, scale is SSO, SCIM and the marketplace."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 238.5,
+      "end": 242.6,
+      "text": "Ooh, speed, control, scale. That's clean. I'm stealing that."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 243.7,
+      "end": 259.5,
+      "text": "Okay, let's talk big moments. I'd love an anchor event. I'm thinking a live virtual launch event, maybe forty-five minutes, with a product demo from Arvin and a short customer panel. What do people think about early December?"
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 260.6,
+      "end": 273.2,
+      "text": "Early December works, as long as it's after the beta has been running for a couple of weeks. That way we have real customer quotes. What about December 3rd?"
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 273.6,
+      "end": 284.7,
+      "text": "December 3rd works for me. It's a Thursday, and it's before the holiday slowdown kicks in. I'll lock that in and start talking to the events vendor."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 286.1,
+      "end": 303.5,
+      "text": "Can I pitch something for the website? What if the homepage had an interactive demo where you type a prompt, like \"when someone fills out our contact form, add them to HubSpot and notify sales,\" and you see an animated draft workflow build itself?"
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 304.0,
+      "end": 309.8,
+      "text": "Oh my gosh, yes. That's the hero. That's the thing people will share."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 310.6,
+      "end": 321.6,
+      "text": "Do we need it to be actually live, or can it be a scripted demo? Because live means we're paying for model calls for every anonymous visitor."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 322.0,
+      "end": 336.4,
+      "text": "I was thinking a hybrid. We pre-generate maybe thirty common prompts, and if someone types something close to one of those, we show that. Otherwise, we show a nice \"join the waitlist to try your own\" message."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 336.8,
+      "end": 356.2,
+      "text": "That's clever. It keeps the cost basically at zero and it doubles as a waitlist capture. Priya, can you put together a concept for the interactive demo, even just a rough prototype, so we can see if it feels as good as it sounds?"
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 356.5,
+      "end": 369.2,
+      "text": "Yeah, I'll do a clickable Figma prototype by the end of next week, and I'll grab Marcus for thirty minutes to sanity check how hard the real version would be."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 370.8,
+      "end": 380.7,
+      "text": "Amazing. And for customer proof, I really want Northwind as the anchor story. They save, what, thirty hours a week with the exception workflow?"
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 381.2,
+      "end": 402.0,
+      "text": "Yeah, Tom Becker mentioned that number. I think he'd be up for it, especially if we feature their team positively. But I'd hold off on asking until the expansion proposal goes out. I don't want them to feel like we're asking for favors in the middle of a negotiation."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 402.9,
+      "end": 412.7,
+      "text": "That makes total sense. David, can you let me know when the timing is right, and then make the intro to Tom?"
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 413.6,
+      "end": 420.9,
+      "text": "Yes, I'll intro you to Tom once the proposal is out, probably in about two weeks."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 421.8,
+      "end": 437.4,
+      "text": "Perfect. For paid, I'm thinking LinkedIn is the main channel, targeting operations titles at our company sizes. Maybe some retargeting on the waitlist page. And then a January webinar series to keep momentum going after the holidays."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 439.0,
+      "end": 456.5,
+      "text": "Could we also do a targeted outbound play? Like, my team sends a short personalized video to two hundred mid-market accounts showing their own use case being built by the AI builder. That converts way better than generic email."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 457.5,
+      "end": 465.3,
+      "text": "Ooh, I love that. Let's make that part of the plan. I'll work with your team on the templates."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 466.5,
+      "end": 475.7,
+      "text": "How many videos can your team realistically record, though? Two hundred personalized videos is a lot on top of quota."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 476.5,
+      "end": 490.1,
+      "text": "Fair. Realistically, maybe fifty fully custom ones for the top-tier accounts, and then a semi-custom version for the rest, where we just swap in their logo and the connectors they already use."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 490.7,
+      "end": 510.6,
+      "text": "That's a nice tiered approach. Okay, what about content? I'm thinking a launch blog post, a three-part blog series on \"the end of the blank canvas,\" and a two-minute launch video. Plus a press release, although honestly I'm not sure how much press we'll get."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 511.7,
+      "end": 528.1,
+      "text": "I'd skip the traditional press push, to be honest. What I'd rather do is brief two or three analysts and a couple of newsletter writers in the automation space ahead of time. They're the ones our buyers actually read."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 529.2,
+      "end": 540.7,
+      "text": "Yeah, that's a good call. I've got contacts at two of the big automation newsletters. I'll set up briefings for the week before the launch, under embargo."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 541.0,
+      "end": 554.7,
+      "text": "For the launch video, can we show real people, not just screen recordings? Like Lisa from Northwind typing a prompt and reacting to the draft. Authentic reactions are way more convincing than polished motion graphics."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 555.9,
+      "end": 566.9,
+      "text": "I love that, though it depends on Northwind agreeing. Let's plan for a screen-recording version as the fallback and upgrade it if we get customer footage."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 567.9,
+      "end": 578.8,
+      "text": "We could also record reactions from the beta customers more generally. With their permission, obviously. Some of the reactions in the research sessions were genuinely priceless."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 580.1,
+      "end": 594.3,
+      "text": "Okay, budget. We have sixty thousand dollars for the quarter. My draft split is twenty-five thousand on paid social, fifteen on the launch event, twelve on content and video, and eight thousand held as contingency."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 595.6,
+      "end": 607.9,
+      "text": "That feels reasonable. I'd maybe shift a few thousand from paid into video. The interactive demo and a really good launch video are going to carry a lot of the weight."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 609.0,
+      "end": 621.5,
+      "text": "Yeah, I can see that. Let's say twenty-two on paid and fifteen on content and video. I'll update the budget sheet and send it to James for approval this week."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 622.3,
+      "end": 638.0,
+      "text": "On enablement, here's my wish list. A one-pager for the AI builder, a demo script, an objection handling guide, especially around AI accuracy and data privacy, and a security FAQ for the IT buyers we talked about."
+    },
+    {
+      "speaker": "sarah.chen@acme.io",
+      "start": 638.6,
+      "end": 650.2,
+      "text": "I can take the demo script and the objection handling guide, since a lot of that comes straight from the research sessions. I'll have drafts by November 10th."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 650.6,
+      "end": 657.8,
+      "text": "And I'll take the one-pager and the security FAQ, with help from Marcus on the technical bits."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 658.5,
+      "end": 669.7,
+      "text": "That'd be great. Ideally everything's ready by the time the beta starts on November 20th, so my team can start using it in calls right away."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 670.3,
+      "end": 687.3,
+      "text": "Okay, let me recap. One campaign, theme is \"Describe it. Done.\" with pillars speed, control and scale. Launch event on December 3rd, interactive homepage demo, Northwind as the anchor story, LinkedIn plus outbound video for distribution, and a sixty thousand dollar budget."
+    },
+    {
+      "speaker": "arvin@acme.io",
+      "start": 687.6,
+      "end": 696.0,
+      "text": "That's a great plan. Honestly, this is the most excited I've been about a launch in a long time."
+    },
+    {
+      "speaker": "priya.patel@acme.io",
+      "start": 697.4,
+      "end": 713.2,
+      "text": "Same. I'm already sketching the hero section in my head. I'll share a couple of rough directions for the visual identity in the design channel early next week so we can react to them before the prototype review."
+    },
+    {
+      "speaker": "david.kim@acme.io",
+      "start": 713.7,
+      "end": 720.5,
+      "text": "And I'm looking forward to finally having assets for the IT buyers. Thanks, Elena."
+    },
+    {
+      "speaker": "elena.rodriguez@acme.io",
+      "start": 721.5,
+      "end": 731.3,
+      "text": "Thank you all! I'll send the notes and the action items in Slack right after this. Have a great rest of your day."
+    }
+  ],
+  "summary": {
+    "overview": "Elena led a brainstorm for the Fall Launch campaign, which will introduce the AI-assisted workflow builder and enterprise features of Acme Flow. The group settled on the campaign theme \"Describe it. Done.\" and agreed to anchor the launch on a live virtual event on December 3rd, supported by a customer story from Northwind Logistics. David pushed for sales enablement assets and a targeted outbound play for mid-market accounts, while Priya proposed an interactive demo on the website that lets visitors type a prompt and see a workflow draft. The team set a $60,000 budget split across paid social, the launch event and content, with an MQL target of 1,500 for the quarter.",
+    "keywords": [
+      "Fall Launch",
+      "Describe it. Done.",
+      "launch event",
+      "AI builder messaging",
+      "interactive demo",
+      "customer story",
+      "MQL target",
+      "sales enablement",
+      "paid social"
+    ],
+    "notes": [
+      {
+        "heading": "🎯 Campaign Goals",
+        "start": 0.0,
+        "bullets": [
+          "Launch the AI builder and enterprise features as one \"Fall Launch\" story",
+          "Primary audience is operations leaders at mid-market companies with 200 to 2,000 employees",
+          "Target of 1,500 MQLs and 300 AI builder beta waitlist signups this quarter"
+        ]
+      },
+      {
+        "heading": "💡 Theme & Messaging",
+        "start": 121.2,
+        "bullets": [
+          "Campaign theme chosen: \"Describe it. Done.\"",
+          "Core message: go from idea to working workflow in minutes, with enterprise-grade controls",
+          "Avoid overpromising AI; emphasize that drafts are reviewed and editable"
+        ]
+      },
+      {
+        "heading": "📣 Launch Moments",
+        "start": 243.7,
+        "bullets": [
+          "Live virtual launch event on December 3 with a product demo and a customer panel",
+          "Interactive \"type a prompt\" demo on the homepage, designed by Priya",
+          "Northwind Logistics customer story as the anchor case study",
+          "Paid social on LinkedIn targeting ops leaders, plus a webinar series in January"
+        ]
+      },
+      {
+        "heading": "💰 Budget & Enablement",
+        "start": 580.1,
+        "bullets": [
+          "Total budget of $60,000: $25k paid social, $15k launch event, $12k content and video, $8k contingency",
+          "Sales needs a one-pager, a demo script, an objection handling guide and a security FAQ",
+          "Enablement assets must be ready by November 20 to match the beta"
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "title": "Goals and audience",
+      "start": 0.0,
+      "end": 121.2,
+      "description": "Elena frames the campaign goals, target audience and success metrics."
+    },
+    {
+      "title": "Theme and messaging",
+      "start": 121.2,
+      "end": 243.7,
+      "description": "The team brainstorms campaign names and lands on \"Describe it. Done.\""
+    },
+    {
+      "title": "Launch moments and channels",
+      "start": 243.7,
+      "end": 580.1,
+      "description": "The group plans the launch event, interactive demo, customer story and paid channels."
+    },
+    {
+      "title": "Budget and sales enablement",
+      "start": 580.1,
+      "end": 670.3,
+      "description": "Elena proposes a budget split and David lists the enablement assets sales needs."
+    },
+    {
+      "title": "Wrap-up",
+      "start": 670.3,
+      "end": 731.3,
+      "description": "Elena recaps decisions and owners."
+    }
+  ],
+  "action_items": [
+    {
+      "text": "Write the Fall Launch messaging framework with headline, three pillars and proof points",
+      "assignee": "elena.rodriguez@acme.io",
+      "start": 198.1,
+      "completed": true,
+      "due_in_days": -1
+    },
+    {
+      "text": "Create a concept prototype for the interactive \"type a prompt\" homepage demo",
+      "assignee": "priya.patel@acme.io",
+      "start": 336.8,
+      "completed": false,
+      "due_in_days": -2
+    },
+    {
+      "text": "Introduce Elena to Tom Becker at Northwind for the launch customer story once the proposal is sent",
+      "assignee": "david.kim@acme.io",
+      "start": 413.6,
+      "completed": false,
+      "due_in_days": 8
+    },
+    {
+      "text": "Update the Fall Launch budget sheet and send it to James for approval",
+      "assignee": "elena.rodriguez@acme.io",
+      "start": 609.0,
+      "completed": true,
+      "due_in_days": -2
+    },
+    {
+      "text": "Draft the AI builder demo script and objection handling guide for sales",
+      "assignee": "sarah.chen@acme.io",
+      "start": 638.6,
+      "completed": false,
+      "due_in_days": 22
+    }
+  ]
+}
