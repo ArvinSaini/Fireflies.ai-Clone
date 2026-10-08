@@ -336,7 +336,7 @@ flowchart LR
 | Playwright: click line → seek & play; seek bar → active line; find "SSO" → 7 highlighted marks, "1 / 7"; Smart Search "Questions" filter | ✅ |
 | Playwright CRUD: paste transcript → AI notes → add/complete/delete action item → rename → AskFred answer → delete meeting | ✅ |
 | Playwright: dark mode, 390 px mobile, PDF export (A4 PDF generated from the print view) | ✅ |
-| **Full requirements audit** (Playwright, visible browser): 51 checks covering every core requirement, CRUD with reload-persistence, placeholders, all 6 bonuses, and 16 responsive checks (390 / 768 / 1024 / 1440 px × 4 pages, no horizontal overflow) | ✅ **51/51**, 0 console errors |
+| **Full site audit** (Playwright, visible browser): 72 checks covering every core requirement, CRUD with reload-persistence, placeholders, all 6 bonuses, every page and control (home tabs, AskFred page, notifications, channels, bulk move, details drawer, player speed/skip/keyboard, summary templates, summary edit + regenerate, transcript edit + speaker re-assignment, all rail panels, Smart Search filters, topic trackers, tasks, analytics, settings, integrations, upgrade, 404) and 16 responsive checks (390 / 768 / 1024 / 1440 px × 4 pages, no horizontal overflow) | ✅ **72/72**, 0 unexpected console errors |
 
 ## 9. Five-minute demo script (for the evaluator)
 
