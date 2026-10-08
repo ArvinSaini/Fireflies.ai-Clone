@@ -29,7 +29,7 @@ SAMPLE_TRANSCRIPT = """[00:00:00] Sarah Chen: Welcome everyone, let's review the
 def client():
     init_db()
     with SessionLocal() as db:
-        db.add(User(id=1, name="Test User", email="test@acme.io"))
+        db.add(User(id=1, name="Sarah Chen", email="sarah@acme.io"))
         db.commit()
     with TestClient(app) as c:
         yield c
@@ -39,10 +39,17 @@ def client():
 
 
 @pytest.fixture()
-def meeting(client):
+def channel(client):
+    res = client.post("/api/channels", json={"name": "Product"})
+    assert res.status_code == 201, res.text
+    return res.json()
+
+
+@pytest.fixture()
+def meeting(client, channel):
     res = client.post("/api/meetings", json={
         "title": "Pricing Sync", "participants": [{"name": "Sarah Chen", "email": "sarah@acme.io"}],
-        "tags": ["Product"], "transcript_text": SAMPLE_TRANSCRIPT,
+        "channel_ids": [channel["id"]], "transcript_text": SAMPLE_TRANSCRIPT,
     })
     assert res.status_code == 201, res.text
     return res.json()
