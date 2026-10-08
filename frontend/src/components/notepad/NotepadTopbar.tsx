@@ -90,7 +90,7 @@ export function NotepadTopbar({ meeting, onInfo }: { meeting: MeetingDetail; onI
             </button>
           ))}
         </Popover>
-        <span className="hidden items-center gap-1.5 px-2 text-[13px] text-ink-4 sm:flex"><Eye className="size-4" /> 1 View</span>
+        <span className="hidden items-center gap-1.5 px-2 text-[13px] whitespace-nowrap text-ink-4 lg:flex"><Eye className="size-4" /> 1 View</span>
         <div className="flex">
           <button onClick={() => comingSoon({ name: "Share with teammates", description: "Share meeting notes with your team or anyone via a public link. Use the link button to copy this meeting's URL." })}
             className="flex h-9 items-center gap-1.5 rounded-l-lg bg-brand px-3 text-[14px] font-medium text-white hover:bg-brand-hover">
