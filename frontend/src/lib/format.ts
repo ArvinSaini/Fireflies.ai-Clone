@@ -35,6 +35,13 @@ export function formatShortDate(d: string): string {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", ...(sameYear ? {} : { year: "numeric" }) });
 }
 
+/** Home "Recent" rows: "Thu, Aug 8 2024, 3:52 PM" */
+export function formatRecentDate(d: string): string {
+  const date = parseDate(d);
+  const day = date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  return `${day} ${date.getFullYear()}, ${formatTime(d)}`;
+}
+
 /** Day-group header: "Tue, Jul 28" */
 export const formatDayHeader = (d: string) =>
   parseDate(d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
@@ -56,13 +63,6 @@ export function formatBytes(bytes: number | null): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-}
-
-export function greeting(now = new Date()): { text: string; emoji: string } {
-  const h = now.getHours();
-  if (h < 12) return { text: "Good Morning", emoji: "☀️" };
-  if (h < 17) return { text: "Good Afternoon", emoji: "🌤️" };
-  return { text: "Good Evening", emoji: "🌙" };
 }
 
 export const initials = (name: string) =>
