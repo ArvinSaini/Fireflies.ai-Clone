@@ -2,8 +2,9 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.api.routes import (
     action_items,
@@ -17,6 +18,7 @@ from app.api.routes import (
 )
 from app.core.config import get_settings
 from app.db import init_db
+from app.services.errors import Conflict, DomainError, InvalidInput, NotFound
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 
@@ -42,6 +44,15 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
         expose_headers=["Content-Disposition"],
     )
+    @app.exception_handler(DomainError)
+    async def domain_error(_: Request, exc: DomainError) -> JSONResponse:
+        """Services raise domain errors; this is the only place they become HTTP status codes."""
+        code = (status.HTTP_404_NOT_FOUND if isinstance(exc, NotFound)
+                else status.HTTP_409_CONFLICT if isinstance(exc, Conflict)
+                else status.HTTP_422_UNPROCESSABLE_CONTENT if isinstance(exc, InvalidInput)
+                else status.HTTP_400_BAD_REQUEST)
+        return JSONResponse({"detail": str(exc)}, status_code=code)
+
     for module in (workspace, channels, topic_trackers, meetings, action_items, transcript, assistant, askfred):
         app.include_router(module.router, prefix="/api")
 

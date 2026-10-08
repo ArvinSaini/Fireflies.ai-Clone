@@ -3,11 +3,9 @@ from datetime import date, datetime
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, File, Form, HTTPException, Query, Response, UploadFile, status
-from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession, OwnedMeeting
 from app.api.presenters import meeting_detail, meeting_list_item
-from app.models import TopicTracker, TranscriptSegment
 from app.schemas.common import Page
 from app.schemas.meeting import (
     BulkMeetingAction,
@@ -24,8 +22,10 @@ from app.schemas.meeting import (
 from app.schemas.transcript import SegmentOut
 from app.services import export as export_service
 from app.services import meetings as svc
+from app.services import topic_trackers as tracker_service
+from app.services import transcript as transcript_service
 from app.services.insights import meeting_analytics
-from app.services.transcript_parser import TranscriptParseError, parse_transcript
+from app.services.transcript_parser import parse_transcript
 
 router = APIRouter(prefix="/meetings", tags=["meetings"])
 
@@ -37,18 +37,8 @@ def _detail(db, meeting) -> MeetingDetail:
 
 
 def _create(db, user, data: MeetingCreate, parsed, **source) -> MeetingDetail:
-    try:
-        meeting = svc.create_meeting(db, user, data, parsed, **source)
-    except svc.InvalidChannel as exc:
-        db.rollback()
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+    meeting = svc.create_meeting(db, user, data, parsed, **source)
     return _detail(db, meeting)
-
-
-def _segments(db, meeting_id: int) -> list[TranscriptSegment]:
-    return list(db.scalars(
-        select(TranscriptSegment).where(TranscriptSegment.meeting_id == meeting_id).order_by(TranscriptSegment.position)
-    ))
 
 
 @router.get("", response_model=Page[MeetingListItem])
@@ -83,10 +73,7 @@ def create_meeting(data: MeetingCreate, db: DbSession, user: CurrentUser):
     """Create from a form; include `transcript_text` to paste a transcript."""
     parsed = None
     if data.transcript_text and data.transcript_text.strip():
-        try:
-            parsed = parse_transcript(data.transcript_text, data.transcript_format)
-        except TranscriptParseError as exc:
-            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+        parsed = parse_transcript(data.transcript_text, data.transcript_format)
         if data.platform == "manual":
             data.platform = "paste"
     return _create(db, user, data, parsed)
@@ -111,10 +98,7 @@ async def upload_meeting(
         content = raw.decode("utf-8-sig")
     except UnicodeDecodeError:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "File must be UTF-8 text") from None
-    try:
-        parsed = parse_transcript(content, transcript_format, file.filename)
-    except TranscriptParseError as exc:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+    parsed = parse_transcript(content, transcript_format, file.filename)
 
     default_title = (file.filename or "Uploaded meeting").rsplit(".", 1)[0].replace("_", " ").replace("-", " ").strip()
     data = MeetingCreate(
@@ -131,11 +115,7 @@ async def upload_meeting(
 @router.post("/bulk")
 def bulk_action(data: BulkMeetingAction, db: DbSession, user: CurrentUser):
     """Delete or move (re-channel) several meetings selected in the Notebook."""
-    try:
-        affected = svc.bulk_action(db, user.id, data.action, data.meeting_ids, data.channel_ids)
-    except svc.InvalidChannel as exc:
-        db.rollback()
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+    affected = svc.bulk_action(db, user.id, data.action, data.meeting_ids, data.channel_ids)
     return {"affected": affected}
 
 
@@ -146,11 +126,7 @@ def get_meeting(meeting: OwnedMeeting, db: DbSession):
 
 @router.patch("/{meeting_id}", response_model=MeetingDetail)
 def update_meeting(data: MeetingUpdate, meeting: OwnedMeeting, db: DbSession):
-    try:
-        return _detail(db, svc.update_meeting(db, meeting, data))
-    except svc.InvalidChannel as exc:
-        db.rollback()
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+    return _detail(db, svc.update_meeting(db, meeting, data))
 
 
 @router.delete("/{meeting_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -160,19 +136,19 @@ def delete_meeting(meeting: OwnedMeeting, db: DbSession):
 
 @router.get("/{meeting_id}/transcript", response_model=list[SegmentOut])
 def get_transcript(meeting: OwnedMeeting, db: DbSession):
-    return _segments(db, meeting.id)
+    return transcript_service.segments(db, meeting.id)
 
 
 @router.get("/{meeting_id}/analytics", response_model=MeetingAnalytics)
 def get_analytics(meeting: OwnedMeeting, db: DbSession):
-    trackers = db.scalars(select(TopicTracker).where(TopicTracker.owner_id == meeting.owner_id).order_by(TopicTracker.name))
-    return meeting_analytics(_segments(db, meeting.id), list(trackers))
+    trackers = tracker_service.list_for_owner(db, meeting.owner_id)
+    return meeting_analytics(transcript_service.segments(db, meeting.id), trackers)
 
 
 @router.post("/{meeting_id}/summary/regenerate", response_model=MeetingDetail)
 def regenerate_summary(meeting: OwnedMeeting, db: DbSession):
     """Re-run the AI pipeline (summary, chapters, AI action items) on the current transcript."""
-    if not _segments(db, meeting.id):
+    if not transcript_service.segments(db, meeting.id):
         raise HTTPException(status.HTTP_409_CONFLICT, "Meeting has no transcript to summarize")
     svc.summarize_meeting(db, meeting)
     return _detail(db, svc.get_meeting(db, meeting.id, meeting.owner_id))
@@ -187,7 +163,7 @@ def edit_summary(data: SummaryUpdate, meeting: OwnedMeeting, db: DbSession):
 @router.get("/{meeting_id}/export")
 def export_meeting(meeting: OwnedMeeting, db: DbSession, format: Literal["md", "txt", "json"] = "md"):
     render, media_type = export_service.EXPORTERS[format]
-    body = render(meeting, _segments(db, meeting.id))
+    body = render(meeting, transcript_service.segments(db, meeting.id))
     slug = "".join(c if c.isalnum() else "-" for c in meeting.title.lower()).strip("-")[:60] or "meeting"
     return Response(
         body, media_type=f"{media_type}; charset=utf-8",

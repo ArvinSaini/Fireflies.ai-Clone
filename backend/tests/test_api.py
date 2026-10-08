@@ -192,3 +192,26 @@ def test_workspace_askfred_intents(client, meeting):
     assert "meetings in the last 7 days" in digest["answer"]
     decisions = client.post("/api/askfred", json={"question": "Key decisions"}).json()
     assert decisions["answer"]  # either decisions found or a clear "none found" message
+
+
+def test_domain_errors_map_to_http_status(client, meeting, channel):
+    """Services raise NotFound / Conflict / InvalidInput; app.main maps them to 404 / 409 / 422."""
+    mid = meeting["id"]
+    seg_id = client.get(f"/api/meetings/{mid}/transcript").json()[0]["id"]
+    assert client.get("/api/meetings/999999").status_code == 404
+    assert client.patch("/api/action-items/999999", json={"is_completed": True}).status_code == 404
+    assert client.delete("/api/bookmarks/999999").status_code == 404
+    assert client.patch("/api/channels/999999", json={"name": "x"}).status_code == 404
+    # case-insensitive duplicate channel name
+    dup = client.post("/api/channels", json={"name": channel["name"].upper()})
+    assert dup.status_code == 409 and "already exists" in dup.json()["detail"]
+    assert client.post("/api/topic-trackers", json={"name": "Dup", "keywords": ["a"]}).status_code == 201
+    assert client.post("/api/topic-trackers", json={"name": "Dup", "keywords": ["b"]}).status_code == 409
+    # invalid references / values
+    assert client.post(f"/api/meetings/{mid}/comments", json={"segment_id": 999999, "body": "hi"}).status_code == 422
+    bad_bite = client.post(f"/api/meetings/{mid}/soundbites", json={"title": "x", "start_ms": 500, "end_ms": 100})
+    assert bad_bite.status_code == 422
+    assert client.post(f"/api/meetings/{mid}/action-items", json={"text": "t", "assignee_id": 999999}).status_code == 422
+    assert client.patch(f"/api/meetings/{mid}", json={"channel_ids": [999999]}).status_code == 422
+    # valid calls still work end to end through the services
+    assert client.post(f"/api/meetings/{mid}/bookmarks", json={"segment_id": seg_id}).status_code == 201

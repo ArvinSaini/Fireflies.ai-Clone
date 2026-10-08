@@ -27,13 +27,9 @@ from app.models.mixins import utcnow
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.services.ai import Line, MeetingContext, get_summarizer
 from app.services.ai.types import SummaryDraft
+from app.services.errors import InvalidInput, NotFound
 from app.services.people import get_or_create_participant
 from app.services.transcript_parser import ParsedSegment
-
-
-class NotFound(LookupError):
-    pass
-
 
 # --- reading ------------------------------------------------------------------
 
@@ -174,7 +170,7 @@ def _set_participants(db: Session, meeting: Meeting, people: list[tuple[str, str
     db.expire(meeting, ["participant_links"])
 
 
-class InvalidChannel(ValueError):
+class InvalidChannel(InvalidInput):
     pass
 
 

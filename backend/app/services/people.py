@@ -6,7 +6,7 @@ import hashlib
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.models import Channel, Participant
+from app.models import Channel, Meeting, MeetingParticipant, Participant
 
 AVATAR_COLORS = [
     "#7C3AED", "#2563EB", "#DB2777", "#059669", "#D97706", "#DC2626",
@@ -49,3 +49,18 @@ def get_or_create_channel(db: Session, owner_id: int, name: str, is_private: boo
         db.add(channel)
         db.flush()
     return channel
+
+
+def participants_with_counts(db: Session, owner_id: int, role: str | None = None) -> list[tuple[Participant, int]]:
+    """People in the owner's meetings with how many meetings each was in; `role` narrows to hosts or attendees."""
+    stmt = (
+        select(Participant, func.count(func.distinct(MeetingParticipant.meeting_id)))
+        .join(MeetingParticipant).join(Meeting)
+        .where(Meeting.owner_id == owner_id)
+    )
+    if role:
+        stmt = stmt.where(MeetingParticipant.role == role)
+    rows = db.execute(
+        stmt.group_by(Participant.id).order_by(func.count(MeetingParticipant.meeting_id).desc(), Participant.name)
+    ).all()
+    return [(p, n) for p, n in rows]

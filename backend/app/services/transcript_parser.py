@@ -18,11 +18,13 @@ import json
 import re
 from dataclasses import dataclass
 
+from app.services.errors import InvalidInput
+
 WORDS_PER_SECOND = 2.5
 MIN_SEGMENT_MS = 1500
 
 
-class TranscriptParseError(ValueError):
+class TranscriptParseError(InvalidInput):
     pass
 
 

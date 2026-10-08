@@ -27,10 +27,7 @@ CurrentUser = Annotated[User, Depends(current_user)]
 
 
 def owned_meeting(meeting_id: int, db: DbSession, user: CurrentUser) -> Meeting:
-    try:
-        return meeting_service.get_meeting(db, meeting_id, user.id)
-    except meeting_service.NotFound:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "Meeting not found") from None
+    return meeting_service.get_meeting(db, meeting_id, user.id)  # NotFound → 404 (see app.main)
 
 
 OwnedMeeting = Annotated[Meeting, Depends(owned_meeting)]

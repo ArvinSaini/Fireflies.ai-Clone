@@ -1,14 +1,13 @@
 """Workspace-level endpoints: current user, stats, participants, global search."""
 from fastapi import APIRouter, Query
-from sqlalchemy import func, select
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Meeting, MeetingParticipant, Participant
 from app.schemas.common import ParticipantCount, ParticipantOut, UserOut
 from app.schemas.transcript import SearchResults
 from app.schemas.workspace import Me, WorkspaceStats
 from app.services import meetings as meeting_service
 from app.services.ai import engine_name
+from app.services.people import participants_with_counts
 from app.services.search import search
 
 router = APIRouter(tags=["workspace"])
@@ -29,17 +28,8 @@ def stats(db: DbSession, user: CurrentUser):
 @router.get("/participants", response_model=list[ParticipantCount])
 def participants(db: DbSession, user: CurrentUser, role: str | None = Query(None, pattern="^(host|attendee)$")):
     """People in the user's meetings; `role=host` lists only people who hosted (Filters → Hosted by)."""
-    stmt = (
-        select(Participant, func.count(func.distinct(MeetingParticipant.meeting_id)))
-        .join(MeetingParticipant).join(Meeting)
-        .where(Meeting.owner_id == user.id)
-    )
-    if role:
-        stmt = stmt.where(MeetingParticipant.role == role)
-    rows = db.execute(
-        stmt.group_by(Participant.id).order_by(func.count(MeetingParticipant.meeting_id).desc(), Participant.name)
-    ).all()
-    return [ParticipantCount(id=p.id, name=p.name, email=p.email, color=p.color, meeting_count=n) for p, n in rows]
+    return [ParticipantCount(id=p.id, name=p.name, email=p.email, color=p.color, meeting_count=n)
+            for p, n in participants_with_counts(db, user.id, role)]
 
 
 @router.get("/search", response_model=SearchResults)

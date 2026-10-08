@@ -42,20 +42,3 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     />
   );
 });
-
-export const IconButton = forwardRef<HTMLButtonElement, ButtonProps & { label: string }>(function IconButton(
-  { label, className, variant = "ghost", size = "sm", ...props },
-  ref,
-) {
-  return (
-    <Button
-      ref={ref}
-      aria-label={label}
-      title={label}
-      variant={variant}
-      size={size}
-      className={cn(size === "xs" ? "w-7 px-0" : size === "sm" ? "w-8 px-0" : "w-10 px-0", className)}
-      {...props}
-    />
-  );
-});
