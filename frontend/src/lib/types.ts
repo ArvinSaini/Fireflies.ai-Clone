@@ -273,3 +273,14 @@ export interface MeetingFilters {
   page?: number;
   page_size?: number;
 }
+
+export interface WorkspaceCitation extends ChatCitation {
+  meeting_id: number;
+  meeting_title: string;
+}
+
+export interface WorkspaceAnswer {
+  answer: string;
+  citations: WorkspaceCitation[];
+  meetings: { meeting_id: number; meeting_title: string; started_at: string }[];
+}

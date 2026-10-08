@@ -2,7 +2,7 @@
 import type {
   ActionItem, ActionItemWithMeeting, Bookmark, ChannelCount, Channel, ChatMessage, Comment, Me, MeetingAnalytics,
   MeetingCreateInput, MeetingDetail, MeetingFilters, MeetingListItem, MeetingUpdateInput, Page, ParticipantCount,
-  SearchResults, Segment, Soundbite, Summary, NoteSection, TopicTracker, WorkspaceStats,
+  SearchResults, Segment, Soundbite, Summary, NoteSection, TopicTracker, WorkspaceAnswer, WorkspaceStats,
 } from "./types";
 
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/$/, "");
@@ -110,6 +110,10 @@ export const api = {
   ask: (meetingId: number, question: string) =>
     request<ChatMessage[]>(`/meetings/${meetingId}/chat`, { method: "POST", body: json({ question }) }),
   clearChat: (meetingId: number) => request<void>(`/meetings/${meetingId}/chat`, { method: "DELETE" }),
+
+  // AskFred across all meetings (stateless; client sends recent turns)
+  askWorkspace: (question: string, history: { role: "user" | "assistant"; content: string }[]) =>
+    request<WorkspaceAnswer>("/askfred", { method: "POST", body: json({ question, history }) }),
 
   // topic trackers
   trackers: () => request<TopicTracker[]>("/topic-trackers"),
