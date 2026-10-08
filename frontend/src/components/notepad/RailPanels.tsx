@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  AudioLines, Bookmark, BookOpen, ChevronDown, ChevronUp, MessageSquare, Play, Plus, Search, Smile, Sparkles, Trash2, X,
+  ArrowUp, AudioLines, Bookmark, ChevronDown, ChevronUp, MessageSquare, Play, Plus, Search, Smile, Sparkles, Trash2, X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -12,15 +12,14 @@ import { Button } from "@/components/ui/Button";
 import { Input, Skeleton, Textarea } from "@/components/ui/Primitives";
 import { api } from "@/lib/api";
 import { formatTimestamp } from "@/lib/format";
-import { errorToast, keys, useAnalytics, useBookmarks, useComments, useSoundbites, useTrackers } from "@/lib/queries";
-import type { FilterKey, MeetingDetail, Segment, SentimentKey } from "@/lib/types";
+import { errorToast, keys, useAnalytics, useBookmarks, useComments, useMe, useSoundbites, useTrackers } from "@/lib/queries";
+import type { FilterKey, Segment, SentimentKey } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { type RailPanel, useNotepad } from "./NotepadContext";
 import { activeSegmentIndex, usePlayer } from "./PlayerContext";
 
 const RAIL: { value: Exclude<RailPanel, null>; label: string; icon: React.ReactNode }[] = [
   { value: "search", label: "Smart Search", icon: <Search /> },
-  { value: "index", label: "Index", icon: <BookOpen /> },
   { value: "soundbites", label: "Soundbites", icon: <AudioLines /> },
   { value: "comments", label: "Comments", icon: <MessageSquare /> },
   { value: "bookmarks", label: "Bookmarks", icon: <Bookmark /> },
@@ -238,39 +237,6 @@ export function SmartSearchPanel({ meetingId, segments }: { meetingId: number; s
   );
 }
 
-export function IndexPanel({ meeting }: { meeting: MeetingDetail }) {
-  const { seek } = usePlayer();
-  const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  const s = meeting.summary;
-  return (
-    <PanelShell title="Index">
-      <nav className="space-y-5 p-5 text-[14px]">
-        <div>
-          <p className="mb-1.5 text-xs font-medium tracking-wider text-ink-4 uppercase">AI summary</p>
-          {s && <button onClick={() => jump("overview")} className="block w-full rounded-md px-2 py-1.5 text-left text-ink-2 hover:bg-muted">Overview</button>}
-          {s?.notes.map((n, i) => (
-            <button key={i} onClick={() => jump(`note-${i}`)} className="block w-full truncate rounded-md px-2 py-1.5 text-left text-ink-2 hover:bg-muted">{n.heading}</button>
-          ))}
-          <button onClick={() => jump("action-items")} className="block w-full rounded-md px-2 py-1.5 text-left text-ink-2 hover:bg-muted">
-            Action Items <span className="text-ink-5">({meeting.action_items.length})</span>
-          </button>
-        </div>
-        {meeting.chapters.length > 0 && (
-          <div>
-            <p className="mb-1.5 text-xs font-medium tracking-wider text-ink-4 uppercase">Outline</p>
-            {meeting.chapters.map((c) => (
-              <button key={c.id} onClick={() => seek(c.start_ms, { play: true })} className="flex w-full items-baseline gap-2 rounded-md px-2 py-1.5 text-left hover:bg-muted">
-                <span className="w-11 shrink-0 text-xs text-link">{formatTimestamp(c.start_ms)}</span>
-                <span className="text-ink-2">{c.title}</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </nav>
-    </PanelShell>
-  );
-}
-
 export function SoundbitesPanel({ meetingId, segments }: { meetingId: number; segments: Segment[] }) {
   const qc = useQueryClient();
   const comingSoon = useComingSoon();
@@ -292,7 +258,7 @@ export function SoundbitesPanel({ meetingId, segments }: { meetingId: number; se
   const remove = useMutation({ mutationFn: (id: number) => api.deleteSoundbite(id), onSuccess: invalidate });
 
   return (
-    <PanelShell title="Soundbite" action={
+    <PanelShell title={`Soundbite${bites?.length ? ` · ${bites.length}` : ""}`} action={
       <button onClick={() => create.mutate()} disabled={!segments.length} aria-label="Create soundbite" className="rounded-md p-1 text-ink-4 hover:bg-muted"><Plus className="size-4" /></button>
     }>
       {isLoading ? <div className="p-5"><Skeleton className="h-16" /></div> : bites?.length ? (
@@ -300,8 +266,11 @@ export function SoundbitesPanel({ meetingId, segments }: { meetingId: number; se
           {bites.map((b) => (
             <li key={b.id} className="group flex items-start gap-3 rounded-xl border border-line p-3 hover:bg-subtle">
               <button onClick={() => seek(b.start_ms, { play: true })} aria-label={`Play ${b.title}`}
-                className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand hover:bg-brand-100">
+                className="relative flex h-12 w-20 shrink-0 items-center justify-center rounded-lg bg-[#1b1440] text-white hover:opacity-90">
                 <Play className="size-4 fill-current" />
+                <span className="absolute right-1 bottom-1 rounded bg-white px-1 text-[10px] font-medium text-[#101828]">
+                  {formatTimestamp(b.end_ms - b.start_ms)}
+                </span>
               </button>
               <div className="min-w-0 flex-1">
                 <p className="line-clamp-2 text-[13px] text-ink">{b.title}</p>
@@ -330,10 +299,12 @@ export function SoundbitesPanel({ meetingId, segments }: { meetingId: number; se
 export function CommentsPanel({ meetingId, segments }: { meetingId: number; segments: Segment[] }) {
   const qc = useQueryClient();
   const { data: comments } = useComments(meetingId);
+  const { data: me } = useMe();
   const { commentOn, setCommentOn, setFocusSegment } = useNotepad();
   const { currentMs, seek } = usePlayer();
   const [body, setBody] = useState("");
   const starts = useMemo(() => segments.map((s) => s.start_ms), [segments]);
+  // Comments attach to the line chosen via the transcript toolbar, else the line playing now.
   const target = segments.find((s) => s.id === commentOn) ?? segments[Math.max(0, activeSegmentIndex(starts, currentMs))];
   const segById = useMemo(() => new Map(segments.map((s) => [s.id, s])), [segments]);
 
@@ -346,34 +317,46 @@ export function CommentsPanel({ meetingId, segments }: { meetingId: number; segm
   const remove = useMutation({ mutationFn: (id: number) => api.deleteComment(id), onSuccess: invalidate });
 
   return (
-    <PanelShell title="Comments">
-      <div className="space-y-3 p-4">
+    <PanelShell title="All comments">
+      <div className="flex h-full flex-col">
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
+          {comments?.map((c) => {
+            const seg = segById.get(c.segment_id);
+            return (
+              <div key={c.id} className="group rounded-xl border border-line p-3">
+                <div className="flex items-center gap-2">
+                  <Avatar name={c.author.name} color={c.author.avatar_color} size="sm" />
+                  <span className="text-[13px] font-medium text-ink">{c.author.name}</span>
+                  {seg && (
+                    <button onClick={() => { seek(seg.start_ms); setFocusSegment(seg.id); }} className="text-xs text-link underline">{formatTimestamp(seg.start_ms)}</button>
+                  )}
+                  <button onClick={() => remove.mutate(c.id)} aria-label="Delete comment" className="ml-auto rounded p-0.5 text-ink-5 opacity-0 group-hover:opacity-100 hover:text-danger"><Trash2 className="size-3.5" /></button>
+                </div>
+                <p className="mt-2 text-[13px] text-ink-2">{c.body}</p>
+              </div>
+            );
+          })}
+          {!comments?.length && (
+            <div className="px-2 py-16 text-center">
+              <p className="text-[15px] font-medium text-ink">No discussion started yet</p>
+              <p className="mt-1 text-[13px] text-ink-4">Start a thread on any moment — hover a transcript line and click 💬, or comment below.</p>
+            </div>
+          )}
+        </div>
         {target && (
-          <form className="rounded-xl border border-line p-3" onSubmit={(e) => { e.preventDefault(); if (body.trim()) add.mutate(); }}>
-            <p className="mb-2 line-clamp-2 text-xs text-ink-4">
+          <form className="border-t border-line p-3" onSubmit={(e) => { e.preventDefault(); if (body.trim()) add.mutate(); }}>
+            <p className="mb-2 line-clamp-1 text-xs text-ink-4">
               On <span className="text-link">{formatTimestamp(target.start_ms)}</span> · {target.speaker?.name}: “{target.text}”
             </p>
-            <Textarea autoFocus={!!commentOn} rows={2} value={body} onChange={(e) => setBody(e.target.value)} placeholder="Add a comment…" />
-            <div className="mt-2 flex justify-end"><Button size="xs" variant="primary" type="submit" disabled={!body.trim()}>Comment</Button></div>
+            <div className="flex items-end gap-2">
+              <Avatar name={me?.name ?? "?"} color={me?.avatar_color} size="md" />
+              <Textarea autoFocus={!!commentOn} rows={1} value={body} onChange={(e) => setBody(e.target.value)} placeholder="Comment…" className="min-h-9" />
+              <Button size="sm" variant="primary" type="submit" aria-label="Comment" className="w-9 px-0" disabled={!body.trim()}>
+                <ArrowUp className="size-4" />
+              </Button>
+            </div>
           </form>
         )}
-        {comments?.map((c) => {
-          const seg = segById.get(c.segment_id);
-          return (
-            <div key={c.id} className="group rounded-xl border border-line p-3">
-              <div className="flex items-center gap-2">
-                <Avatar name={c.author.name} color={c.author.avatar_color} size="sm" />
-                <span className="text-[13px] font-medium text-ink">{c.author.name}</span>
-                {seg && (
-                  <button onClick={() => { seek(seg.start_ms); setFocusSegment(seg.id); }} className="text-xs text-link underline">{formatTimestamp(seg.start_ms)}</button>
-                )}
-                <button onClick={() => remove.mutate(c.id)} aria-label="Delete comment" className="ml-auto rounded p-0.5 text-ink-5 opacity-0 group-hover:opacity-100 hover:text-danger"><Trash2 className="size-3.5" /></button>
-              </div>
-              <p className="mt-2 text-[13px] text-ink-2">{c.body}</p>
-            </div>
-          );
-        })}
-        {!comments?.length && <p className="px-1 text-[13px] text-ink-5">No comments yet. Hover a transcript line and click 💬 to comment on it.</p>}
       </div>
     </PanelShell>
   );
@@ -390,7 +373,7 @@ export function BookmarksPanel({ meetingId, segments }: { meetingId: number; seg
     onSuccess: () => qc.invalidateQueries({ queryKey: keys.bookmarks(meetingId) }),
   });
   return (
-    <PanelShell title="Bookmarks">
+    <PanelShell title="All Bookmarks">
       <div className="space-y-2 p-4">
         {bookmarks?.map((b) => {
           const seg = segById.get(b.segment_id);
@@ -406,7 +389,12 @@ export function BookmarksPanel({ meetingId, segments }: { meetingId: number; seg
             </div>
           );
         })}
-        {!bookmarks?.length && <p className="px-1 text-[13px] text-ink-5">Save important moments: hover a transcript line and click 🔖.</p>}
+        {!bookmarks?.length && (
+          <div className="px-4 py-16 text-center">
+            <p className="text-[15px] font-medium text-ink">No bookmarks yet</p>
+            <p className="mt-1 text-[13px] text-ink-4">Add bookmarks to highlight key moments in the meeting. Hover a transcript line and click 🔖.</p>
+          </div>
+        )}
       </div>
     </PanelShell>
   );

@@ -11,6 +11,8 @@ A full-stack clone of the [Fireflies.ai](https://fireflies.ai) post-meeting work
 
 > 📋 **Requirement-by-requirement coverage, UML diagrams and the evaluation checklist: [`docs/DELIVERABLES.md`](docs/DELIVERABLES.md)**
 >
+> 🔗 **Live demo:** _add the Vercel URL after deploying_ · **Repository:** https://github.com/ArvinSaini/Fireflies.ai-Clone
+>
 > **Stack:** Next.js 16 (TypeScript, App Router, Tailwind v4, TanStack Query) · FastAPI · SQLAlchemy 2 · SQLite (+ FTS5)
 
 The UI was modelled on the **current** Fireflies app. Before any frontend code was written, I studied its 2026 help-center screenshots and product pages. The findings, sampled colors and design decisions are in [`docs/UI_RESEARCH.md`](docs/UI_RESEARCH.md).

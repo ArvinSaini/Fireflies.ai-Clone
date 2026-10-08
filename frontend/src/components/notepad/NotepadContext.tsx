@@ -1,8 +1,8 @@
 "use client";
 // UI state shared across the meeting page panels (which rail panel is open, transcript filters…).
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 
-export type RailPanel = "search" | "index" | "soundbites" | "comments" | "bookmarks" | null;
+export type RailPanel = "search" | "soundbites" | "comments" | "bookmarks" | null;
 export type RightTab = "transcript" | "askfred";
 
 /** A Smart Search filter applied to the transcript ("4 Questions", "Pricing", "Negative"…). */
@@ -36,8 +36,19 @@ export function useNotepad() {
   return ctx;
 }
 
+const WIDE = "(min-width: 1280px)";
+const subscribeWide = (onChange: () => void) => {
+  const mq = window.matchMedia(WIDE);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+};
+
 export function NotepadProvider({ meetingId, children }: { meetingId: number; children: ReactNode }) {
-  const [panel, setPanel] = useState<RailPanel>(null);
+  // Like Fireflies, Smart Search starts open — on wide screens only, so it never covers the transcript on mobile.
+  // Until the user picks a panel ("auto"), the open panel follows the viewport; the server renders it closed.
+  const wide = useSyncExternalStore(subscribeWide, () => window.matchMedia(WIDE).matches, () => false);
+  const [choice, setPanel] = useState<RailPanel | "auto">("auto");
+  const panel: RailPanel = choice === "auto" ? (wide ? "search" : null) : choice;
   const [rightTab, setRightTab] = useState<RightTab>("transcript");
   const [filter, setFilter] = useState<TranscriptFilter | null>(null);
   const [focusSegment, setFocusSegment] = useState<number | null>(null);

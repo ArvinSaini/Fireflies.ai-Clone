@@ -5,7 +5,7 @@ import { IconRail } from "@/components/layout/IconRail";
 /** Meetings & Uploads: collapsed icon rail + channels panel, like the Fireflies Notebook. */
 export default function LibraryLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-full overflow-hidden">
       <div className="hidden md:flex">
         <IconRail />
         <Suspense fallback={<div className="w-[280px] border-r border-line" />}>

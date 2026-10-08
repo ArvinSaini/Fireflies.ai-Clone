@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronDown, ClipboardPaste, FilePlus2, Search, Sparkles, Upload, UserPlus, Video } from "lucide-react";
+import { Bell, ChevronDown, ClipboardPaste, FilePlus2, Search, Sparkles, Upload, Video } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
@@ -103,8 +103,21 @@ export function CaptureButton() {
   );
 }
 
+/** "Free plan" chip + green Upgrade button, as in the real top bar. */
+export function PlanBadge() {
+  return (
+    <div className="hidden items-center gap-2 lg:flex">
+      <span className="inline-flex items-center gap-1.5 text-[13px] whitespace-nowrap text-ink-3">
+        <span className="rounded bg-success-soft px-1.5 py-0.5 text-[11px] font-semibold text-success">FREE</span> plan
+      </span>
+      <Link href="/upgrade" className="rounded-lg border border-success/40 bg-success-soft px-3 py-1.5 text-[13px] font-medium whitespace-nowrap text-success hover:border-success">
+        Upgrade
+      </Link>
+    </div>
+  );
+}
+
 export function Topbar({ title, children }: { title: ReactNode; children?: ReactNode }) {
-  const comingSoon = useComingSoon();
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b border-line bg-surface px-3 sm:gap-4 sm:px-5">
       <NavDrawer className="md:hidden" />
@@ -112,16 +125,8 @@ export function Topbar({ title, children }: { title: ReactNode; children?: React
       <SearchTrigger className="hidden w-[380px] md:flex" />
       <div className="flex flex-1 items-center justify-end gap-2">
         {children}
-        <button
-          onClick={() => comingSoon("AI credits")}
-          className="hidden h-9 items-center gap-1.5 rounded-lg border whitespace-nowrap border-[#fde68a] bg-surface px-3 text-[13px] font-medium text-ink-2 shadow-[0_0_0_3px_rgba(167,243,208,0.35)] hover:bg-subtle lg:flex"
-        >
-          <Sparkles className="size-4" /> Get AI credits
-        </button>
+        <PlanBadge />
         <NotificationsBell />
-        <Button variant="soft" className="hidden sm:inline-flex" onClick={() => comingSoon("Invite teammates")}>
-          <UserPlus className="size-4" /> Invite
-        </Button>
         <CaptureButton />
       </div>
     </header>

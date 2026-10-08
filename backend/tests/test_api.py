@@ -179,3 +179,16 @@ def test_workspace_askfred(client, meeting):
     assert "discount" in found["citations"][0]["text"].lower()
     none = client.post("/api/askfred", json={"question": "zebras"}).json()
     assert none["citations"] == []
+
+
+def test_workspace_askfred_intents(client, meeting):
+    last = client.post("/api/askfred", json={"question": "Summarize my last meeting"}).json()
+    assert "Pricing Sync" in last["answer"] and "Open action items" in last["answer"]
+    upcoming = client.post("/api/askfred", json={"question": "Prepare me for the upcoming meeting"}).json()
+    assert "No upcoming meetings" in upcoming["answer"] and "Pricing Sync" in upcoming["answer"]
+    initiatives = client.post("/api/askfred", json={"question": "What are the key initiatives?"}).json()
+    assert initiatives["meetings"][0]["meeting_title"] == "Pricing Sync"
+    digest = client.post("/api/askfred", json={"question": "Prepare weekly digest, based on my meetings"}).json()
+    assert "meetings in the last 7 days" in digest["answer"]
+    decisions = client.post("/api/askfred", json={"question": "Key decisions"}).json()
+    assert decisions["answer"]  # either decisions found or a clear "none found" message

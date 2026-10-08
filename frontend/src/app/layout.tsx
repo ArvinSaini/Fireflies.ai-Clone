@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { TrialBanner } from "@/components/layout/TrialBanner";
 import { Providers } from "@/components/providers/Providers";
 import "./globals.css";
 
@@ -14,7 +15,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="min-h-full text-[14px]">
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* Banner on top, the active route fills the rest of the viewport. */}
+          <div className="flex h-dvh flex-col print:block print:h-auto">
+            <TrialBanner />
+            <div className="min-h-0 flex-1 print:min-h-0">{children}</div>
+          </div>
+        </Providers>
       </body>
     </html>
   );

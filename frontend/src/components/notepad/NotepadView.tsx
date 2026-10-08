@@ -16,7 +16,7 @@ import { NotepadProvider, useNotepad } from "./NotepadContext";
 import { NotepadTopbar } from "./NotepadTopbar";
 import { PlayerBar } from "./PlayerBar";
 import { PlayerProvider, usePlayer } from "./PlayerContext";
-import { BookmarksPanel, CommentsPanel, IndexPanel, LeftRail, SmartSearchPanel, SoundbitesPanel } from "./RailPanels";
+import { BookmarksPanel, CommentsPanel, LeftRail, SmartSearchPanel, SoundbitesPanel } from "./RailPanels";
 import { SummaryColumn } from "./SummaryColumn";
 import { TranscriptPanel } from "./TranscriptPanel";
 
@@ -44,7 +44,7 @@ function Workspace({ meeting, segments }: { meeting: MeetingDetail; segments: Se
   const [mobilePane, setMobilePane] = useState<"notes" | "panel">("notes");
 
   return (
-    <div className="flex h-screen flex-col bg-surface">
+    <div className="flex h-full flex-col bg-surface">
       <NotepadTopbar meeting={meeting} onInfo={() => setInfo(true)} />
       <div className="flex shrink-0 gap-1 border-b border-line p-2 lg:hidden">
         {(["notes", "panel"] as const).map((p) => (
@@ -57,7 +57,6 @@ function Workspace({ meeting, segments }: { meeting: MeetingDetail; segments: Se
       <div className="flex min-h-0 flex-1">
         <LeftRail />
         {panel === "search" && <SmartSearchPanel meetingId={meeting.id} segments={segments} />}
-        {panel === "index" && <IndexPanel meeting={meeting} />}
         {panel === "soundbites" && <SoundbitesPanel meetingId={meeting.id} segments={segments} />}
         {panel === "comments" && <CommentsPanel meetingId={meeting.id} segments={segments} />}
         {panel === "bookmarks" && <BookmarksPanel meetingId={meeting.id} segments={segments} />}
@@ -73,7 +72,7 @@ function Workspace({ meeting, segments }: { meeting: MeetingDetail; segments: Se
             mobilePane === "panel" ? "flex flex-1" : "hidden",
             expand === "transcript" ? "lg:flex-1" : "lg:w-[38%] lg:max-w-[560px] lg:min-w-[380px] lg:flex-none")}>
             <div className="flex h-14 shrink-0 items-center gap-6 border-b border-line px-5">
-              {(["transcript", "askfred"] as const).map((t) => (
+              {(["askfred", "transcript"] as const).map((t) => (
                 <button key={t} onClick={() => setRightTab(t)}
                   className={cn("relative flex h-full items-center gap-2 text-[15px] transition-colors",
                     rightTab === t ? "text-brand after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-brand" : "text-ink-3 hover:text-ink")}>
@@ -126,7 +125,7 @@ export function NotepadView({ id }: { id: number }) {
   if (meeting.error) {
     const notFound = meeting.error instanceof ApiError && meeting.error.status === 404;
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-full items-center justify-center">
         <EmptyState
           icon={<FileQuestion />}
           title={notFound ? "Meeting not found" : "Couldn't load this meeting"}
@@ -138,7 +137,7 @@ export function NotepadView({ id }: { id: number }) {
   }
   if (!meeting.data || !transcript.data) {
     return (
-      <div className="flex h-screen flex-col">
+      <div className="flex h-full flex-col">
         <div className="h-14 border-b border-line" />
         <div className="flex flex-1">
           <div className="w-[60px] border-r border-line" />

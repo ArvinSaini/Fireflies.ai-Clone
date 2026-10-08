@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowUp, Copy, Sparkles, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { ArrowUp, Copy, Plus, Sparkles, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
@@ -12,6 +12,10 @@ import { useNotepad } from "./NotepadContext";
 import { usePlayer } from "./PlayerContext";
 
 const SPARKLE_COLORS = ["text-[#9b8afb]", "text-[#ee46bc]", "text-[#f38744]"];
+const QUICK_CHIPS = [
+  { label: "Attendee Contributions", question: "Who talked the most?" },
+  { label: "Todos", question: "What are the action items?" },
+];
 
 /** Renders "• item" lines as a list and keeps other paragraphs as text. */
 export function AnswerText({ text }: { text: string }) {
@@ -140,14 +144,22 @@ export function AskFredPanel({ meetingId }: { meetingId: number }) {
           </div>
         )}
       </div>
-      <form onSubmit={(e) => { e.preventDefault(); send(input); }} className="border-t border-line p-3">
+      <div className="flex flex-wrap gap-1.5 px-3 pt-3">
+        {QUICK_CHIPS.map((c) => (
+          <button key={c.label} type="button" onClick={() => send(c.question)}
+            className="inline-flex items-center gap-1 rounded-md bg-subtle px-2 py-1 text-xs text-ink-2 hover:bg-muted">
+            <Plus className="size-3 text-success" /> {c.label}
+          </button>
+        ))}
+      </div>
+      <form onSubmit={(e) => { e.preventDefault(); send(input); }} className="p-3">
         <div className="flex items-end gap-2 rounded-xl border border-line-strong bg-surface p-2 focus-within:border-brand-400 focus-within:ring-4 focus-within:ring-brand-100">
           <textarea
-            rows={1}
+            rows={3}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
-            placeholder="Ask anything about this meeting…"
+            placeholder="Ask anything. Type / to run AI Skills"
             aria-label="Ask Fred"
             className="max-h-32 min-h-9 flex-1 resize-none bg-transparent px-2 py-1.5 text-[14px] text-ink outline-none placeholder:text-ink-5"
           />

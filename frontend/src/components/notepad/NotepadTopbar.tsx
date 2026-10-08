@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Copy, Download, Eye, Globe2, Info, Link2, MoreHorizontal, PenLine, Plus, RefreshCw, Share2, Trash2,
+  Copy, Download, Globe2, Info, Link2, MoreHorizontal, PenLine, Plus, RefreshCw, Share2, Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -90,7 +90,9 @@ export function NotepadTopbar({ meeting, onInfo }: { meeting: MeetingDetail; onI
             </button>
           ))}
         </Popover>
-        <span className="hidden items-center gap-1.5 px-2 text-[13px] whitespace-nowrap text-ink-4 lg:flex"><Eye className="size-4" /> 1 View</span>
+        <Link href="/upgrade" className="hidden rounded-lg border border-success/40 bg-success-soft px-3 py-1.5 text-[13px] font-medium whitespace-nowrap text-success hover:border-success lg:block">
+          Upgrade
+        </Link>
         <div className="flex">
           <button onClick={() => comingSoon({ name: "Share with teammates", description: "Share meeting notes with your team or anyone via a public link. Use the link button to copy this meeting's URL." })}
             className="flex h-9 items-center gap-1.5 rounded-l-lg bg-brand px-3 text-[14px] font-medium text-white hover:bg-brand-hover">

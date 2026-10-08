@@ -21,7 +21,12 @@ from app.services.ai import Line, MeetingContext, get_assistant
 from app.services.ai.text_utils import content_words, truncate_words
 
 TASKS = re.compile(r"action item|task|to-?do|follow[- ]?up|assigned|owe|next step", re.I)
-RECAP = re.compile(r"summar|recap|this week|last week|overview|what happened|catch me up", re.I)
+LAST_MEETING = re.compile(r"\b(last|latest|most recent|previous) meeting\b", re.I)
+UPCOMING = re.compile(r"\bupcoming\b|\bnext meeting\b|prepare me", re.I)
+DECISIONS = re.compile(r"decision|decided|agree", re.I)
+INITIATIVES = re.compile(r"initiative|priorit|project|roadmap|focus area", re.I)
+RECAP = re.compile(r"summar|recap|this week|last week|overview|what happened|catch me up|digest", re.I)
+_DECISION_LINE = re.compile(r"\b(decid|agree|approved|let's go with|we'll go with|final call|sounds like a plan|consensus)", re.I)
 
 
 def _citation(seg: TranscriptSegment, meeting: Meeting) -> dict:
@@ -42,6 +47,58 @@ def _open_tasks(db: Session, user: User) -> dict:
     lines = [f"• {a.text}" + (f" — {a.assignee.name}" if a.assignee else "") + f" ({m.title})" for a, m in rows]
     return {"answer": "Here are the most recent open action items across your meetings:\n" + "\n".join(lines),
             "citations": [], "meetings": _meeting_refs([m for _, m in rows])}
+
+
+def _recent_meetings(db: Session, user: User, limit: int) -> list[Meeting]:
+    return list(db.scalars(
+        select(Meeting).where(Meeting.owner_id == user.id).order_by(Meeting.started_at.desc()).limit(limit)
+    ))
+
+
+def _last_meeting(db: Session, user: User, intro: str = "") -> dict:
+    recent = _recent_meetings(db, user, 1)
+    if not recent:
+        return {"answer": "You don't have any meetings yet.", "citations": []}
+    m = recent[0]
+    lines = [f"{intro}Your most recent meeting was “{m.title}”."]
+    if m.summary and m.summary.overview:
+        lines.append(truncate_words(m.summary.overview, 70))
+    open_items = [a for a in m.action_items if not a.is_completed][:4]
+    if open_items:
+        lines.append("Open action items:")
+        lines += [f"• {a.text}" + (f" — {a.assignee.name}" if a.assignee else "") for a in open_items]
+    return {"answer": "\n".join(lines), "citations": [], "meetings": _meeting_refs([m])}
+
+
+def _upcoming(db: Session, user: User) -> dict:
+    # Calendar sync is a placeholder in this demo, so there is no real "next meeting" to prepare for.
+    return _last_meeting(
+        db, user,
+        intro="No upcoming meetings are on your calendar (calendar sync isn't connected in this demo). "
+              "To pick up where you left off: ",
+    )
+
+
+def _decisions(db: Session, user: User) -> dict:
+    rows = db.execute(
+        select(TranscriptSegment, Meeting).join(Meeting)
+        .where(Meeting.owner_id == user.id).order_by(Meeting.started_at.desc(), TranscriptSegment.position)
+    ).all()
+    hits = [(s, m) for s, m in rows if _DECISION_LINE.search(s.text)][:6]
+    if not hits:
+        return {"answer": "I couldn't find explicit decisions in your meetings.", "citations": []}
+    body = "\n".join(f"• {m.title}: “{truncate_words(s.text, 28)}”" for s, m in hits)
+    return {"answer": "Key decisions from your recent meetings:\n" + body,
+            "citations": [_citation(s, m) for s, m in hits], "meetings": _meeting_refs([m for _, m in hits])}
+
+
+def _initiatives(db: Session, user: User) -> dict:
+    meetings = [m for m in _recent_meetings(db, user, 8) if m.summary and m.summary.keywords]
+    if not meetings:
+        return {"answer": "No initiatives found yet — they come from your meetings' AI notes.", "citations": []}
+    lines = [f"• {m.title}: {', '.join(m.summary.keywords[:4])}" for m in meetings[:6]]
+    return {"answer": "Key initiatives and topics across your recent meetings:\n" + "\n".join(lines),
+            "citations": [], "meetings": _meeting_refs(meetings[:6])}
 
 
 def _recap(db: Session, user: User) -> dict:
@@ -89,8 +146,17 @@ def _retrieve(db: Session, user: User, question: str, limit: int = 12) -> list[t
 
 
 def ask_workspace(db: Session, user: User, question: str, history: list[tuple[str, str]]) -> dict:
+    # Specific intents first ("Summarize my last meeting" must not fall into the generic recap).
+    if LAST_MEETING.search(question):
+        return _last_meeting(db, user)
+    if UPCOMING.search(question):
+        return _upcoming(db, user)
     if TASKS.search(question):
         return _open_tasks(db, user)
+    if DECISIONS.search(question):
+        return _decisions(db, user)
+    if INITIATIVES.search(question):
+        return _initiatives(db, user)
     if RECAP.search(question):
         return _recap(db, user)
 

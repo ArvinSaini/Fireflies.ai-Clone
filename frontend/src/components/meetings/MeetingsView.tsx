@@ -18,6 +18,7 @@ import { useCreateMeeting } from "./CreateMeetingModal";
 import {
   DATE_PRESETS, DURATION_PRESETS, EMPTY_FILTERS, FiltersPopover, toQuery, type LibraryFilters,
 } from "./FiltersPopover";
+import { LibraryAskFred } from "./LibraryAskFred";
 import { MeetingCard } from "./MeetingCard";
 import { ConfirmDialog, MeetingDetailsDrawer, MoveToChannelDialog } from "./MeetingDialogs";
 import { PLATFORMS } from "./PlatformIcon";
@@ -140,7 +141,8 @@ function Library({ view, channelId, initialQuery }: { view: "all" | "mine"; chan
   return (
     <>
       <Topbar title="Meetings" />
-      <div className="flex min-h-0 flex-1 flex-col bg-surface">
+      <div className="flex min-h-0 flex-1">
+      <div className="flex min-w-0 flex-1 flex-col bg-surface">
         <div className="flex flex-wrap items-center gap-3 border-b border-line px-6 py-4">
           {channel ? (
             <h1 className="mr-auto text-[16px] font-medium text-ink">{title}</h1>
@@ -262,6 +264,8 @@ function Library({ view, channelId, initialQuery }: { view: "all" | "mine"; chan
             </div>
           )}
         </div>
+      </div>
+      <LibraryAskFred scope={channel ? channel.name : view === "all" ? "All Meetings" : "My Meetings"} />
       </div>
 
       <MeetingDetailsDrawer meeting={details} onClose={() => setDetails(null)} />
