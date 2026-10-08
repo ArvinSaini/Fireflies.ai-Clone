@@ -13,6 +13,12 @@ def get_history(meeting: OwnedMeeting, db: DbSession):
     return chat.history(db, meeting.id)
 
 
+@router.get("/suggestions", response_model=list[str])
+def suggestions(meeting: OwnedMeeting):
+    """"Try asking…" prompts tailored to this meeting."""
+    return chat.suggestions(meeting)
+
+
 @router.post("", response_model=list[ChatMessageOut], status_code=status.HTTP_201_CREATED)
 def ask(data: ChatAsk, meeting: OwnedMeeting, db: DbSession):
     """Returns the stored [question, answer] pair."""

@@ -31,6 +31,16 @@ def ask(db: Session, meeting: Meeting, question: str) -> tuple[ChatMessage, Chat
     return q, a
 
 
+def suggestions(meeting: Meeting, limit: int = 3) -> list[str]:
+    """Question prompts built from the meeting's own keywords, so they are always answerable."""
+    keywords = (meeting.summary.keywords if meeting.summary else [])[:2]
+    out = [f"What was discussed about {k}?" for k in keywords]
+    if meeting.action_items:
+        out.append("What are the action items and who owns them?")
+    out += ["What decisions were made?", "Who talked the most?", "Summarize this meeting in 3 bullets"]
+    return out[:limit]
+
+
 def clear(db: Session, meeting_id: int) -> None:
     db.execute(delete(ChatMessage).where(ChatMessage.meeting_id == meeting_id))
     db.commit()

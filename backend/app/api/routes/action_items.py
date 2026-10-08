@@ -9,6 +9,7 @@ from app.models import ActionItem, Meeting, Participant, TranscriptSegment
 from app.models.mixins import utcnow
 from app.schemas.common import ActionItemOut, ActionItemWithMeeting
 from app.schemas.transcript import ActionItemCreate, ActionItemUpdate
+from app.services.meetings import user_participant
 
 router = APIRouter(tags=["action items"])
 
@@ -30,9 +31,13 @@ def _check_assignee(db, assignee_id: int | None) -> None:
 @router.get("/action-items", response_model=list[ActionItemWithMeeting])
 def list_all_action_items(
     db: DbSession, user: CurrentUser, status_filter: Literal["all", "open", "completed"] = "all",
-    assignee_id: int | None = None,
+    assignee_id: int | None = None, mine: bool = False,
 ):
+    """The Tasks feed. `mine=true` = "My Tasks" (assigned to the current user)."""
     stmt = select(ActionItem, Meeting).join(Meeting).where(Meeting.owner_id == user.id)
+    if mine:
+        me = user_participant(db, user)
+        stmt = stmt.where(ActionItem.assignee_id == (me.id if me else -1))
     if status_filter != "all":
         stmt = stmt.where(ActionItem.is_completed.is_(status_filter == "completed"))
     if assignee_id is not None:

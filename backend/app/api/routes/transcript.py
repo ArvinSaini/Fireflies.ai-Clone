@@ -1,10 +1,12 @@
-"""Transcript segment editing, comments and soundbites."""
+"""Transcript segment editing, comments, soundbites and bookmarks."""
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession, OwnedMeeting
-from app.models import Comment, Meeting, MeetingParticipant, Soundbite, TranscriptSegment
-from app.schemas.transcript import CommentCreate, CommentOut, SegmentOut, SegmentUpdate, SoundbiteCreate, SoundbiteOut
+from app.models import Bookmark, Comment, Meeting, MeetingParticipant, Soundbite, TranscriptSegment
+from app.schemas.transcript import (
+    BookmarkCreate, BookmarkOut, CommentCreate, CommentOut, SegmentOut, SegmentUpdate, SoundbiteCreate, SoundbiteOut,
+)
 from app.services.people import get_or_create_participant
 
 router = APIRouter(tags=["transcript"])
@@ -93,4 +95,37 @@ def delete_soundbite(soundbite_id: int, db: DbSession, user: CurrentUser):
     if bite is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Soundbite not found")
     db.delete(bite)
+    db.commit()
+
+
+# --- bookmarks ----------------------------------------------------------------
+
+@router.get("/meetings/{meeting_id}/bookmarks", response_model=list[BookmarkOut])
+def list_bookmarks(meeting: OwnedMeeting, db: DbSession, user: CurrentUser):
+    return db.scalars(
+        select(Bookmark).where(Bookmark.meeting_id == meeting.id, Bookmark.user_id == user.id).order_by(Bookmark.id)
+    ).all()
+
+
+@router.post("/meetings/{meeting_id}/bookmarks", response_model=BookmarkOut, status_code=status.HTTP_201_CREATED)
+def create_bookmark(data: BookmarkCreate, meeting: OwnedMeeting, db: DbSession, user: CurrentUser):
+    seg = db.get(TranscriptSegment, data.segment_id)
+    if seg is None or seg.meeting_id != meeting.id:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Segment does not belong to this meeting")
+    existing = db.scalar(select(Bookmark).where(Bookmark.segment_id == seg.id, Bookmark.user_id == user.id))
+    if existing:  # idempotent: bookmarking twice is a no-op
+        return existing
+    bookmark = Bookmark(meeting_id=meeting.id, segment_id=seg.id, user_id=user.id)
+    db.add(bookmark)
+    db.commit()
+    db.refresh(bookmark)
+    return bookmark
+
+
+@router.delete("/bookmarks/{bookmark_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_bookmark(bookmark_id: int, db: DbSession, user: CurrentUser):
+    bookmark = db.scalar(select(Bookmark).where(Bookmark.id == bookmark_id, Bookmark.user_id == user.id))
+    if bookmark is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Bookmark not found")
+    db.delete(bookmark)
     db.commit()
