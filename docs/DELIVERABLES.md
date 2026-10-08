@@ -322,7 +322,7 @@ flowchart LR
 | **UI/UX** | Layout, wording and colors taken from the *current* Fireflies app (§4, `UI_RESEARCH.md`): sidebar/rail/channels, cards grouped by day, two-pane filters, Notepad with left rail panels, Transcript/AskFred tabs, purple pill player, square avatars, blue underlined timestamps. Loading skeletons, empty states, toasts, keyboard shortcuts, dark mode, mobile layout. |
 | **Database design** | Normalized 3NF core; M:N with payload (`meeting_participants.role`); 1:1 summary keyed by `meeting_id`; integer-ms times; `CHECK` constraints (time order, non-negative duration); unique constraints (segment position, participant per meeting, channel name per owner, bookmark per user); composite indexes for the hot queries (`owner_id, started_at`), (`meeting_id, start_ms`); cascade vs set-null chosen per relation; FTS5 external-content index maintained by triggers; JSON only for render-as-a-unit documents (notes, keywords, citations). |
 | **Backend / API design** | Resource-oriented REST (`/meetings`, `/meetings/{id}/transcript`, `/action-items/{id}`, `/channels`…), correct status codes (201/204/404/409/413/422), Pydantic validation on every input, pagination and filter params, ownership checks in dependencies, a bulk endpoint, OpenAPI docs at `/docs`. Layered: routes → services → models; AI behind protocols with graceful fallback. |
-| **Code quality** | TypeScript strict + ESLint (Next + React hooks rules) clean; `next build` clean; 23 pytest tests; small focused modules; comments explain *why* (e.g. reset-during-render, client-only values, FTS triggers). |
+| **Code quality** | TypeScript strict + ESLint (Next + React hooks rules) clean; `next build` clean; 24 pytest tests; small focused modules; comments explain *why* (e.g. reset-during-render, client-only values, FTS triggers). |
 | **Modularity** | Backend: parser, AI engines, search, insights, export and chat are independent services. Frontend: feature folders, shared UI primitives (`ui/`), one typed API client, central query keys and invalidation (`useMeetingMutation`), shared player/notepad contexts. |
 | **Code understanding** | The diagrams above plus the README architecture section describe every flow; each module opens with a docstring stating its responsibility. |
 
@@ -330,12 +330,13 @@ flowchart LR
 
 | Check | Result |
 |---|---|
-| `pytest` (parser formats, AI extraction, API: CRUD, filters, FTS search + triggers, bulk, channels, Smart Search, bookmarks, AskFred) | **23 passed** |
+| `pytest` (parser formats, AI extraction, API: CRUD, filters, FTS search + triggers, bulk, channels, Smart Search, bookmarks, AskFred) | **24 passed** |
 | `tsc --noEmit` · `eslint src` | 0 errors · 0 warnings |
 | `next build` (production) | ✅ all routes build (static + partial prerender) |
 | Playwright: click line → seek & play; seek bar → active line; find "SSO" → 7 highlighted marks, "1 / 7"; Smart Search "Questions" filter | ✅ |
 | Playwright CRUD: paste transcript → AI notes → add/complete/delete action item → rename → AskFred answer → delete meeting | ✅ |
 | Playwright: dark mode, 390 px mobile, PDF export (A4 PDF generated from the print view) | ✅ |
+| **Full requirements audit** (Playwright, visible browser): 51 checks covering every core requirement, CRUD with reload-persistence, placeholders, all 6 bonuses, and 16 responsive checks (390 / 768 / 1024 / 1440 px × 4 pages, no horizontal overflow) | ✅ **51/51**, 0 console errors |
 
 ## 9. Five-minute demo script (for the evaluator)
 

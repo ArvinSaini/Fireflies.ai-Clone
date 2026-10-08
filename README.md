@@ -50,7 +50,7 @@ On first start the app creates `backend/fireflies.db` and **seeds 8 realistic me
 
 - Interactive API docs: http://localhost:8000/docs
 - Re-seed from scratch: `python -m app.seed.loader --reset`
-- Run the tests: `pytest` (parser, AI engine and API end-to-end)
+- Run the tests: `pytest` (24 tests: parser, AI engine and API end-to-end)
 
 ### 2. Frontend (Next.js on :3000)
 
