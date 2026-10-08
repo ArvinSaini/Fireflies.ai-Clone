@@ -18,7 +18,7 @@ class WorkspaceStats(BaseModel):
     action_items_total: int
     action_items_open: int
     participant_count: int
-    ai_engine: Literal["llm", "heuristic"]
+    ai_engine: Literal["claude", "gemini", "heuristic"]
 
 
 class Turn(BaseModel):

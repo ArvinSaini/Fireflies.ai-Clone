@@ -3,12 +3,12 @@ from fastapi import APIRouter, Query
 from sqlalchemy import func, select
 
 from app.api.deps import CurrentUser, DbSession
-from app.core.config import get_settings
 from app.models import Meeting, MeetingParticipant, Participant
 from app.schemas.common import ParticipantCount, ParticipantOut, UserOut
 from app.schemas.transcript import SearchResults
 from app.schemas.workspace import Me, WorkspaceStats
 from app.services import meetings as meeting_service
+from app.services.ai import engine_name
 from app.services.search import search
 
 router = APIRouter(tags=["workspace"])
@@ -23,8 +23,7 @@ def me(db: DbSession, user: CurrentUser):
 
 @router.get("/stats", response_model=WorkspaceStats)
 def stats(db: DbSession, user: CurrentUser):
-    engine = "llm" if get_settings().llm_enabled else "heuristic"
-    return WorkspaceStats(**meeting_service.workspace_stats(db, user.id), ai_engine=engine)
+    return WorkspaceStats(**meeting_service.workspace_stats(db, user.id), ai_engine=engine_name())
 
 
 @router.get("/participants", response_model=list[ParticipantCount])

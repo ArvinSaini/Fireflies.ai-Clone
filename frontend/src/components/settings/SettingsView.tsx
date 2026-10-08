@@ -161,7 +161,7 @@ export function SettingsView() {
                 </div>
                 <p className="mt-4 text-[13px] text-ink-4">
                   Workspace: {stats?.meeting_count ?? "…"} meetings · AI engine:{" "}
-                  <b className="font-medium text-ink-2">{stats?.ai_engine === "llm" ? "Claude (LLM)" : "Built-in summarizer"}</b>
+                  <b className="font-medium text-ink-2">{{ claude: "Claude (LLM)", gemini: "Gemini (LLM)", heuristic: "Built-in summarizer" }[stats?.ai_engine ?? "heuristic"]}</b>
                 </p>
               </Card>
             )}

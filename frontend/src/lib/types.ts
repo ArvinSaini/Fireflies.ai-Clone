@@ -44,7 +44,7 @@ export interface WorkspaceStats {
   action_items_total: number;
   action_items_open: number;
   participant_count: number;
-  ai_engine: "llm" | "heuristic";
+  ai_engine: "claude" | "gemini" | "heuristic";
 }
 
 export interface ActionItem {
@@ -77,7 +77,7 @@ export interface Summary {
   overview: string;
   keywords: string[];
   notes: NoteSection[];
-  generated_by: "seed" | "heuristic" | "llm" | "user";
+  generated_by: "seed" | "heuristic" | "claude" | "gemini" | "user";
   updated_at: string;
 }
 

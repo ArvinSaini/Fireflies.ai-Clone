@@ -21,7 +21,7 @@ class Summary(Base):
     overview: Mapped[str] = mapped_column(Text, default="")
     keywords: Mapped[list[str]] = mapped_column(JSON, default=list)
     notes: Mapped[list[dict]] = mapped_column(JSON, default=list)
-    generated_by: Mapped[str] = mapped_column(String(32), default="heuristic")  # seed | heuristic | llm | user
+    generated_by: Mapped[str] = mapped_column(String(32), default="heuristic")  # seed | heuristic | claude | gemini | user
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, onupdate=utcnow)
 
     meeting = relationship("Meeting", back_populates="summary")
