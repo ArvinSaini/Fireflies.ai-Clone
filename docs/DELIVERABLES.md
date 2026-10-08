@@ -60,10 +60,10 @@ Legend: ✅ done · 🟡 placeholder by design (allowed by the brief)
 | Requirement | Status | Implementation |
 |---|---|---|
 | Navigation & layout (library + detail) | ✅ | Route groups: `(main)` expanded sidebar · `(library)` icon rail + channels panel · `(notepad)` full-width meeting page; all researched from current Fireflies screenshots |
-| Transcript & summary panels | ✅ | Notes / AI Skills tabs; Transcript / AskFred tabs; left rail with Smart Search · Index · Soundbites · Comments · Bookmarks |
+| Transcript & summary panels | ✅ | Notes / AI Skills tabs in the middle; **AskFred / Transcript** tabs on the right (same order as Fireflies); 4-icon left rail — Smart Search (open by default on desktop) · Soundbites · Comments · Bookmarks. The Meetings page has Fireflies' permanent **Ask Fred** side panel |
 | Forms, modals, search, filters | ✅ | Create-meeting dialog, edit dialog, move-to-channel, confirm dialogs, Ctrl+K palette, filters popover |
-| Notifications / toasts | ✅ | `sonner` toasts on every mutation; notifications bell |
-| Settings placeholders | ✅ | `/settings`: Profile · Appearance (works) · Notetaker 🟡 · Channels (works) · Topic Trackers (works) · Billing 🟡 · API 🟡 |
+| Notifications / toasts | ✅ | `sonner` toasts on every mutation; notifications bell; Fireflies' dismissible free-trial banner |
+| Settings placeholders | ✅ | `/settings`: Profile · Appearance (works) · Notetaker 🟡 · Channels (works) · Topic Trackers (works) · Team 🟡 · Billing 🟡 · API 🟡; `/upgrade` Plans page (monthly / annual toggle, Upgrade → Coming soon) |
 
 ## 2. Mocked / placeholder sections (allowed)
 
@@ -72,7 +72,7 @@ Legend: ✅ done · 🟡 placeholder by design (allowed by the brief)
 | Real-time bot that joins calls | 🟡 "Capture" button → Coming soon dialog; Settings → Notetaker toggles |
 | Actual speech-to-text | 🟡 Transcripts are seeded, uploaded or pasted; playback uses a virtual clock |
 | Integrations (Zoom, Meet, calendar, CRM) | 🟡 `/integrations` catalog + meeting-page "send to apps" menu → Coming soon |
-| Team / sharing | 🟡 Invite / Create Team / Share → Coming soon ("Copy link" works) |
+| Team / sharing | 🟡 Settings → Team, sidebar *Team* / *Create Team* and the meeting *Share* button → Coming soon ("Copy link" works) |
 | Real authentication | 🟡 Single default user via the `current_user` dependency (one function to swap) |
 
 ## 3. Bonus features (all done)
@@ -91,7 +91,7 @@ Legend: ✅ done · 🟡 placeholder by design (allowed by the brief)
 
 | Note | How it's met |
 |---|---|
-| UI should resemble Fireflies closely; study it first | Researched Feb–Jul 2026 help-center screenshots + the homepage with Playwright before building; colors sampled from pixels (`#6938EF`, Untitled-UI grays). See `docs/UI_RESEARCH.md` |
+| UI should resemble Fireflies closely; study it first | Researched Feb–Jul 2026 help-center screenshots + the homepage with Playwright before building; colors sampled from pixels (`#6938EF`, Untitled-UI grays). Then compared every page with the **live app** (free account, read-only) and matched the gaps: trial banner, FREE plan + Upgrade, Meetings-page Ask Fred panel, 4-icon meeting rail with Smart Search open, AskFred → Transcript tab order, AskFred start screen and starters, Plans page, Tasks *Share Feedback*, Settings → Team. See `docs/UI_RESEARCH.md` |
 | Seed several meetings with full transcripts, summaries, action items | 8 meetings (45–64 lines each), each with summary, notes, chapters and 5–6 action items, channels, a sample comment/soundbite, 3 topic trackers; auto-seeded on first start |
 | Design your own schema (evaluated) | 15 tables + an FTS5 index; see §6 and the README schema section |
 | README: setup, tech stack, architecture, schema, assumptions | `README.md` (also covers API and deployment) |
@@ -296,14 +296,16 @@ flowchart LR
     end
     subgraph Server["FastAPI backend"]
       direction TB
-      R["api/routes<br/>(thin HTTP layer)"]
+      R["api/routes<br/>(thin HTTP layer, no SQL)"]
+      E["main.py exception handler<br/>NotFound→404 · Conflict→409 · InvalidInput→422"]
       D["api/deps.py<br/>session · current_user · ownership"]
-      Svc["services/<br/>meetings · search · insights · export · chat · workspace_assistant · parser"]
+      Svc["services/<br/>meetings · action_items · transcript · channels · topic_trackers<br/>search · insights · export · chat · workspace_assistant · parser"]
       AI["services/ai<br/>Summarizer / Assistant protocols"]
       M["models/ (SQLAlchemy) · schemas/ (Pydantic)"]
       R --> D
       R --> Svc --> AI
       Svc --> M
+      Svc -. raises domain errors .-> E
     end
     DB[("SQLite<br/>15 tables + FTS5")]
     LLM(["Claude or Gemini API (optional)"])
@@ -319,35 +321,35 @@ flowchart LR
 | Criterion | Evidence |
 |---|---|
 | **Functionality** | Every must-have item in §1 works end to end. Interactive transcript ↔ player sync, find-with-highlights, AI summary/notes/outline/action items, full CRUD (verified in §8). |
-| **UI/UX** | Layout, wording and colors taken from the *current* Fireflies app (§4, `UI_RESEARCH.md`): sidebar/rail/channels, cards grouped by day, two-pane filters, Notepad with left rail panels, Transcript/AskFred tabs, purple pill player, square avatars, blue underlined timestamps. Loading skeletons, empty states, toasts, keyboard shortcuts, dark mode, mobile layout. |
+| **UI/UX** | Layout, wording and colors taken from the *current* Fireflies app (§4, `UI_RESEARCH.md`): sidebar/rail/channels, cards grouped by day, two-pane filters, Notepad with left rail panels, AskFred/Transcript tabs, purple pill player, square avatars, blue underlined timestamps; then a page-by-page comparison with the live app (trial banner, Ask Fred side panel, AskFred start screen, Plans page). Loading skeletons, Fireflies' empty states, toasts, keyboard shortcuts, light + dark themes (every page audited in both), mobile layout. |
 | **Database design** | Normalized 3NF core; M:N with payload (`meeting_participants.role`); 1:1 summary keyed by `meeting_id`; integer-ms times; `CHECK` constraints (time order, non-negative duration); unique constraints (segment position, participant per meeting, channel name per owner, bookmark per user); composite indexes for the hot queries (`owner_id, started_at`), (`meeting_id, start_ms`); cascade vs set-null chosen per relation; FTS5 external-content index maintained by triggers; JSON only for render-as-a-unit documents (notes, keywords, citations). |
-| **Backend / API design** | Resource-oriented REST (`/meetings`, `/meetings/{id}/transcript`, `/action-items/{id}`, `/channels`…), correct status codes (201/204/404/409/413/422), Pydantic validation on every input, pagination and filter params, ownership checks in dependencies, a bulk endpoint, OpenAPI docs at `/docs`. Layered: routes → services → models; AI behind protocols with graceful fallback. |
-| **Code quality** | TypeScript strict + ESLint (Next + React hooks rules) clean with no suppressions; Python linted with Ruff (pyflakes, bugbear, isort, pyupgrade); `next build` clean; 41 pytest tests; small focused modules; comments explain *why* (e.g. reset-during-render, client-only values, FTS triggers). |
-| **Modularity** | Backend: parser, AI engines, search, insights, export and chat are independent services. Frontend: feature folders, shared UI primitives (`ui/`), one typed API client, central query keys and invalidation (`useMeetingMutation`), shared player/notepad contexts. |
+| **Backend / API design** | Resource-oriented REST (`/meetings`, `/meetings/{id}/transcript`, `/action-items/{id}`, `/channels`…), correct status codes (201/204/404/409/413/422), Pydantic validation on every input, pagination and filter params, ownership checks in dependencies, a bulk endpoint, OpenAPI docs at `/docs`. Layered: routes → services → models, and **no route contains SQL**. Services raise domain errors (`NotFound` / `Conflict` / `InvalidInput`) that one exception handler maps to 404 / 409 / 422, so status codes are consistent everywhere. AI sits behind protocols with graceful fallback. |
+| **Code quality** | TypeScript strict + ESLint (Next + React hooks rules) clean with no suppressions; Python linted with Ruff (pyflakes, bugbear, isort, pyupgrade); `next build` clean; 43 pytest tests (including one covering every error mapping); dead code removed; small focused modules; comments explain *why* (e.g. reset-during-render, client-only values, FTS triggers). |
+| **Modularity** | Backend: one service module per resource (meetings, action items, transcript & annotations, channels, topic trackers, people) plus parser, AI engines, search, insights, export and chat. Frontend: feature folders, shared UI primitives (`ui/`), one typed API client, central query keys and invalidation (`useMeetingMutation`), shared player/notepad contexts, shared AskFred answer rendering (`AnswerSources`). |
 | **Code understanding** | The diagrams above plus the README architecture section describe every flow; each module opens with a docstring stating its responsibility. |
 
 ## 8. Verification performed
 
 | Check | Result |
 |---|---|
-| `pytest` (parser formats, AI extraction, API: CRUD, filters, FTS search + triggers, bulk, channels, Smart Search, bookmarks, AskFred) | **41 passed** |
+| `pytest` (parser formats, AI extraction, LLM providers, API: CRUD, filters, FTS search + triggers, bulk, channels, Smart Search, bookmarks, AskFred intents, domain-error → HTTP mapping) | **43 passed** |
 | `tsc --noEmit` · `eslint src` · `ruff check` (backend) | 0 errors · 0 warnings · no lint suppressions in the frontend |
 | `next build` (production) | ✅ all routes build (static + partial prerender) |
 | Playwright: click line → seek & play; seek bar → active line; find "SSO" → 7 highlighted marks, "1 / 7"; Smart Search "Questions" filter | ✅ |
 | Playwright CRUD: paste transcript → AI notes → add/complete/delete action item → rename → AskFred answer → delete meeting | ✅ |
 | Playwright: dark mode, 390 px mobile, PDF export (A4 PDF generated from the print view) | ✅ |
-| **Full site audit** (Playwright, visible browser, production build): 73 checks covering every core requirement, global-search jump to the exact moment, CRUD with reload-persistence, placeholders, all 6 bonuses, every page and control (home tabs, AskFred page, notifications, channels, bulk move, details drawer, player speed/skip/keyboard, summary templates, summary edit + regenerate, transcript edit + speaker re-assignment, all rail panels, Smart Search filters, topic trackers, tasks, analytics, settings, integrations, upgrade, 404) and 16 responsive checks (390 / 768 / 1024 / 1440 px × 4 pages, no horizontal overflow) | ✅ **73/73**, 0 unexpected console errors |
+| **Full site audit** (Playwright, visible browser, production build): 73 checks covering every core requirement, global-search jump to the exact moment, CRUD with reload-persistence, placeholders, all 6 bonuses, every page and control (home tabs, AskFred page, notifications, channels, bulk move, details drawer, player speed/skip/keyboard, summary templates, summary edit + regenerate, transcript edit + speaker re-assignment, all rail panels, Smart Search filters, topic trackers, tasks, analytics, settings, integrations, upgrade, 404) 16 responsive checks (390 / 768 / 1024 / 1440 px × 4 pages, no horizontal overflow), **parity checks against the live Fireflies UI** (trial banner, top bar, Meetings Ask Fred panel, meeting rail + tabs + AskFred chips, AskFred start screen, Plans toggle, Team / feedback placeholders) and a **light + dark theme sweep of all 10 pages** (theme applied, correct surface colour, no overflow) | ✅ **82/82**, 0 unexpected console errors |
 
 ## 9. Five-minute demo script (for the evaluator)
 
 1. **Home** (`/`): greeting, assistant cards, Recent / AI Feed. Press **Ctrl+K** and search "SSO" to jump to the exact transcript moment.
-2. **Meetings**: use Filters → Participants, try *Hosted by me*, open a channel, hover a card for **Details** and ⋯, then bulk-select and move.
+2. **Meetings**: use Filters → Participants, try *Hosted by me*, open a channel, hover a card for **Details** and ⋯, then bulk-select and move. In the **Ask Fred** panel on the right, click *Key decisions*.
 3. Open **Q4 Product Roadmap Planning**: press ▶, click transcript lines, drag the seek bar, and use **Find** "SSO".
 4. Open **Smart Search** → Questions / Sentiment / Talk time / Topic Trackers.
 5. Action items: add, assign, complete. Then **Refine Summary**, Edit, and Export (MD / TXT / PDF).
 6. Ask **AskFred** "What decisions were made?" and click a citation.
 7. **Capture ▾ → Paste transcript → Use a sample** to create a meeting; rename it and delete it.
-8. Visit **Tasks** (My / All), **AskFred** (across meetings), **Analytics**, and **Settings** → Appearance → Dark.
+8. Visit **AskFred** and click *Summarize my last meeting*, then **Tasks** (My / All), **Analytics**, **Upgrade** (monthly / annual), and **Settings** → Appearance → Dark.
 
 ## 10. Known limitations
 

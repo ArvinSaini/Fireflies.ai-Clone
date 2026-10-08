@@ -212,3 +212,21 @@ The full-width layout replaces the app sidebar; a ☰ button opens it.
 - **"Coming soon" placeholders** (per the assignment):
   - Capture (live bot), Voice Agents, AI Skills / AI Apps, Integrations, Team/Invite, Get AI credits, Upgrade.
   - Video (no media), Daily Digest, Upcoming meetings (calendar), Share links.
+
+## 9. Live-app comparison (October 2026)
+
+After the clone was built, every page was compared side by side with the live app at `app.fireflies.ai`
+(a free account, viewed read-only: nothing was changed, connected or sent). These differences were then matched:
+
+| Area | Live Fireflies | Clone |
+|---|---|---|
+| Global | Dismissible "You are eligible for 7 days business plan free trial · Start free trial →" strip | `TrialBanner` (dismissal remembered per browser) |
+| Top bar | Plan chip + green **Upgrade**, bell, Capture ▾ | `PlanBadge` (FREE plan + Upgrade), bell, Capture ▾ |
+| Meetings | Permanent right **Ask Fred** panel: "Hi Arvin! Get ready for your meeting", chips *My action items · Key decisions · Key initiatives*, "Connect Slack and Gmail" card, input scoped to `# My Meetings` | `LibraryAskFred` with the same chips, card and scope chip; answers come from `/api/askfred` |
+| Meeting page | 4-icon rail (Smart Search, Soundbites, Comments, Bookmarks) with **Smart Search open**; right tabs **AskFred \| Transcript**; AskFred quick chips *Attendee Contributions · Todos*; "Ask anything. Type / to run AI Skills"; Upgrade in the top bar | Same rail (Index panel removed), Smart Search open ≥ 1280 px, same tab order, chips and placeholder; "Soundbite · 3" header with duration thumbnails; "All comments" / "All Bookmarks" with the live empty states |
+| AskFred page | "Hi Arvin, how can I help today?", large composer (+, connectors, mic, send), "Bring context from 100+ apps with custom MCP + Add", five starters (action items this week, summarize last meeting, prepare for upcoming meeting, connect Gmail/Notion, weekly digest) | Same layout; each starter maps to a backend intent in `workspace_assistant.py`; connectors are placeholders |
+| Tasks | My Tasks / All Tasks, work-apps strip, *Share Feedback* | Same, plus status filter |
+| Upgrade | "You are on the **Free** plan", MONTHLY / ANNUAL (40% OFF) toggle, Free / Pro / Business (POPULAR) / Enterprise cards with "Everything in …, plus" lists | `PlansView` with the same structure; Upgrade → Coming soon |
+| Settings | Personal / Team, many sections (recording, AI settings, MCP & API…) | Profile, Appearance, Notetaker, Channels, Topic Trackers, **Team** (coming soon), Billing, API |
+| Not copied (outside the brief) | AI Skills builder, Voice Agents, Email Assistant, MCP & API, Knowledge Base | Present as navigation entries that open "Coming soon" |
+| Analytics | Locked on the Free plan | Kept working (team/meeting analytics from the seeded data) |

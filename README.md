@@ -15,7 +15,7 @@ A full-stack clone of the [Fireflies.ai](https://fireflies.ai) post-meeting work
 >
 > **Stack:** Next.js 16 (TypeScript, App Router, Tailwind v4, TanStack Query) · FastAPI · SQLAlchemy 2 · SQLite (+ FTS5)
 
-The UI was modelled on the **current** Fireflies app. Before any frontend code was written, I studied its 2026 help-center screenshots and product pages. The findings, sampled colors and design decisions are in [`docs/UI_RESEARCH.md`](docs/UI_RESEARCH.md).
+The UI was modelled on the **current** Fireflies app. Before any frontend code was written, I studied its 2026 help-center screenshots and product pages. I then compared every page side by side with the live app (a free account, viewed read-only) and matched the differences: the trial banner, the Meetings-page Ask Fred panel, the meeting page's 4-icon rail and tab order, the AskFred start screen and the Plans page. The findings, sampled colors and design decisions are in [`docs/UI_RESEARCH.md`](docs/UI_RESEARCH.md).
 
 ---
 
@@ -23,13 +23,13 @@ The UI was modelled on the **current** Fireflies app. Before any frontend code w
 
 | Area | What works |
 |---|---|
-| **Meetings library** | Meeting cards grouped by day, showing date · time · duration · host and capture-source icons. **Channels** (`#public` / 🔒 private) appear in a second-level panel. Views: *My Meetings* (Hosted by me / Shared with me), *All Meetings* and *Uploads*. **Filters** popover: host, participants, date range, duration, captured-from, channels. Local search by title or participant, sorting, "load more" paging, bulk select → move / delete, per-meeting ⋯ menu (share, copy link, download, move to channel, rename, delete) and a **Details** drawer. |
-| **Meeting page** | **Transcript:** speaker avatars, clickable timestamps and **click-to-seek**. The playing line highlights and auto-scrolls, with a "Sync with audio" button when you scroll away. **Player:** seek bar with chapter ticks, ±15 s, speed, keyboard shortcuts. **Find in transcript** with highlighted matches and next/previous. Inline transcript editing and speaker re-assignment. Hover toolbar: soundbite, comment, bookmark, copy, link to this moment (`?t=` deep links). |
+| **Meetings library** | Meeting cards grouped by day, showing date · time · duration · host and capture-source icons. **Channels** (`#public` / 🔒 private) appear in a second-level panel. Views: *My Meetings* (Hosted by me / Shared with me), *All Meetings* and *Uploads*. **Filters** popover: host, participants, date range, duration, captured-from, channels. Local search by title or participant, sorting, "load more" paging, bulk select → move / delete, per-meeting ⋯ menu (share, copy link, download, move to channel, rename, delete) and a **Details** drawer. A permanent **Ask Fred** panel on the right answers questions across the current scope (My action items · Key decisions · Key initiatives). |
+| **Meeting page** | Same layout as Fireflies: a 4-icon left rail (Smart Search open by default, Soundbites, Comments, Bookmarks), notes in the middle, **AskFred | Transcript** tabs on the right. **Transcript:** speaker avatars, clickable timestamps and **click-to-seek**. The playing line highlights and auto-scrolls, with a "Sync with audio" button when you scroll away. **Player:** seek bar with chapter ticks, ±15 s, speed, keyboard shortcuts. **Find in transcript** with highlighted matches and next/previous. Inline transcript editing and speaker re-assignment. Hover toolbar: soundbite, comment, bookmark, copy, link to this moment (`?t=` deep links). |
 | **AI notes** | Keywords, overview, timestamped notes sections, action items grouped by assignee (add / edit / assign / complete / delete) and an outline of chapters. Summary "templates", edit and regenerate. |
 | **Smart Search** | AI filters (questions, tasks, metrics, dates), sentiment, speaker talk time with WPM, and topic trackers. Each one filters the transcript. |
-| **AskFred** | Per-meeting chat with suggested questions and cited transcript moments. A workspace-wide AskFred page answers across all meetings with sources. |
+| **AskFred** | Per-meeting chat with suggested questions, *Attendee Contributions* / *Todos* quick prompts and cited transcript moments. A workspace-wide AskFred page (Fireflies' start screen and starters) answers across all meetings with sources: open action items, last-meeting summary, prep for the next meeting, key decisions, key initiatives, weekly digest, or any free-text question (retrieval over FTS5). |
 | **CRUD** | Create meetings by **uploading** (.txt / .vtt / .srt / .json), **pasting** a transcript or a **manual form**. Edit metadata (title, date, language, participants), delete, and full CRUD for action items, channels, comments, soundbites, bookmarks and topic trackers. Everything persists in SQLite. |
-| **Everything else** | Ctrl+K global search (SQLite FTS5 with highlighted snippets), Tasks feed (My Tasks / All Tasks), workspace analytics, export (Markdown / TXT / JSON / print-to-PDF), toasts, dark mode, responsive layout. |
+| **Everything else** | Ctrl+K global search (SQLite FTS5 with highlighted snippets), Tasks feed (My Tasks / All Tasks), workspace analytics, Plans page (monthly / annual toggle), export (Markdown / TXT / JSON / print-to-PDF), toasts, light and dark themes, responsive layout. |
 | **Placeholders** | These show a "Coming soon" dialog: the live meeting bot / Capture, speech-to-text, integrations, team & sharing, AI Skills, Voice Agents, billing and real authentication (a default user is assumed). |
 
 ---
@@ -52,7 +52,7 @@ On first start the app creates `backend/fireflies.db` and **seeds 8 realistic me
 
 - Interactive API docs: http://localhost:8000/docs
 - Re-seed from scratch: `python -m app.seed.loader --reset`
-- Run the tests: `pytest` (41 tests: parser, AI engines and providers, API end-to-end) · lint: `ruff check app tests`
+- Run the tests: `pytest` (43 tests: parser, AI engines and providers, API end-to-end, error mapping) · lint: `ruff check app tests`
 
 ### 2. Frontend (Next.js on :3000)
 
@@ -85,9 +85,10 @@ The app is fully functional without an LLM: a built-in extractive engine produce
 │  (library)/ icon rail + channels: Meetings, Uploads      │  REST  │ api/deps.py   DB session, current user,     │
 │  (notepad)/meetings/[id]  meeting page                   │ ◀───── │               ownership checks              │
 │ components/  feature folders (meetings, notepad, …)      │        │ services/     use-cases & business logic    │
-│ lib/api.ts   typed fetch client                          │        │   meetings · search · insights · export     │
-│ lib/queries.ts TanStack Query hooks + cache invalidation │        │   transcript_parser · chat · workspace_ai   │
-│ PlayerContext virtual clock ↔ transcript sync            │        │   ai/ heuristic | Claude or Gemini (opt.)   │
+│ lib/api.ts   typed fetch client                          │        │   meetings · action_items · transcript ·    │
+│ lib/queries.ts TanStack Query hooks + cache invalidation │        │   channels · topic_trackers · search ·      │
+│ PlayerContext virtual clock ↔ transcript sync            │        │   insights · export · chat · workspace_ai · │
+│                                                          │        │   parser · errors · ai/ (heuristic|LLM)     │
 └──────────────────────────────────────────────────────────┘        │ models/       SQLAlchemy 2 ORM (15 tables)  │
                                                                      │ schemas/      Pydantic request/response     │
                                                                      │ SQLite + FTS5 virtual table (triggers)      │
@@ -96,8 +97,9 @@ The app is fully functional without an LLM: a built-in extractive engine produce
 
 **Backend layering:**
 
-- **Routers** only parse input and map errors to HTTP status codes.
-- **Services** own the business rules and transactions.
+- **Routers** are thin: they validate input with Pydantic, call one service function and shape the response. No route contains SQL.
+- **Services** own the queries, business rules and transactions. They raise **domain errors** (`services/errors.py`: `NotFound`, `Conflict`, `InvalidInput`) and know nothing about HTTP.
+- **One exception handler** in `main.py` maps those errors to 404 / 409 / 422, so status codes are consistent across every endpoint.
 - **Models** define the schema.
 - **Schemas** are the public contract.
 
@@ -195,7 +197,7 @@ Base URL `/api`. The full schema is at `/docs`.
 | `PATCH /segments/{id}` | Edit transcript text / re-assign speaker |
 | `…/comments`, `…/soundbites`, `…/bookmarks` | Collaboration on transcript moments |
 | `GET · POST · DELETE /meetings/{id}/chat` · `GET /meetings/{id}/chat/suggestions` | AskFred for one meeting |
-| `POST /askfred` | AskFred across all meetings (retrieval + answer with cited sources) |
+| `POST /askfred` | AskFred across all meetings: intents (action items, last meeting, upcoming, decisions, initiatives, weekly digest) or retrieval + answer with cited sources |
 | `GET /search?q=` | Global FTS5 search over titles and transcripts with highlighted snippets |
 | `GET · POST · PATCH · DELETE /channels` · `/topic-trackers` | Workspace configuration |
 | `GET /me` · `/stats` · `/participants?role=host` · `/health` | Workspace info |
@@ -235,9 +237,10 @@ backend/
     core/config.py  pydantic-settings
     models/         SQLAlchemy models
     schemas/        Pydantic models
-    services/       meetings, search, insights, export, chat, workspace_assistant, transcript_parser, ai/
+    services/       meetings, action_items, transcript, channels, topic_trackers, people, search, insights,
+                    export, chat, workspace_assistant, transcript_parser, errors, ai/
     seed/           loader.py + data/*.json (8 meetings)
-  tests/            pytest: parser, AI engine, API
+  tests/            pytest: parser, AI engines/providers, API, error mapping
 frontend/
   src/app/          (main) · (library) · (notepad) route groups
   src/components/   layout, meetings, notepad, askfred, tasks, analytics, settings, ui
