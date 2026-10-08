@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -60,3 +60,16 @@ class Soundbite(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     meeting = relationship("Meeting", back_populates="soundbites")
+
+
+class Bookmark(Base):
+    """A saved transcript moment (the 🔖 panel in the meeting view)."""
+
+    __tablename__ = "bookmarks"
+    __table_args__ = (UniqueConstraint("segment_id", "user_id", name="uq_bookmark_segment_user"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    meeting_id: Mapped[int] = mapped_column(ForeignKey("meetings.id", ondelete="CASCADE"), index=True)
+    segment_id: Mapped[int] = mapped_column(ForeignKey("transcript_segments.id", ondelete="CASCADE"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

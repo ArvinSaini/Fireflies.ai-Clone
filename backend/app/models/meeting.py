@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -24,12 +24,16 @@ class Meeting(TimestampMixin, Base):
     # Optional URL of a recording; when null the frontend uses a simulated player.
     media_url: Mapped[str | None] = mapped_column(String(1024))
     description: Mapped[str | None] = mapped_column(Text)
+    language: Mapped[str] = mapped_column(String(32), default="English (Global)")
+    # For uploads: the original transcript file (shown in the Uploads list).
+    source_filename: Mapped[str | None] = mapped_column(String(255))
+    source_size_bytes: Mapped[int | None] = mapped_column(Integer)
 
     owner = relationship("User")
     participant_links: Mapped[list["MeetingParticipant"]] = relationship(
         back_populates="meeting", cascade="all, delete-orphan", order_by="MeetingParticipant.id"
     )
-    tag_links: Mapped[list["MeetingTag"]] = relationship(back_populates="meeting", cascade="all, delete-orphan")
+    channel_links: Mapped[list["MeetingChannel"]] = relationship(back_populates="meeting", cascade="all, delete-orphan")
     segments = relationship(
         "TranscriptSegment", back_populates="meeting", cascade="all, delete-orphan",
         order_by="TranscriptSegment.position", passive_deletes=True,
@@ -56,8 +60,12 @@ class Meeting(TimestampMixin, Base):
         return [link.participant for link in self.participant_links]
 
     @property
-    def tags(self) -> list["Tag"]:
-        return [link.tag for link in self.tag_links]
+    def channels(self) -> list["Channel"]:
+        return [link.channel for link in self.channel_links]
+
+    @property
+    def host(self) -> "Participant | None":
+        return next((link.participant for link in self.participant_links if link.role == "host"), None)
 
 
 class Participant(Base):
@@ -86,19 +94,27 @@ class MeetingParticipant(Base):
     participant: Mapped[Participant] = relationship(lazy="joined")
 
 
-class Tag(Base):
-    __tablename__ = "tags"
+class Channel(TimestampMixin, Base):
+    """Fireflies-style channel (`#public` or private) used to organize meetings.
+    A meeting can live in several channels (M:N via meeting_channels)."""
+
+    __tablename__ = "channels"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(50), unique=True)
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    name: Mapped[str] = mapped_column(String(50))
+    description: Mapped[str | None] = mapped_column(Text)
+    is_private: Mapped[bool] = mapped_column(Boolean, default=False)
     color: Mapped[str] = mapped_column(String(9))
 
+    __table_args__ = (UniqueConstraint("owner_id", "name", name="uq_channel_owner_name"),)
 
-class MeetingTag(Base):
-    __tablename__ = "meeting_tags"
+
+class MeetingChannel(Base):
+    __tablename__ = "meeting_channels"
 
     meeting_id: Mapped[int] = mapped_column(ForeignKey("meetings.id", ondelete="CASCADE"), primary_key=True)
-    tag_id: Mapped[int] = mapped_column(ForeignKey("tags.id", ondelete="CASCADE"), primary_key=True, index=True)
+    channel_id: Mapped[int] = mapped_column(ForeignKey("channels.id", ondelete="CASCADE"), primary_key=True, index=True)
 
-    meeting: Mapped[Meeting] = relationship(back_populates="tag_links")
-    tag: Mapped[Tag] = relationship(lazy="joined")
+    meeting: Mapped[Meeting] = relationship(back_populates="channel_links")
+    channel: Mapped[Channel] = relationship(lazy="joined")
