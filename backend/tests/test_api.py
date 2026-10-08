@@ -167,3 +167,15 @@ def test_my_tasks(client, meeting):
     mine = client.get("/api/action-items?mine=true").json()
     assert [t["text"] for t in mine] == ["Mine"]
     assert len(client.get("/api/action-items").json()) > 1
+
+
+def test_workspace_askfred(client, meeting):
+    tasks = client.post("/api/askfred", json={"question": "What are my open action items?"}).json()
+    assert "action items" in tasks["answer"] and tasks["meetings"][0]["meeting_title"] == "Pricing Sync"
+    recap = client.post("/api/askfred", json={"question": "Recap this week"}).json()
+    assert "Pricing Sync" in recap["answer"]
+    found = client.post("/api/askfred", json={"question": "What was said about the discount?"}).json()
+    assert found["citations"] and found["citations"][0]["meeting_id"] == meeting["id"]
+    assert "discount" in found["citations"][0]["text"].lower()
+    none = client.post("/api/askfred", json={"question": "zebras"}).json()
+    assert none["citations"] == []

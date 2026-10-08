@@ -5,7 +5,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import action_items, assistant, channels, meetings, topic_trackers, transcript, workspace
+from app.api.routes import (
+    action_items, askfred, assistant, channels, meetings, topic_trackers, transcript, workspace,
+)
 from app.core.config import get_settings
 from app.db import init_db
 
@@ -33,7 +35,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
         expose_headers=["Content-Disposition"],
     )
-    for module in (workspace, channels, topic_trackers, meetings, action_items, transcript, assistant):
+    for module in (workspace, channels, topic_trackers, meetings, action_items, transcript, assistant, askfred):
         app.include_router(module.router, prefix="/api")
 
     @app.get("/api/health", tags=["meta"])
