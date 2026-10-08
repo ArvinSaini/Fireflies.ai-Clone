@@ -31,14 +31,40 @@ class MeetingParticipantOut(ParticipantOut):
     role: Literal["host", "attendee"] = "attendee"
 
 
-class TagOut(ORMModel):
+class ChannelOut(ORMModel):
     id: int
     name: str
+    description: str | None
+    is_private: bool
     color: str
 
 
-class TagCount(TagOut):
+class ChannelCount(ChannelOut):
     meeting_count: int
+
+
+class ChannelCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=50)
+    description: str | None = Field(default=None, max_length=500)
+    is_private: bool = False
+
+
+class ChannelUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=50)
+    description: str | None = Field(default=None, max_length=500)
+    is_private: bool | None = None
+
+
+class TopicTrackerIn(BaseModel):
+    name: str = Field(min_length=1, max_length=60)
+    keywords: list[str] = Field(min_length=1, max_length=25)
+
+
+class TopicTrackerOut(ORMModel):
+    id: int
+    name: str
+    keywords: list[str]
+    color: str
 
 
 class ParticipantCount(ParticipantOut):

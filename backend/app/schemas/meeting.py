@@ -3,7 +3,9 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-from app.schemas.common import ActionItemOut, MeetingParticipantOut, ORMModel, ParticipantIn, ParticipantOut, TagOut
+from app.schemas.common import (
+    ActionItemOut, ChannelOut, MeetingParticipantOut, ORMModel, ParticipantIn, ParticipantOut,
+)
 
 Platform = Literal["zoom", "google_meet", "teams", "upload", "paste", "manual"]
 TranscriptFormat = Literal["auto", "txt", "vtt", "srt", "json"]
@@ -44,8 +46,12 @@ class MeetingListItem(BaseModel):
     started_at: datetime
     duration_ms: int
     platform: str
+    language: str
+    source_filename: str | None
+    source_size_bytes: int | None
+    host: ParticipantOut | None
     participants: list[MeetingParticipantOut]
-    tags: list[TagOut]
+    channels: list[ChannelOut]
     overview: str | None
     action_items_total: int
     action_items_open: int
@@ -59,10 +65,14 @@ class MeetingDetail(BaseModel):
     duration_ms: int
     platform: str
     media_url: str | None
+    language: str
+    source_filename: str | None
+    source_size_bytes: int | None
     created_at: datetime
     updated_at: datetime
+    host: ParticipantOut | None
     participants: list[MeetingParticipantOut]
-    tags: list[TagOut]
+    channels: list[ChannelOut]
     summary: SummaryOut | None
     chapters: list[ChapterOut]
     action_items: list[ActionItemOut]
@@ -77,8 +87,9 @@ class MeetingCreate(BaseModel):
     started_at: datetime | None = None
     platform: Platform = "manual"
     description: str | None = None
+    language: str = Field(default="English (Global)", max_length=32)
     participants: list[ParticipantIn] = []
-    tags: list[str] = []
+    channel_ids: list[int] = []
     transcript_text: str | None = None
     transcript_format: TranscriptFormat = "auto"
     duration_minutes: int | None = Field(default=None, ge=0, le=24 * 60)
@@ -89,8 +100,25 @@ class MeetingUpdate(BaseModel):
     title: str | None = Field(default=None, min_length=1, max_length=255)
     started_at: datetime | None = None
     description: str | None = None
+    language: str | None = Field(default=None, max_length=32)
     participants: list[ParticipantIn] | None = None
-    tags: list[str] | None = None
+    channel_ids: list[int] | None = None
+
+
+class BulkMeetingAction(BaseModel):
+    """Bulk actions from the Notebook's checkbox selection."""
+
+    action: Literal["delete", "move"]
+    meeting_ids: list[int] = Field(min_length=1, max_length=500)
+    channel_ids: list[int] = []  # for "move": the meetings' new channel set
+
+
+class TopicHit(BaseModel):
+    tracker_id: int
+    name: str
+    color: str
+    count: int
+    segment_ids: list[int]
 
 
 class SpeakerStat(BaseModel):
@@ -104,14 +132,17 @@ class SpeakerStat(BaseModel):
 
 class MeetingAnalytics(BaseModel):
     speakers: list[SpeakerStat]
-    # Fireflies-style "AI filters": segment ids per category.
+    # Fireflies-style "AI filters": segment ids per category (questions, dates, metrics, tasks).
     filters: dict[str, list[int]]
+    # positive / neutral / negative -> segment ids
+    sentiments: dict[str, list[int]]
+    topics: list[TopicHit]
     total_words: int
     question_count: int
 
 
 __all__ = [
-    "ChapterOut", "MeetingAnalytics", "MeetingCreate", "MeetingDetail", "MeetingListItem", "MeetingUpdate",
+    "BulkMeetingAction", "ChapterOut", "MeetingAnalytics", "MeetingCreate", "MeetingDetail", "MeetingListItem", "MeetingUpdate",
     "NoteSection", "Platform", "SortKey", "SpeakerStat", "SummaryOut", "SummaryUpdate",
-    "TranscriptFormat",
+    "TopicHit", "TranscriptFormat",
 ]

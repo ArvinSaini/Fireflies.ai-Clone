@@ -82,6 +82,17 @@ class ChatMessageOut(ORMModel):
     created_at: datetime
 
 
+class BookmarkCreate(BaseModel):
+    segment_id: int
+
+
+class BookmarkOut(ORMModel):
+    id: int
+    meeting_id: int
+    segment_id: int
+    created_at: datetime
+
+
 class ChatAsk(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
 
