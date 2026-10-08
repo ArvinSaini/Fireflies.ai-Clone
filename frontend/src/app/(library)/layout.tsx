@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import { ChannelsPanel } from "@/components/layout/ChannelsPanel";
-import { IconRail } from "@/components/layout/IconRail";
+import { AppNav } from "@/components/layout/AppNav";
 
-/** Meetings & Uploads: collapsed icon rail + channels panel, like the Fireflies Notebook. */
+/** Meetings & Uploads: app nav (compact rail by default) + channels panel, like the Fireflies Notebook. */
 export default function LibraryLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full overflow-hidden">
       <div className="hidden md:flex">
-        <IconRail />
+        <AppNav />
         <Suspense fallback={<div className="w-[280px] border-r border-line" />}>
           <ChannelsPanel />
         </Suspense>

@@ -1,12 +1,12 @@
 import { HelpButton } from "@/components/layout/HelpButton";
-import { IconRail } from "@/components/layout/IconRail";
+import { AppNav } from "@/components/layout/AppNav";
 
-/** Home, Tasks, AskFred, Settings…: the compact icon rail, like every page of the live app. */
+/** Home, Tasks, AskFred, Settings…: app nav (compact rail by default), like every page of the live app. */
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full overflow-hidden">
       <div className="hidden md:flex">
-        <IconRail />
+        <AppNav />
       </div>
       <div className="flex min-w-0 flex-1 flex-col">{children}</div>
       <HelpButton />

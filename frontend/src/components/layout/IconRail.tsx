@@ -2,13 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { useMe } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { NAV_FOOTER, NAV_GROUPS, isActive, type NavItem } from "./nav";
-import { Sidebar } from "./Sidebar";
 
 function RailButton({ item, path }: { item: NavItem; path: string }) {
   const comingSoon = useComingSoon();
@@ -35,64 +33,36 @@ function RailButton({ item, path }: { item: NavItem; path: string }) {
   );
 }
 
-/**
- * Compact app rail, as on every page of the live app. Clicking the profile
- * avatar slides the full sidebar out over the page.
- */
-export function IconRail() {
+/** Compact app rail, as on every page of the live app. The profile avatar expands it (see AppNav). */
+export function IconRail({ onExpand }: { onExpand: () => void }) {
   const path = usePathname();
   const { data: me } = useMe();
-  const [expanded, setExpanded] = useState(false);
-
-  // Navigating somewhere collapses the sidebar again.
-  const [lastPath, setLastPath] = useState(path);
-  if (path !== lastPath) {
-    setLastPath(path);
-    setExpanded(false);
-  }
-
-  useEffect(() => {
-    if (!expanded) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setExpanded(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [expanded]);
 
   return (
-    <>
-      <aside className="flex h-full w-[60px] shrink-0 flex-col items-center border-r border-line bg-sidebar py-3">
+    <aside className="flex h-full w-[60px] shrink-0 flex-col items-center border-r border-line bg-sidebar py-3">
         <button
           type="button"
-          onClick={() => setExpanded(true)}
-          aria-label="Expand sidebar"
-          aria-expanded={expanded}
-          title={me?.name}
-          className="rounded-lg p-1.5 hover:bg-muted"
-        >
-          <Avatar name={me?.name ?? "…"} color={me?.avatar_color} size="sm" />
-        </button>
-        <nav className="mt-3 flex flex-1 flex-col items-center gap-1">
-          {NAV_GROUPS.map((group, i) => (
-            <div key={i} className={cn("flex flex-col items-center gap-1", i && "mt-1 border-t border-line pt-2")}>
-              {group.map((item) => (
-                <RailButton key={item.label} item={item} path={path} />
-              ))}
-            </div>
-          ))}
-        </nav>
-        <div className="flex flex-col items-center gap-1">
-          {NAV_FOOTER.map((item) => (
-            <RailButton key={item.label} item={item} path={path} />
-          ))}
-        </div>
-      </aside>
-      {expanded && (
-        <div className="fixed inset-0 z-40" onMouseDown={() => setExpanded(false)}>
-          <div className="animate-fade-in h-full w-fit" onMouseDown={(e) => e.stopPropagation()}>
-            <Sidebar className="shadow-pop" onCollapse={() => setExpanded(false)} />
+        onClick={onExpand}
+        aria-label="Expand sidebar"
+        title={me?.name}
+        className="rounded-lg p-1.5 hover:bg-muted"
+      >
+        <Avatar name={me?.name ?? "…"} color={me?.avatar_color} size="sm" />
+      </button>
+      <nav className="mt-3 flex flex-1 flex-col items-center gap-1">
+        {NAV_GROUPS.map((group, i) => (
+          <div key={i} className={cn("flex flex-col items-center gap-1", i && "mt-1 border-t border-line pt-2")}>
+            {group.map((item) => (
+              <RailButton key={item.label} item={item} path={path} />
+            ))}
           </div>
-        </div>
-      )}
-    </>
-  );
+        ))}
+      </nav>
+      <div className="flex flex-col items-center gap-1">
+        {NAV_FOOTER.map((item) => (
+          <RailButton key={item.label} item={item} path={path} />
+        ))}
+      </div>
+  </aside>
+);
 }

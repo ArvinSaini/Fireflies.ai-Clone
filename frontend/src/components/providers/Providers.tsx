@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { ComingSoonProvider } from "./ComingSoonProvider";
+import { AppNavProvider } from "@/components/layout/AppNav";
 import { CommandPaletteProvider } from "@/components/search/CommandPalette";
 import { CreateMeetingProvider } from "@/components/meetings/CreateMeetingModal";
 
@@ -25,7 +26,9 @@ export function Providers({ children }: { children: ReactNode }) {
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
         <ComingSoonProvider>
           <CreateMeetingProvider>
-            <CommandPaletteProvider>{children}</CommandPaletteProvider>
+            <CommandPaletteProvider>
+              <AppNavProvider>{children}</AppNavProvider>
+            </CommandPaletteProvider>
           </CreateMeetingProvider>
         </ComingSoonProvider>
         <Toaster position="bottom-left" richColors closeButton toastOptions={{ className: "font-sans" }} />
