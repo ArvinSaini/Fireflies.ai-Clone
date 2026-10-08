@@ -103,12 +103,12 @@ export function CaptureButton() {
   );
 }
 
-/** "Free plan" chip + green Upgrade button, as in the real top bar. */
+/** "3 Free meetings" counter + green Upgrade button, as in the real top bar. */
 export function PlanBadge() {
   return (
     <div className="hidden items-center gap-2 lg:flex">
       <span className="inline-flex items-center gap-1.5 text-[13px] whitespace-nowrap text-ink-3">
-        <span className="rounded bg-success-soft px-1.5 py-0.5 text-[11px] font-semibold text-success">FREE</span> plan
+        <span className="rounded bg-success-soft px-1.5 py-0.5 text-[12px] font-semibold text-success">3</span> Free meetings
       </span>
       <Link href="/upgrade" className="rounded-lg border border-success/40 bg-success-soft px-3 py-1.5 text-[13px] font-medium whitespace-nowrap text-success hover:border-success">
         Upgrade
