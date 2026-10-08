@@ -18,6 +18,8 @@ you'll you're you've your yours yourself yourselves okay ok um uh hmm oh well ki
 going go know mean want need yep great good thanks thank cool awesome guys everyone one two also basically pretty
 quite probably definitely totally exactly anyway alright bit way look looks see make sounds sound even still
 much many back today tomorrow week next last time take come day put something anything everything someone done
+monday tuesday wednesday thursday friday saturday sunday january february march april june july august
+september october november december meeting call folks minutes morning afternoon evening quick
 """.split())
 
 _WORD = re.compile(r"[a-zA-Z][a-zA-Z'\-]+")

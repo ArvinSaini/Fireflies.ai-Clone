@@ -73,7 +73,7 @@ class _Scorer:
     def sentence(self, text: str) -> float:
         toks = content_words(text)
         n_words = len(text.split())
-        if n_words < 6 or text.endswith("?"):
+        if n_words < 6 or text.endswith("?") or _SMALL_TALK.match(_clean(text)):
             return 0.0
         return sum(math.log1p(self.weights[t]) for t in set(toks)) / math.sqrt(n_words)
 
@@ -82,7 +82,39 @@ class _Scorer:
         candidates = [c for c in candidates if c[0] > 0]
         candidates.sort(key=lambda c: -c[0])
         picked = sorted(candidates[:limit], key=lambda c: c[1])
-        return [(ln, _clean(s)) for _, _, ln, s in picked]
+        return [(ln, third_person(_clean(s), ln.speaker)) for _, _, ln, s in picked]
+
+
+# Greetings / logistics that carry no meeting content.
+_SMALL_TALK = re.compile(
+    r"^(?:thanks?(?: you)?(?: (?:all|everyone|guys|folks))? for (?:joining|coming|your time)|hi\b|hello\b|hey\b|"
+    r"welcome\b|good (?:morning|afternoon|evening)|let'?s (?:get started|start|kick (?:it|things) off|begin|wrap)|"
+    r"can everyone hear|sounds good|that'?s all|talk (?:soon|later)|see you)",
+    re.I,
+)
+
+# First person → third person, so extracted sentences read like notes ("Ben will send…").
+_PERSON_RULES = [
+    (re.compile(r"^I'll\b|^I will\b", re.I), "{name} will"),
+    (re.compile(r"^I'm going to\b|^I am going to\b", re.I), "{name} is going to"),
+    (re.compile(r"^I'm\b|^I am\b", re.I), "{name} is"),
+    (re.compile(r"^I've\b|^I have\b", re.I), "{name} has"),
+    (re.compile(r"^I\b"), "{name}"),
+    (re.compile(r"^We need to\b", re.I), "The team needs to"),
+    (re.compile(r"^We'll\b|^We will\b", re.I), "The team will"),
+    (re.compile(r"^We're\b|^We are\b", re.I), "The team is"),
+    (re.compile(r"^We\b", re.I), "The team"),
+    (re.compile(r"^Let's\b", re.I), "The team will"),
+]
+
+
+def third_person(sentence: str, speaker: str | None) -> str:
+    name = _first_name(speaker) or "The speaker"
+    for pattern, repl in _PERSON_RULES:
+        if pattern.match(sentence):
+            out = pattern.sub(repl.format(name=name), sentence, count=1)
+            return re.sub(r"\bmy\b", "their", out) if repl.startswith("{name}") else out
+    return sentence
 
 
 class HeuristicSummarizer:

@@ -34,3 +34,20 @@ def test_assistant_answers_with_citations():
     assert ans.line_indexes and "discount" in ans.answer.lower()
     talk = HeuristicAssistant().answer(_ctx(), "Who talked the most?", [])
     assert talk.answer.startswith("Talk time by speaker")
+
+
+def test_notes_skip_small_talk_and_use_third_person():
+    from app.services.ai.heuristic import third_person
+
+    assert third_person("I'll send the deck by Friday.", "Ben Carter") == "Ben will send the deck by Friday."
+    assert third_person("We need to fix my report.", "Ann Lee") == "The team needs to fix my report."
+    assert third_person("I am updating my notes.", "Ann Lee") == "Ann is updating their notes."
+    lines = [
+        Line(0, "Nina", 0, 4000, "Thanks for joining the partner onboarding review today everyone."),
+        Line(1, "Ben", 4000, 9000, "Activation is up twelve percent since the new onboarding checklist shipped."),
+        Line(2, "Ben", 9000, 14000, "I'll send the onboarding funnel breakdown by Friday with the drop-off screens."),
+    ]
+    draft = HeuristicSummarizer().summarize(MeetingContext("Review", ["Nina", "Ben"], lines))
+    assert "Thanks for joining" not in draft.overview
+    assert "Ben will send the onboarding funnel breakdown" in draft.overview
+    assert "Friday" not in draft.keywords
