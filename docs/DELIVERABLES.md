@@ -59,7 +59,7 @@ Legend: ✅ done · 🟡 placeholder by design (allowed by the brief)
 
 | Requirement | Status | Implementation |
 |---|---|---|
-| Navigation & layout (library + detail) | ✅ | Route groups: `(main)` expanded sidebar · `(library)` icon rail + channels panel · `(notepad)` full-width meeting page; all researched from current Fireflies screenshots |
+| Navigation & layout (library + detail) | ✅ | Route groups: `(main)` icon rail (avatar opens the full sidebar) · `(library)` icon rail + channels panel · `(notepad)` full-width meeting page; all researched from current Fireflies screenshots |
 | Transcript & summary panels | ✅ | Notes / AI Skills tabs in the middle; **AskFred / Transcript** tabs on the right (same order as Fireflies); 4-icon left rail — Smart Search (open by default on desktop) · Soundbites · Comments · Bookmarks. The Meetings page has Fireflies' permanent **Ask Fred** side panel |
 | Forms, modals, search, filters | ✅ | Create-meeting dialog, edit dialog, move-to-channel, confirm dialogs, Ctrl+K palette, filters popover |
 | Notifications / toasts | ✅ | `sonner` toasts on every mutation; notifications bell; Fireflies' dismissible free-trial banner |

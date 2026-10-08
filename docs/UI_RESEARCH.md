@@ -207,7 +207,7 @@ The full-width layout replaces the app sidebar; a ☰ button opens it.
 
 ### Frontend structure
 - **Pages**: `/` Home, `/meetings` Notebook (channels panel), `/meetings/[id]` Notepad, `/uploads`, `/tasks`, `/askfred`, and placeholders (Analytics, AI Skills, Voice Agents, Integrations, Team, Settings, Upgrade).
-- **Shell**: an expanded sidebar on Home, Tasks and AskFred; an icon rail + channels panel on Meetings and Uploads; no sidebar on the Notepad (hamburger drawer instead).
+- **Shell**: the compact icon rail on every page (the avatar opens the full sidebar as a flyout); a channels panel next to it on Meetings and Uploads; no rail on the Notepad (hamburger drawer instead).
 - **Notepad**: rail + panel, summary column, right Transcript/AskFred panel, bottom player. Wording, layout and colors follow sections 1 and 5.
 - **"Coming soon" placeholders** (per the assignment):
   - Capture (live bot), Voice Agents, AI Skills / AI Apps, Integrations, Team/Invite, Get AI credits, Upgrade.
@@ -220,8 +220,10 @@ After the clone was built, every page was compared side by side with the live ap
 
 | Area | Live Fireflies | Clone |
 |---|---|---|
+| Navigation | Compact 60px icon rail on **every** page (avatar · Home, AskFred · Meetings, Tasks, AI Skills · Analytics, Voice Agents · Upgrade with green dot · Invite, Integrations, Settings) | `IconRail` everywhere; clicking the avatar slides the full `Sidebar` out over the page (Esc, outside click, collapse button or navigation closes it) |
+| Home | "Welcome Aboard, {name}!" card with product-demo video, **Quick Start** (Schedule Meeting · Upload File · Capture Meeting), Recent \| Upcoming \| AI Feed + Settings, **Try More** (Desktop App Download, Mobile App stores), floating "?" help | `HomeView` rebuilt to this layout; recent rows show "Thu, Oct 8 2026, 3:00 PM" |
 | Global | Dismissible "You are eligible for 7 days business plan free trial · Start free trial →" strip | `TrialBanner` (dismissal remembered per browser) |
-| Top bar | Plan chip + green **Upgrade**, bell, Capture ▾ | `PlanBadge` (FREE plan + Upgrade), bell, Capture ▾ |
+| Top bar | "3 Free meetings" counter + green **Upgrade**, bell, Capture ▾ | `PlanBadge` ("3 Free meetings" + Upgrade), bell, Capture ▾ |
 | Meetings | Permanent right **Ask Fred** panel: "Hi Arvin! Get ready for your meeting", chips *My action items · Key decisions · Key initiatives*, "Connect Slack and Gmail" card, input scoped to `# My Meetings` | `LibraryAskFred` with the same chips, card and scope chip; answers come from `/api/askfred` |
 | Meeting page | 4-icon rail (Smart Search, Soundbites, Comments, Bookmarks) with **Smart Search open**; right tabs **AskFred \| Transcript**; AskFred quick chips *Attendee Contributions · Todos*; "Ask anything. Type / to run AI Skills"; Upgrade in the top bar | Same rail (Index panel removed), Smart Search open ≥ 1280 px, same tab order, chips and placeholder; "Soundbite · 3" header with duration thumbnails; "All comments" / "All Bookmarks" with the live empty states |
 | AskFred page | "Hi Arvin, how can I help today?", large composer (+, connectors, mic, send), "Bring context from 100+ apps with custom MCP + Add", five starters (action items this week, summarize last meeting, prepare for upcoming meeting, connect Gmail/Notion, weekly digest) | Same layout; each starter maps to a backend intent in `workspace_assistant.py`; connectors are placeholders |
