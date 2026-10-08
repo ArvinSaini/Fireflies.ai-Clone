@@ -10,6 +10,7 @@ import { useCreateMeeting } from "@/components/meetings/CreateMeetingModal";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { LogoMark } from "@/components/ui/Logo";
+import { AppStoreIcon, PlayStoreIcon } from "@/components/ui/StoreIcons";
 import { EmptyState, Segmented, Skeleton } from "@/components/ui/Primitives";
 import { firstName, formatRecentDate, formatShortDate } from "@/lib/format";
 import { useMe, useMeetings } from "@/lib/queries";
@@ -64,22 +65,6 @@ function QuickStartCard({ label, icon, className, onClick }: { label: string; ic
     </button>
   );
 }
-
-const AppStoreIcon = () => (
-  <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
-    <rect width="24" height="24" rx="5" fill="#1a8cff" />
-    <path d="M12.5 6.5 9 13h6.2M10.4 6.5l1.2 2.1M7 16.5l1.3-2.2M17 16.5l-2.7-4.6" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" fill="none" />
-  </svg>
-);
-
-const PlayStoreIcon = () => (
-  <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
-    <path d="M4 3.2v17.6L13.2 12z" fill="#00d26a" />
-    <path d="M4 3.2 16.4 10.1 13.2 12z" fill="#00a0ff" />
-    <path d="M4 20.8 16.4 13.9 13.2 12z" fill="#ff3d3d" />
-    <path d="m16.4 10.1 3.6 1.9-3.6 1.9-3.2-1.9z" fill="#ffc400" />
-  </svg>
-);
 
 export function HomeView() {
   const comingSoon = useComingSoon();

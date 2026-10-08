@@ -1,18 +1,15 @@
 "use client";
 
-import { ChevronDown, LogOut, Mail, Moon, PanelLeftClose, Settings, Sun, X } from "lucide-react";
+import { Mail, PanelLeft, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import { useState } from "react";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
-import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
-import { MenuItem, MenuSeparator, Popover } from "@/components/ui/Popover";
 import { NewBadge } from "@/components/ui/Primitives";
-import { useMe } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { NAV_FOOTER, NAV_GROUPS, isActive, type NavItem } from "./nav";
+import { ProfileMenu } from "./ProfileMenu";
 
 function NavLink({ item, path, onNavigate }: { item: NavItem; path: string; onNavigate?: () => void }) {
   const comingSoon = useComingSoon();
@@ -41,52 +38,6 @@ function NavLink({ item, path, onNavigate }: { item: NavItem; path: string; onNa
   );
 }
 
-export function WorkspaceSwitcher() {
-  const { data: me } = useMe();
-  const { theme, setTheme } = useTheme();
-  const comingSoon = useComingSoon();
-  const name = me?.name ?? "…";
-  return (
-    <Popover
-      trigger={({ toggle }) => (
-        <button
-          type="button"
-          onClick={toggle}
-          className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-muted"
-        >
-          <Avatar name={name} color={me?.avatar_color} size="sm" />
-          <span className="max-w-32 truncate text-[14px] font-medium text-ink">{name}</span>
-          <ChevronDown className="size-4 text-ink-4" />
-        </button>
-      )}
-      className="w-60"
-    >
-      {(close) => (
-        <>
-          <div className="px-2.5 py-2">
-            <p className="text-[13px] font-medium text-ink">{name}</p>
-            <p className="text-xs text-ink-4">{me?.email}</p>
-          </div>
-          <MenuSeparator />
-          <Link href="/settings" onClick={close}>
-            <MenuItem icon={<Settings />}>Settings</MenuItem>
-          </Link>
-          <MenuItem
-            icon={theme === "dark" ? <Sun /> : <Moon />}
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {theme === "dark" ? "Light mode" : "Dark mode"}
-          </MenuItem>
-          <MenuSeparator />
-          <MenuItem icon={<LogOut />} onClick={() => { close(); comingSoon("Sign out & multiple accounts"); }}>
-            Sign out
-          </MenuItem>
-        </>
-      )}
-    </Popover>
-  );
-}
-
 /** Expanded app sidebar: the mobile drawer, and the flyout opened from the rail's profile icon. */
 export function Sidebar({ onNavigate, onCollapse, className }: { onNavigate?: () => void; onCollapse?: () => void; className?: string }) {
   const path = usePathname();
@@ -95,10 +46,10 @@ export function Sidebar({ onNavigate, onCollapse, className }: { onNavigate?: ()
   return (
     <aside className={cn("flex h-full w-[240px] shrink-0 flex-col border-r border-line bg-sidebar", className)}>
       <div className="flex h-16 items-center justify-between px-3">
-        <WorkspaceSwitcher />
+        <ProfileMenu />
         {onCollapse && (
           <button type="button" onClick={onCollapse} aria-label="Collapse sidebar" className="rounded-lg p-1.5 text-ink-4 hover:bg-muted hover:text-ink">
-            <PanelLeftClose className="size-[18px]" strokeWidth={1.75} />
+            <PanelLeft className="size-[18px]" strokeWidth={1.75} />
           </button>
         )}
       </div>
