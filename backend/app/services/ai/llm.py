@@ -1,14 +1,15 @@
-"""Claude-backed summarizer and Q&A, used when ANTHROPIC_API_KEY is configured.
+"""LLM-backed summarizer and Q&A (Claude or Gemini), used when an API key is configured.
 
-Both use structured outputs (`client.messages.parse` with a Pydantic schema), so the
-response is validated JSON rather than free text we would have to scrape.
+Provider-agnostic: prompts, output schemas and the mapping back to drafts live here; the vendor call
+is a `StructuredLLM` from `providers.py` that returns a validated Pydantic object, so responses are
+checked JSON rather than free text we would have to scrape.
 """
 from __future__ import annotations
 
-import anthropic
 from pydantic import BaseModel, Field
 
 from app.services.ai.heuristic import fmt_ms
+from app.services.ai.providers import StructuredLLM
 from app.services.ai.types import (
     ActionItemDraft,
     AnswerDraft,
@@ -17,11 +18,6 @@ from app.services.ai.types import (
     MeetingContext,
     SummaryDraft,
 )
-
-
-class LLMRefusal(RuntimeError):
-    pass
-
 
 # --- output schemas -----------------------------------------------------------
 
@@ -66,26 +62,15 @@ def _line_at(lines: list[Line], index: int) -> Line:
     return lines[max(0, min(index, len(lines) - 1))]
 
 
-class _ClaudeBase:
-    def __init__(self, api_key: str, model: str):
-        self.client = anthropic.Anthropic(api_key=api_key, max_retries=1, timeout=90)
-        self.model = model
+class _LLMBase:
+    def __init__(self, provider: StructuredLLM):
+        self.provider = provider
 
     def _parse(self, system: str, prompt: str, schema: type[BaseModel]) -> BaseModel:
-        response = self.client.messages.parse(
-            model=self.model,
-            max_tokens=16000,
-            system=system,
-            messages=[{"role": "user", "content": prompt}],
-            output_config={"effort": "low"},
-            output_format=schema,
-        )
-        if response.stop_reason == "refusal" or response.parsed_output is None:
-            raise LLMRefusal(f"LLM returned no usable output (stop_reason={response.stop_reason})")
-        return response.parsed_output
+        return self.provider.parse(system, prompt, schema)
 
 
-class ClaudeSummarizer(_ClaudeBase):
+class LLMSummarizer(_LLMBase):
     SYSTEM = (
         "You are Fred, a meeting assistant like Fireflies.ai. You write accurate, skimmable meeting "
         "summaries grounded strictly in the transcript. Never invent facts. Transcript lines are "
@@ -117,11 +102,11 @@ class ClaudeSummarizer(_ClaudeBase):
                    for n in out.notes],
             chapters=chapters,
             action_items=[ActionItemDraft(a.text, a.assignee, _line_at(lines, a.line).index) for a in out.action_items],
-            engine="llm",
+            engine=self.provider.name,
         )
 
 
-class ClaudeAssistant(_ClaudeBase):
+class LLMAssistant(_LLMBase):
     SYSTEM = (
         "You are Fred, the AskFred assistant inside a Fireflies-style meeting app. Answer questions "
         "about ONE meeting using only its transcript and summary. If the transcript doesn't contain the "
@@ -138,4 +123,4 @@ class ClaudeAssistant(_ClaudeBase):
         )
         out: _Answer = self._parse(self.SYSTEM, prompt, _Answer)  # type: ignore[assignment]
         valid = [i for i in out.cited_lines if 0 <= i < len(ctx.lines)][:4]
-        return AnswerDraft(out.answer, valid, engine="llm")
+        return AnswerDraft(out.answer, valid, engine=self.provider.name)
