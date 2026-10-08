@@ -18,8 +18,12 @@ FILTER_PATTERNS: dict[str, re.Pattern] = {
         r"august|september|october|november|december|q[1-4]|\d{1,2}(?::\d{2})?\s?(?:am|pm)|eod|eow)\b",
         re.I,
     ),
+    # Quantities: "$40k", "18%", "250 seats" and spelled-out ones ("eighteen percent", "forty thousand").
     "metrics": re.compile(
-        r"(\$\s?\d[\d,.]*\s?[kmb]?|\b\d+(?:\.\d+)?\s?(?:%|percent|k\b|million|billion|x\b|ms\b|users|customers|seats|deals))",
+        r"(\$\s?\d[\d,.]*\s?[kmb]?|\b\d+(?:\.\d+)?\s?(?:%|percent|k\b|million|billion|x\b|ms\b|users|customers|seats|deals)"
+        r"|\b(?:\w+[- ])?(?:hundred|thousand|million|billion|percent)\b"
+        r"|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|twelve|fifteen|twenty|thirty|forty|fifty|sixty|seventy|"
+        r"eighty|ninety)[- ]?(?:\w+[- ])?(?:seats|users|customers|accounts|deals|tickets|licenses|k)\b)",
         re.I,
     ),
     "tasks": re.compile(
