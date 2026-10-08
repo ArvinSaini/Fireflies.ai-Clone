@@ -1,5 +1,5 @@
 import {
-  BarChart3, Bot, Home, ListChecks, Plug, Settings, Sparkles, Users, Video, Zap, type LucideIcon,
+  BarChart3, Bot, BotMessageSquare, Home, Layers, ListChecks, Settings, Sparkles, UserPlus, Video, Zap, type LucideIcon,
 } from "lucide-react";
 
 export interface NavItem {
@@ -9,6 +9,8 @@ export interface NavItem {
   comingSoon?: string; // placeholder feature description
   badge?: { text: string; tone: "green" | "purple" };
   hint?: string;
+  accent?: string; // icon color in the rail (e.g. the purple AskFred bot)
+  dot?: boolean; // small green dot on the rail icon
   match?: (path: string) => boolean;
 }
 
@@ -16,7 +18,7 @@ export interface NavItem {
 export const NAV_GROUPS: NavItem[][] = [
   [
     { label: "Home", icon: Home, href: "/", match: (p) => p === "/" },
-    { label: "AskFred", icon: Bot, href: "/askfred", badge: { text: "NEW", tone: "green" } },
+    { label: "AskFred", icon: BotMessageSquare, href: "/askfred", badge: { text: "NEW", tone: "green" }, accent: "text-brand" },
   ],
   [
     { label: "Meetings", icon: Video, href: "/meetings", match: (p) => p.startsWith("/meetings") || p.startsWith("/uploads") },
@@ -26,13 +28,13 @@ export const NAV_GROUPS: NavItem[][] = [
   [
     { label: "Analytics", icon: BarChart3, href: "/analytics" },
     { label: "Voice Agents", icon: Bot, comingSoon: "Voice Agents hold real-time voice conversations (screening calls, interviews) for you." },
-    { label: "Upgrade", icon: Zap, href: "/upgrade", badge: { text: "40% OFF", tone: "green" } },
   ],
+  [{ label: "Upgrade", icon: Zap, href: "/upgrade", badge: { text: "40% OFF", tone: "green" }, dot: true }],
 ];
 
 export const NAV_FOOTER: NavItem[] = [
-  { label: "Integrations", icon: Plug, href: "/integrations" },
-  { label: "Team", icon: Users, comingSoon: "Invite teammates, share meetings and collaborate in shared channels." },
+  { label: "Invite Team", icon: UserPlus, comingSoon: "Invite teammates, share meetings and collaborate in shared channels." },
+  { label: "Integrations", icon: Layers, href: "/integrations" },
   { label: "Settings", icon: Settings, href: "/settings" },
 ];
 

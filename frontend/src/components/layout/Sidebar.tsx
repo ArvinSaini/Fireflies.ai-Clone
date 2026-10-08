@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, LogOut, Mail, Moon, Settings, Sun, X } from "lucide-react";
+import { ChevronDown, LogOut, Mail, Moon, PanelLeftClose, Settings, Sun, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -23,7 +23,7 @@ function NavLink({ item, path, onNavigate }: { item: NavItem; path: string; onNa
   );
   const body = (
     <>
-      <item.icon className={cn("size-[18px]", active ? "text-ink-2" : "text-ink-4")} strokeWidth={1.75} />
+      <item.icon className={cn("size-[18px]", item.accent ?? (active ? "text-ink-2" : "text-ink-4"))} strokeWidth={1.75} />
       <span className="flex-1 text-left">{item.label}</span>
       {item.badge && <NewBadge tone={item.badge.tone}>{item.badge.text}</NewBadge>}
     </>
@@ -41,7 +41,7 @@ function NavLink({ item, path, onNavigate }: { item: NavItem; path: string; onNa
   );
 }
 
-export function WorkspaceSwitcher({ compact = false }: { compact?: boolean }) {
+export function WorkspaceSwitcher() {
   const { data: me } = useMe();
   const { theme, setTheme } = useTheme();
   const comingSoon = useComingSoon();
@@ -52,15 +52,11 @@ export function WorkspaceSwitcher({ compact = false }: { compact?: boolean }) {
         <button
           type="button"
           onClick={toggle}
-          className={cn("flex items-center gap-2 rounded-lg py-1.5 hover:bg-muted", compact ? "px-1.5" : "px-2")}
+          className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-muted"
         >
           <Avatar name={name} color={me?.avatar_color} size="sm" />
-          {!compact && (
-            <>
-              <span className="max-w-32 truncate text-[14px] font-medium text-ink">{name}</span>
-              <ChevronDown className="size-4 text-ink-4" />
-            </>
-          )}
+          <span className="max-w-32 truncate text-[14px] font-medium text-ink">{name}</span>
+          <ChevronDown className="size-4 text-ink-4" />
         </button>
       )}
       className="w-60"
@@ -91,15 +87,20 @@ export function WorkspaceSwitcher({ compact = false }: { compact?: boolean }) {
   );
 }
 
-/** Expanded app sidebar (Home, Tasks, AskFred, …). */
-export function Sidebar({ onNavigate, className }: { onNavigate?: () => void; className?: string }) {
+/** Expanded app sidebar: the mobile drawer, and the flyout opened from the rail's profile icon. */
+export function Sidebar({ onNavigate, onCollapse, className }: { onNavigate?: () => void; onCollapse?: () => void; className?: string }) {
   const path = usePathname();
   const comingSoon = useComingSoon();
   const [showInvite, setShowInvite] = useState(true);
   return (
     <aside className={cn("flex h-full w-[240px] shrink-0 flex-col border-r border-line bg-sidebar", className)}>
-      <div className="flex h-16 items-center px-3">
+      <div className="flex h-16 items-center justify-between px-3">
         <WorkspaceSwitcher />
+        {onCollapse && (
+          <button type="button" onClick={onCollapse} aria-label="Collapse sidebar" className="rounded-lg p-1.5 text-ink-4 hover:bg-muted hover:text-ink">
+            <PanelLeftClose className="size-[18px]" strokeWidth={1.75} />
+          </button>
+        )}
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 pb-3">
         {NAV_GROUPS.map((group, i) => (
