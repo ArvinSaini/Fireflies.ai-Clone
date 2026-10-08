@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Bot, CreditCard, Hash, KeyRound, Lock, Moon, Palette, Plus, Sun, Tags, Trash2, User } from "lucide-react";
+import { Bot, CreditCard, Hash, KeyRound, Lock, Moon, Palette, Plus, Sun, Tags, Trash2, User, Users } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -16,13 +16,14 @@ import { api } from "@/lib/api";
 import { errorToast, keys, useChannels, useMe, useStats, useTrackers } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
-type Tab = "profile" | "appearance" | "notetaker" | "channels" | "trackers" | "billing" | "api";
+type Tab = "profile" | "appearance" | "notetaker" | "channels" | "trackers" | "team" | "billing" | "api";
 const TABS: { value: Tab; label: string; icon: React.ReactNode }[] = [
   { value: "profile", label: "Profile", icon: <User /> },
   { value: "appearance", label: "Appearance", icon: <Palette /> },
   { value: "notetaker", label: "Notetaker", icon: <Bot /> },
   { value: "channels", label: "Channels", icon: <Hash /> },
   { value: "trackers", label: "Topic Trackers", icon: <Tags /> },
+  { value: "team", label: "Team", icon: <Users /> },
   { value: "billing", label: "Plans & Billing", icon: <CreditCard /> },
   { value: "api", label: "Developer API", icon: <KeyRound /> },
 ];
@@ -204,6 +205,7 @@ export function SettingsView() {
 
             {tab === "channels" && <ChannelsSettings />}
             {tab === "trackers" && <TrackerSettings />}
+            {tab === "team" && <Placeholder title="Team & sharing" description="Invite teammates, manage roles and share meetings with your team or via a public link. This demo runs as a single default user, so teams are coming soon." />}
             {tab === "billing" && <Placeholder title="Plans & Billing" description="You're on the Free plan with unlimited transcription in this demo. Upgrades and invoices will appear here." />}
             {tab === "api" && <Placeholder title="Developer API" description="Generate API keys and webhooks to pull transcripts and summaries into your own tools." />}
           </div>
