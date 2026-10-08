@@ -16,41 +16,50 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.db import Base, SessionLocal, engine, init_db
-from app.models import Comment, Meeting, Soundbite, User
+from app.models import Comment, Meeting, Soundbite, TopicTracker, User
 from app.models.mixins import utcnow
 from app.schemas.meeting import MeetingCreate
 from app.services import meetings as svc
 from app.services.ai.types import ActionItemDraft, ChapterDraft, SummaryDraft
+from app.services.people import CHANNEL_COLORS, color_for, get_or_create_channel
 from app.services.transcript_parser import ParsedSegment
 
 log = logging.getLogger(__name__)
 DATA_DIR = Path(__file__).parent / "data"
 
 DEFAULT_USER = {"id": 1, "name": "Arvin Saini", "email": "arvin@acme.io", "avatar_color": "#7C3AED"}
+PRIVATE_CHANNELS = {"1:1", "Hiring"}
+DEFAULT_TRACKERS = {
+    "Pricing": ["price", "pricing", "discount", "budget", "cost"],
+    "Competitors": ["competitor", "Zapier", "Make", "Workato"],
+    "Security": ["SSO", "SOC 2", "audit", "security", "compliance"],
+}
 
 
 def _ms(seconds: float | None) -> int | None:
     return None if seconds is None else int(round(float(seconds) * 1000))
 
 
-def load_meeting(db: Session, owner_id: int, spec: dict) -> Meeting:
+def load_meeting(db: Session, owner: User, spec: dict) -> Meeting:
     people = {p["email"]: p["name"] for p in spec["participants"]}
     day = (utcnow() - timedelta(days=spec.get("days_ago", 0))).date()
     started = datetime.combine(day, time(spec.get("start_hour", 10), spec.get("start_minute", 0)))
 
     # The host goes first so create_meeting gives them the host role.
     ordered = sorted(spec["participants"], key=lambda p: p.get("role") != "host")
+    channels = [get_or_create_channel(db, owner.id, name, is_private=name in PRIVATE_CHANNELS).id
+                for name in spec.get("tags", [])]
     data = MeetingCreate(
         title=spec["title"], started_at=started, platform=spec.get("platform", "zoom"),
         participants=[{"name": p["name"], "email": p["email"]} for p in ordered],
-        tags=spec.get("tags", []), generate_summary=False,
+        channel_ids=channels, generate_summary=False,
     )
     parsed = [
         ParsedSegment(people.get(s["speaker"], s["speaker"]), s["text"], _ms(s["start"]), _ms(s["end"]))
         for s in spec["segments"]
     ]
-    meeting = svc.create_meeting(db, owner_id, data, parsed)
-    ctx, segments = svc.build_context(db, meeting)
+    meeting = svc.create_meeting(db, owner, data, parsed)
+    _, segments = svc.build_context(db, meeting)
     starts = [seg.start_ms for seg in segments]
 
     def line_at(seconds: float | None) -> int | None:
@@ -107,11 +116,15 @@ def seed(db: Session) -> int:
         db.add(user)
         db.commit()
 
+    for name, keywords in DEFAULT_TRACKERS.items():
+        db.add(TopicTracker(owner_id=user.id, name=name, keywords=keywords, color=color_for(name, CHANNEL_COLORS)))
+    db.commit()
+
     files = sorted(DATA_DIR.glob("*.json"))
     loaded = []
     for path in files:
         spec = json.loads(path.read_text(encoding="utf-8"))
-        loaded.append(load_meeting(db, user.id, spec))
+        loaded.append(load_meeting(db, user, spec))
         log.info("Seeded %s", spec["title"])
     if loaded:
         newest = max(loaded, key=lambda m: m.started_at)
