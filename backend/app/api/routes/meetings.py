@@ -7,10 +7,10 @@ from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession, OwnedMeeting
 from app.api.presenters import meeting_detail, meeting_list_item
-from app.models import TranscriptSegment
+from app.models import TopicTracker, TranscriptSegment
 from app.schemas.common import Page
 from app.schemas.meeting import (
-    MeetingAnalytics, MeetingCreate, MeetingDetail, MeetingListItem, MeetingUpdate, SortKey,
+    BulkMeetingAction, MeetingAnalytics, MeetingCreate, MeetingDetail, MeetingListItem, MeetingUpdate, SortKey,
     SummaryOut, SummaryUpdate, TranscriptFormat,
 )
 from app.schemas.transcript import SegmentOut
@@ -28,6 +28,15 @@ def _detail(db, meeting) -> MeetingDetail:
     return meeting_detail(meeting, *svc.meeting_counts(db, meeting.id))
 
 
+def _create(db, user, data: MeetingCreate, parsed, **source) -> MeetingDetail:
+    try:
+        meeting = svc.create_meeting(db, user, data, parsed, **source)
+    except svc.InvalidChannel as exc:
+        db.rollback()
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+    return _detail(db, meeting)
+
+
 def _segments(db, meeting_id: int) -> list[TranscriptSegment]:
     return list(db.scalars(
         select(TranscriptSegment).where(TranscriptSegment.meeting_id == meeting_id).order_by(TranscriptSegment.position)
@@ -39,17 +48,25 @@ def list_meetings(
     db: DbSession,
     user: CurrentUser,
     q: str | None = Query(None, description="Matches title or participant name/email"),
+    scope: Literal["all", "mine"] = Query("all", description="'mine' = hosted by me"),
+    host_id: Annotated[list[int], Query()] = [],
     participant_id: Annotated[list[int], Query()] = [],
-    tag_id: Annotated[list[int], Query()] = [],
-    platform: str | None = None,
+    channel_id: Annotated[list[int], Query()] = [],
+    platform: Annotated[list[str], Query(description="Captured from")] = [],
     date_from: date | None = None,
     date_to: date | None = None,
+    min_duration: int | None = Query(None, ge=0, description="minutes"),
+    max_duration: int | None = Query(None, ge=1, description="minutes (exclusive)"),
     sort: SortKey = "recent",
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
 ):
-    filters = svc.MeetingFilters(q, participant_id, tag_id, platform, date_from, date_to, sort)
-    rows, total = svc.list_meetings(db, user.id, filters, page, page_size)
+    filters = svc.MeetingFilters(
+        q=q, scope=scope, host_ids=host_id, participant_ids=participant_id, channel_ids=channel_id,
+        platforms=platform, date_from=date_from, date_to=date_to,
+        min_duration_min=min_duration, max_duration_min=max_duration, sort=sort,
+    )
+    rows, total = svc.list_meetings(db, user, filters, page, page_size)
     return Page(items=[meeting_list_item(m, t, o) for m, t, o in rows], total=total, page=page, page_size=page_size)
 
 
@@ -64,7 +81,7 @@ def create_meeting(data: MeetingCreate, db: DbSession, user: CurrentUser):
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
         if data.platform == "manual":
             data.platform = "paste"
-    return _detail(db, svc.create_meeting(db, user.id, data, parsed))
+    return _create(db, user, data, parsed)
 
 
 @router.post("/upload", response_model=MeetingDetail, status_code=status.HTTP_201_CREATED)
@@ -75,7 +92,8 @@ async def upload_meeting(
     title: str | None = Form(None),
     started_at: datetime | None = Form(None),
     participants: str | None = Form(None, description="Comma-separated names"),
-    tags: str | None = Form(None, description="Comma-separated tag names"),
+    channel_ids: str | None = Form(None, description="Comma-separated channel ids"),
+    language: str = Form("English (Global)"),
     transcript_format: TranscriptFormat = Form("auto"),
 ):
     raw = await file.read(MAX_UPLOAD_BYTES + 1)
@@ -95,10 +113,22 @@ async def upload_meeting(
         title=(title or default_title or "Uploaded meeting")[:255],
         started_at=started_at,
         platform="upload",
+        language=language,
         participants=[{"name": n.strip()} for n in (participants or "").split(",") if n.strip()],
-        tags=[t.strip() for t in (tags or "").split(",") if t.strip()],
+        channel_ids=[int(c) for c in (channel_ids or "").split(",") if c.strip().isdigit()],
     )
-    return _detail(db, svc.create_meeting(db, user.id, data, parsed))
+    return _create(db, user, data, parsed, source_filename=file.filename, source_size_bytes=len(raw))
+
+
+@router.post("/bulk")
+def bulk_action(data: BulkMeetingAction, db: DbSession, user: CurrentUser):
+    """Delete or move (re-channel) several meetings selected in the Notebook."""
+    try:
+        affected = svc.bulk_action(db, user.id, data.action, data.meeting_ids, data.channel_ids)
+    except svc.InvalidChannel as exc:
+        db.rollback()
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+    return {"affected": affected}
 
 
 @router.get("/{meeting_id}", response_model=MeetingDetail)
@@ -108,7 +138,11 @@ def get_meeting(meeting: OwnedMeeting, db: DbSession):
 
 @router.patch("/{meeting_id}", response_model=MeetingDetail)
 def update_meeting(data: MeetingUpdate, meeting: OwnedMeeting, db: DbSession):
-    return _detail(db, svc.update_meeting(db, meeting, data))
+    try:
+        return _detail(db, svc.update_meeting(db, meeting, data))
+    except svc.InvalidChannel as exc:
+        db.rollback()
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
 
 
 @router.delete("/{meeting_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -123,7 +157,8 @@ def get_transcript(meeting: OwnedMeeting, db: DbSession):
 
 @router.get("/{meeting_id}/analytics", response_model=MeetingAnalytics)
 def get_analytics(meeting: OwnedMeeting, db: DbSession):
-    return meeting_analytics(_segments(db, meeting.id))
+    trackers = db.scalars(select(TopicTracker).where(TopicTracker.owner_id == meeting.owner_id).order_by(TopicTracker.name))
+    return meeting_analytics(_segments(db, meeting.id), list(trackers))
 
 
 @router.post("/{meeting_id}/summary/regenerate", response_model=MeetingDetail)
