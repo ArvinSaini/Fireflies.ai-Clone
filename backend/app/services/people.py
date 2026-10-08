@@ -1,4 +1,4 @@
-"""Participant and tag lookup/creation (deduplicated, with stable colors)."""
+"""Participant and channel lookup/creation (deduplicated, with stable colors)."""
 from __future__ import annotations
 
 import hashlib
@@ -6,13 +6,13 @@ import hashlib
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.models import Participant, Tag
+from app.models import Channel, Participant
 
 AVATAR_COLORS = [
     "#7C3AED", "#2563EB", "#DB2777", "#059669", "#D97706", "#DC2626",
     "#0891B2", "#4F46E5", "#C026D3", "#65A30D", "#EA580C", "#0D9488",
 ]
-TAG_COLORS = ["#7C3AED", "#2563EB", "#DB2777", "#059669", "#D97706", "#0891B2", "#4F46E5", "#DC2626"]
+CHANNEL_COLORS = ["#7C3AED", "#2563EB", "#DB2777", "#059669", "#D97706", "#0891B2", "#4F46E5", "#DC2626"]
 
 
 def color_for(key: str, palette: list[str] = AVATAR_COLORS) -> str:
@@ -41,11 +41,11 @@ def get_or_create_participant(db: Session, name: str, email: str | None = None) 
     return participant
 
 
-def get_or_create_tag(db: Session, name: str) -> Tag:
-    name = name.strip()[:50]
-    tag = db.scalar(select(Tag).where(func.lower(Tag.name) == name.lower()))
-    if tag is None:
-        tag = Tag(name=name, color=color_for(name, TAG_COLORS))
-        db.add(tag)
+def get_or_create_channel(db: Session, owner_id: int, name: str, is_private: bool = False) -> Channel:
+    name = name.strip().lstrip("#").strip()[:50]
+    channel = db.scalar(select(Channel).where(Channel.owner_id == owner_id, func.lower(Channel.name) == name.lower()))
+    if channel is None:
+        channel = Channel(owner_id=owner_id, name=name, is_private=is_private, color=color_for(name, CHANNEL_COLORS))
+        db.add(channel)
         db.flush()
-    return tag
+    return channel

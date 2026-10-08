@@ -11,14 +11,14 @@ from sqlalchemy import Select, case, exists, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import (
-    ActionItem, Chapter, Comment, Meeting, MeetingParticipant, MeetingTag, Participant, Summary,
-    TranscriptSegment,
+    ActionItem, Channel, Chapter, Comment, Meeting, MeetingChannel, MeetingParticipant, Participant, Summary,
+    TranscriptSegment, User,
 )
 from app.models.mixins import utcnow
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.services.ai import Line, MeetingContext, get_summarizer
 from app.services.ai.types import SummaryDraft
-from app.services.people import get_or_create_participant, get_or_create_tag
+from app.services.people import get_or_create_participant
 from app.services.transcript_parser import ParsedSegment
 
 
@@ -30,16 +30,29 @@ class NotFound(LookupError):
 
 @dataclass
 class MeetingFilters:
+    """Mirrors the Fireflies Notebook filters popover."""
+
     q: str | None = None
+    scope: str = "all"  # all | mine (hosted by the current user)
+    host_ids: list[int] = field(default_factory=list)
     participant_ids: list[int] = field(default_factory=list)
-    tag_ids: list[int] = field(default_factory=list)
-    platform: str | None = None
+    channel_ids: list[int] = field(default_factory=list)
+    platforms: list[str] = field(default_factory=list)  # "Captured from"
     date_from: date | None = None
     date_to: date | None = None
+    min_duration_min: int | None = None
+    max_duration_min: int | None = None
     sort: str = "recent"
 
 
-def _apply_filters(stmt: Select, f: MeetingFilters) -> Select:
+def _has_participant(ids: list[int], role: str | None = None):
+    cond = [MeetingParticipant.meeting_id == Meeting.id, MeetingParticipant.participant_id.in_(ids)]
+    if role:
+        cond.append(MeetingParticipant.role == role)
+    return exists().where(*cond)
+
+
+def _apply_filters(stmt: Select, f: MeetingFilters, me: Participant | None) -> Select:
     if f.q:
         like = f"%{f.q.strip().lower()}%"
         by_participant = exists().where(
@@ -48,17 +61,30 @@ def _apply_filters(stmt: Select, f: MeetingFilters) -> Select:
             or_(func.lower(Participant.name).like(like), func.lower(Participant.email).like(like)),
         )
         stmt = stmt.where(or_(func.lower(Meeting.title).like(like), by_participant))
-    for pid in f.participant_ids:  # AND semantics: meetings with all selected people
-        stmt = stmt.where(exists().where(MeetingParticipant.meeting_id == Meeting.id, MeetingParticipant.participant_id == pid))
-    if f.tag_ids:  # OR semantics across tags
-        stmt = stmt.where(exists().where(MeetingTag.meeting_id == Meeting.id, MeetingTag.tag_id.in_(f.tag_ids)))
-    if f.platform:
-        stmt = stmt.where(Meeting.platform == f.platform)
+    if f.scope == "mine":
+        stmt = stmt.where(_has_participant([me.id], "host")) if me else stmt.where(False)
+    if f.host_ids:
+        stmt = stmt.where(_has_participant(f.host_ids, "host"))
+    if f.participant_ids:  # checkbox list: any of the selected people
+        stmt = stmt.where(_has_participant(f.participant_ids))
+    if f.channel_ids:
+        stmt = stmt.where(exists().where(MeetingChannel.meeting_id == Meeting.id, MeetingChannel.channel_id.in_(f.channel_ids)))
+    if f.platforms:
+        stmt = stmt.where(Meeting.platform.in_(f.platforms))
     if f.date_from:
         stmt = stmt.where(Meeting.started_at >= datetime.combine(f.date_from, datetime.min.time()))
     if f.date_to:
         stmt = stmt.where(Meeting.started_at < datetime.combine(f.date_to + timedelta(days=1), datetime.min.time()))
+    if f.min_duration_min is not None:
+        stmt = stmt.where(Meeting.duration_ms >= f.min_duration_min * 60_000)
+    if f.max_duration_min is not None:
+        stmt = stmt.where(Meeting.duration_ms < f.max_duration_min * 60_000)
     return stmt
+
+
+def user_participant(db: Session, user: User) -> Participant | None:
+    """The participant record that represents the logged-in user (matched by email)."""
+    return db.scalar(select(Participant).where(Participant.email == user.email.lower()))
 
 
 _SORTS = {
@@ -70,9 +96,9 @@ _SORTS = {
 }
 
 
-def list_meetings(db: Session, owner_id: int, f: MeetingFilters, page: int, page_size: int):
+def list_meetings(db: Session, user: User, f: MeetingFilters, page: int, page_size: int):
     """Returns (rows, total) where rows are (Meeting, total_items, open_items)."""
-    base = _apply_filters(select(Meeting).where(Meeting.owner_id == owner_id), f)
+    base = _apply_filters(select(Meeting).where(Meeting.owner_id == user.id), f, user_participant(db, user))
     total = db.scalar(select(func.count()).select_from(base.subquery())) or 0
 
     counts = (
@@ -87,7 +113,7 @@ def list_meetings(db: Session, owner_id: int, f: MeetingFilters, page: int, page
     stmt = (
         base.add_columns(func.coalesce(counts.c.total, 0), func.coalesce(counts.c.open, 0))
         .outerjoin(counts, counts.c.meeting_id == Meeting.id)
-        .options(selectinload(Meeting.participant_links), selectinload(Meeting.tag_links), selectinload(Meeting.summary))
+        .options(selectinload(Meeting.participant_links), selectinload(Meeting.channel_links), selectinload(Meeting.summary))
         .order_by(*_SORTS.get(f.sort, _SORTS["recent"]))
         .offset((page - 1) * page_size)
         .limit(page_size)
@@ -100,7 +126,7 @@ def get_meeting(db: Session, meeting_id: int, owner_id: int) -> Meeting:
         select(Meeting)
         .where(Meeting.id == meeting_id, Meeting.owner_id == owner_id)
         .options(
-            selectinload(Meeting.participant_links), selectinload(Meeting.tag_links),
+            selectinload(Meeting.participant_links), selectinload(Meeting.channel_links),
             selectinload(Meeting.summary), selectinload(Meeting.chapters), selectinload(Meeting.action_items),
         )
     )
@@ -137,13 +163,22 @@ def _set_participants(db: Session, meeting: Meeting, people: list[tuple[str, str
     db.expire(meeting, ["participant_links"])
 
 
-def _set_tags(db: Session, meeting: Meeting, names: list[str]) -> None:
-    tags = {get_or_create_tag(db, n).id for n in names if n.strip()}
-    meeting.tag_links[:] = [link for link in meeting.tag_links if link.tag_id in tags]
-    have = {link.tag_id for link in meeting.tag_links}
-    meeting.tag_links.extend(MeetingTag(tag_id=t) for t in tags - have)
+class InvalidChannel(ValueError):
+    pass
+
+
+def set_channels(db: Session, meeting: Meeting, channel_ids: list[int]) -> None:
+    """Replace the meeting's channels ("Move to channel")."""
+    wanted = set(channel_ids)
+    if wanted:
+        owned = set(db.scalars(select(Channel.id).where(Channel.id.in_(wanted), Channel.owner_id == meeting.owner_id)))
+        if owned != wanted:
+            raise InvalidChannel(f"Unknown channel(s): {sorted(wanted - owned)}")
+    meeting.channel_links[:] = [link for link in meeting.channel_links if link.channel_id in wanted]
+    have = {link.channel_id for link in meeting.channel_links}
+    meeting.channel_links.extend(MeetingChannel(channel_id=c) for c in wanted - have)
     db.flush()
-    db.expire(meeting, ["tag_links"])
+    db.expire(meeting, ["channel_links"])
 
 
 def _store_segments(db: Session, meeting: Meeting, parsed: list[ParsedSegment]) -> list[TranscriptSegment]:
@@ -174,26 +209,32 @@ def _store_segments(db: Session, meeting: Meeting, parsed: list[ParsedSegment]) 
 
 
 def create_meeting(
-    db: Session, owner_id: int, data: MeetingCreate, parsed: list[ParsedSegment] | None
+    db: Session, user: User, data: MeetingCreate, parsed: list[ParsedSegment] | None,
+    source_filename: str | None = None, source_size_bytes: int | None = None,
 ) -> Meeting:
     meeting = Meeting(
-        owner_id=owner_id,
+        owner_id=user.id,
         title=data.title.strip(),
         started_at=(data.started_at.replace(tzinfo=None) if data.started_at else utcnow()),
         platform=data.platform,
         description=data.description,
+        language=data.language,
         duration_ms=(data.duration_minutes or 0) * 60_000,
+        source_filename=source_filename,
+        source_size_bytes=source_size_bytes,
     )
     db.add(meeting)
     db.flush()
-    _set_participants(db, meeting, [(p.name, p.email, "host" if i == 0 else "attendee") for i, p in enumerate(data.participants)])
-    _set_tags(db, meeting, data.tags)
+    # The first listed participant hosts; with nobody listed, the creator hosts (e.g. uploads).
+    people = [(p.name, p.email) for p in data.participants] or [(user.name, user.email)]
+    _set_participants(db, meeting, [(name, email, "host" if i == 0 else "attendee") for i, (name, email) in enumerate(people)])
+    set_channels(db, meeting, data.channel_ids)
     if parsed:
         _store_segments(db, meeting, parsed)
         if data.generate_summary:
             summarize_meeting(db, meeting, commit=False)
     db.commit()
-    return get_meeting(db, meeting.id, owner_id)
+    return get_meeting(db, meeting.id, user.id)
 
 
 def update_meeting(db: Session, meeting: Meeting, data: MeetingUpdate) -> Meeting:
@@ -201,13 +242,15 @@ def update_meeting(db: Session, meeting: Meeting, data: MeetingUpdate) -> Meetin
         meeting.title = data.title.strip()
     if data.started_at is not None:
         meeting.started_at = data.started_at.replace(tzinfo=None)
+    if data.language is not None:
+        meeting.language = data.language
     if "description" in data.model_fields_set:
         meeting.description = data.description
     if data.participants is not None:
         roles = {link.participant.name.lower(): link.role for link in meeting.participant_links}
         _set_participants(db, meeting, [(p.name, p.email, roles.get(p.name.lower(), "attendee")) for p in data.participants])
-    if data.tags is not None:
-        _set_tags(db, meeting, data.tags)
+    if data.channel_ids is not None:
+        set_channels(db, meeting, data.channel_ids)
     meeting.updated_at = utcnow()
     db.commit()
     return get_meeting(db, meeting.id, meeting.owner_id)
@@ -216,6 +259,21 @@ def update_meeting(db: Session, meeting: Meeting, data: MeetingUpdate) -> Meetin
 def delete_meeting(db: Session, meeting: Meeting) -> None:
     db.delete(meeting)
     db.commit()
+
+
+def bulk_action(db: Session, owner_id: int, action: str, meeting_ids: list[int], channel_ids: list[int]) -> int:
+    """Delete or move many meetings at once; returns how many were affected."""
+    meetings = list(db.scalars(
+        select(Meeting).where(Meeting.id.in_(meeting_ids), Meeting.owner_id == owner_id)
+        .options(selectinload(Meeting.channel_links))
+    ))
+    for meeting in meetings:
+        if action == "delete":
+            db.delete(meeting)
+        else:
+            set_channels(db, meeting, channel_ids)
+    db.commit()
+    return len(meetings)
 
 
 # --- AI summary -------------------------------------------------------------------
