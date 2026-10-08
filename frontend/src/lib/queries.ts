@@ -1,8 +1,9 @@
 "use client";
 // React Query hooks: one place for cache keys, fetching and cache invalidation after mutations.
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, type QueryKey, type UseQueryOptions, type UseQueryResult } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { api } from "./api";
+import { useIsClient } from "./hooks";
 import type { MeetingFilters } from "./types";
 
 export const keys = {
@@ -28,28 +29,41 @@ export const errorToast = (e: unknown) => toast.error(e instanceof Error ? e.mes
 
 // --- queries -----------------------------------------------------------------
 
-export const useMe = () => useQuery({ queryKey: keys.me, queryFn: api.me, staleTime: Infinity });
-export const useStats = () => useQuery({ queryKey: keys.stats, queryFn: api.stats });
-export const useChannels = () => useQuery({ queryKey: keys.channels, queryFn: api.channels });
+/**
+ * useQuery that reports "no data yet" until hydration has finished. Pages are server-rendered
+ * without data (everything is fetched in the browser), but a query can resolve *before* React
+ * hydrates a slower Suspense boundary; rendering that data during hydration would mismatch the
+ * server HTML. Gating on useIsClient (false during hydration) keeps the first render identical.
+ */
+function useClientQuery<T>(options: UseQueryOptions<T, Error, T, QueryKey>): UseQueryResult<T, Error> {
+  const query = useQuery(options);
+  const hydrated = useIsClient();
+  if (hydrated) return query;
+  return { ...query, data: undefined, isLoading: true, isPending: true, isSuccess: false, status: "pending" } as UseQueryResult<T, Error>;
+}
+
+export const useMe = () => useClientQuery({ queryKey: keys.me, queryFn: api.me, staleTime: Infinity });
+export const useStats = () => useClientQuery({ queryKey: keys.stats, queryFn: api.stats });
+export const useChannels = () => useClientQuery({ queryKey: keys.channels, queryFn: api.channels });
 export const useParticipants = (role?: "host" | "attendee") =>
-  useQuery({ queryKey: keys.participants(role), queryFn: () => api.participants(role) });
+  useClientQuery({ queryKey: keys.participants(role), queryFn: () => api.participants(role) });
 export const useMeetings = (f: MeetingFilters) =>
-  useQuery({ queryKey: keys.meetings(f), queryFn: () => api.meetings(f), placeholderData: (prev) => prev });
-export const useMeeting = (id: number) => useQuery({ queryKey: keys.meeting(id), queryFn: () => api.meeting(id) });
+  useClientQuery({ queryKey: keys.meetings(f), queryFn: () => api.meetings(f), placeholderData: (prev) => prev });
+export const useMeeting = (id: number) => useClientQuery({ queryKey: keys.meeting(id), queryFn: () => api.meeting(id) });
 export const useTranscript = (id: number) =>
-  useQuery({ queryKey: keys.transcript(id), queryFn: () => api.transcript(id) });
-export const useAnalytics = (id: number) => useQuery({ queryKey: keys.analytics(id), queryFn: () => api.analytics(id) });
-export const useComments = (id: number) => useQuery({ queryKey: keys.comments(id), queryFn: () => api.comments(id) });
+  useClientQuery({ queryKey: keys.transcript(id), queryFn: () => api.transcript(id) });
+export const useAnalytics = (id: number) => useClientQuery({ queryKey: keys.analytics(id), queryFn: () => api.analytics(id) });
+export const useComments = (id: number) => useClientQuery({ queryKey: keys.comments(id), queryFn: () => api.comments(id) });
 export const useSoundbites = (id: number) =>
-  useQuery({ queryKey: keys.soundbites(id), queryFn: () => api.soundbites(id) });
-export const useBookmarks = (id: number) => useQuery({ queryKey: keys.bookmarks(id), queryFn: () => api.bookmarks(id) });
-export const useChat = (id: number) => useQuery({ queryKey: keys.chat(id), queryFn: () => api.chat(id) });
+  useClientQuery({ queryKey: keys.soundbites(id), queryFn: () => api.soundbites(id) });
+export const useBookmarks = (id: number) => useClientQuery({ queryKey: keys.bookmarks(id), queryFn: () => api.bookmarks(id) });
+export const useChat = (id: number) => useClientQuery({ queryKey: keys.chat(id), queryFn: () => api.chat(id) });
 export const useChatSuggestions = (id: number) =>
-  useQuery({ queryKey: keys.suggestions(id), queryFn: () => api.chatSuggestions(id) });
-export const useTasks = (mine: boolean) => useQuery({ queryKey: keys.tasks(mine), queryFn: () => api.tasks({ mine }) });
-export const useTrackers = () => useQuery({ queryKey: keys.trackers, queryFn: api.trackers });
+  useClientQuery({ queryKey: keys.suggestions(id), queryFn: () => api.chatSuggestions(id) });
+export const useTasks = (mine: boolean) => useClientQuery({ queryKey: keys.tasks(mine), queryFn: () => api.tasks({ mine }) });
+export const useTrackers = () => useClientQuery({ queryKey: keys.trackers, queryFn: api.trackers });
 export const useSearch = (q: string) =>
-  useQuery({ queryKey: keys.search(q), queryFn: () => api.search(q), enabled: q.trim().length > 1 });
+  useClientQuery({ queryKey: keys.search(q), queryFn: () => api.search(q), enabled: q.trim().length > 1 });
 
 // --- mutations -----------------------------------------------------------------
 
