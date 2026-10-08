@@ -1,13 +1,14 @@
-"""Per-meeting analytics: speaker talk time and Fireflies-style "AI filters"
-(questions, dates & times, metrics, tasks) computed from transcript segments."""
+"""Per-meeting analytics for the Smart Search panel, computed from transcript segments:
+speaker talk time, "AI filters" (questions, dates & times, metrics, tasks), sentiment
+and topic-tracker mentions. Everything is rule-based so it is instant and explainable."""
 from __future__ import annotations
 
 import re
 from collections import defaultdict
 
-from app.models import TranscriptSegment
+from app.models import TopicTracker, TranscriptSegment
 from app.schemas.common import ParticipantOut
-from app.schemas.meeting import MeetingAnalytics, SpeakerStat
+from app.schemas.meeting import MeetingAnalytics, SpeakerStat, TopicHit
 
 FILTER_PATTERNS: dict[str, re.Pattern] = {
     "questions": re.compile(r"\?"),
@@ -28,13 +29,47 @@ FILTER_PATTERNS: dict[str, re.Pattern] = {
 }
 
 
+POSITIVE = frozenset("""
+great good awesome excellent love like happy glad excited amazing perfect fantastic nice impressive solid strong
+win wins won agree agreed thanks thank helpful easy smooth success successful improve improved improvement
+appreciate love clear exactly absolutely definitely confident promising better best progress resolved
+""".split())
+NEGATIVE = frozenset("""
+bad issue issues problem problems concern concerns concerned worried worry risk risks blocker blocked blocking
+delay delayed slow difficult hard confusing confused frustrated frustrating unfortunately fail failed failing
+bug bugs broken churn lost lose losing expensive worse worst missing late hate annoying pain painful struggle
+""".split())
+_WORD = re.compile(r"[a-z']+")
+
+
+def sentiment(text: str) -> str:
+    """Lexicon score with simple negation handling ("not good" counts as negative)."""
+    score, prev = 0, ""
+    for word in _WORD.findall(text.lower()):
+        sign = -1 if prev in {"not", "no", "never", "don't", "isn't", "wasn't", "aren't"} else 1
+        if word in POSITIVE:
+            score += sign
+        elif word in NEGATIVE:
+            score -= sign
+        prev = word
+    return "positive" if score > 0 else "negative" if score < 0 else "neutral"
+
+
 def classify(text: str) -> list[str]:
     return [name for name, pattern in FILTER_PATTERNS.items() if pattern.search(text)]
 
 
-def meeting_analytics(segments: list[TranscriptSegment]) -> MeetingAnalytics:
+def _tracker_pattern(keywords: list[str]) -> re.Pattern | None:
+    words = [re.escape(k.strip()) for k in keywords if k.strip()]
+    return re.compile(r"\b(" + "|".join(words) + r")\w*", re.I) if words else None
+
+
+def meeting_analytics(segments: list[TranscriptSegment], trackers: list[TopicTracker] = ()) -> MeetingAnalytics:
     talk: dict[int | None, dict] = defaultdict(lambda: {"ms": 0, "segments": 0, "words": 0, "speaker": None})
     filters: dict[str, list[int]] = {name: [] for name in FILTER_PATTERNS}
+    sentiments: dict[str, list[int]] = {"positive": [], "neutral": [], "negative": []}
+    patterns = [(t, _tracker_pattern(t.keywords)) for t in trackers]
+    topic_hits: dict[int, tuple[int, list[int]]] = {t.id: (0, []) for t in trackers}
     total_words = 0
 
     for seg in segments:
@@ -47,6 +82,11 @@ def meeting_analytics(segments: list[TranscriptSegment]) -> MeetingAnalytics:
         total_words += n
         for name in classify(seg.text):
             filters[name].append(seg.id)
+        sentiments[sentiment(seg.text)].append(seg.id)
+        for tracker, pattern in patterns:
+            if pattern and (mentions := len(pattern.findall(seg.text))):
+                count, ids = topic_hits[tracker.id]
+                topic_hits[tracker.id] = (count + mentions, ids + [seg.id])
 
     total_ms = sum(s["ms"] for s in talk.values()) or 1
     speakers = [
@@ -60,6 +100,11 @@ def meeting_analytics(segments: list[TranscriptSegment]) -> MeetingAnalytics:
         )
         for s in sorted(talk.values(), key=lambda s: -s["ms"])
     ]
+    topics = [
+        TopicHit(tracker_id=t.id, name=t.name, color=t.color, count=topic_hits[t.id][0], segment_ids=topic_hits[t.id][1])
+        for t in trackers
+    ]
     return MeetingAnalytics(
-        speakers=speakers, filters=filters, total_words=total_words, question_count=len(filters["questions"])
+        speakers=speakers, filters=filters, sentiments=sentiments, topics=topics,
+        total_words=total_words, question_count=len(filters["questions"]),
     )
