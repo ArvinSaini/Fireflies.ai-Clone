@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   AudioLines, Bookmark, BookmarkCheck, ChevronDown, ChevronUp, Copy, Link2, MessageSquare, Search, X,
 } from "lucide-react";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/ui/Avatar";
 import { MenuItem, Popover } from "@/components/ui/Popover";
@@ -200,10 +200,10 @@ export function TranscriptPanel({ segments, editing }: { segments: Segment[]; ed
     if (activeId && follow && !query) scrollToSegment(activeId);
   }, [activeId, follow, query, scrollToSegment]);
 
-  // Find navigation → scroll to the current match.
+  // Find navigation → scroll to the current match (only when the match index/count changes).
+  const scrollToCurrentMatch = useEffectEvent(() => currentLoc && scrollToSegment(currentLoc.segId));
   useEffect(() => {
-    if (currentLoc) scrollToSegment(currentLoc.segId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    scrollToCurrentMatch();
   }, [current, totalMatches]);
 
   // External requests (comments / bookmarks / AskFred citations).

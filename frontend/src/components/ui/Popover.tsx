@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useEffectEvent, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /** Click-to-open floating panel anchored to its trigger; closes on outside click / Escape. */
@@ -20,17 +20,18 @@ export function Popover({
   const setOpen = (v: boolean) => (onOpenChange ? onOpenChange(v) : setInner(v));
   const ref = useRef<HTMLDivElement>(null);
 
+  // Effect event: always sees the latest setOpen without re-subscribing listeners.
+  const dismiss = useEffectEvent(() => setOpen(false));
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onDown = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && dismiss();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && dismiss();
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const close = () => setOpen(false);

@@ -3,7 +3,7 @@
 import { ArrowUp, Copy, Layers, MessageSquarePlus, Search, Sparkles, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Topbar } from "@/components/layout/Topbar";
 import { AnswerText } from "@/components/notepad/AskFredPanel";
@@ -104,14 +104,14 @@ export function AskFredView() {
     }
   };
 
-  // ?q= from the Home "Ask anything" bar or the command palette.
+  // ?q= from the Home "Ask anything" bar or the command palette (asked once).
+  const askFromUrl = useEffectEvent((q: string) => void ask(q));
   useEffect(() => {
     const q = params.get("q");
     if (q && !autoAsked.current) {
       autoAsked.current = true;
-      void ask(q);
+      askFromUrl(q);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   const groups = conversations.reduce<Record<string, Conversation[]>>((acc, c) => {
