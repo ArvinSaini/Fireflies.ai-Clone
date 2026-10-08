@@ -207,7 +207,7 @@ The full-width layout replaces the app sidebar; a ☰ button opens it.
 
 ### Frontend structure
 - **Pages**: `/` Home, `/meetings` Notebook (channels panel), `/meetings/[id]` Notepad, `/uploads`, `/tasks`, `/askfred`, and placeholders (Analytics, AI Skills, Voice Agents, Integrations, Team, Settings, Upgrade).
-- **Shell**: the compact icon rail on every page (the avatar opens the full sidebar as a flyout); a channels panel next to it on Meetings and Uploads; no rail on the Notepad (hamburger drawer instead).
+- **Shell**: the compact icon rail on every page (the avatar slides it open into the full sidebar); a channels panel next to it on Meetings and Uploads; no rail on the Notepad (hamburger drawer instead).
 - **Notepad**: rail + panel, summary column, right Transcript/AskFred panel, bottom player. Wording, layout and colors follow sections 1 and 5.
 - **"Coming soon" placeholders** (per the assignment):
   - Capture (live bot), Voice Agents, AI Skills / AI Apps, Integrations, Team/Invite, Get AI credits, Upgrade.
@@ -220,7 +220,7 @@ After the clone was built, every page was compared side by side with the live ap
 
 | Area | Live Fireflies | Clone |
 |---|---|---|
-| Navigation | Compact 60px icon rail on **every** page (avatar · Home, AskFred · Meetings, Tasks, AI Skills · Analytics, Voice Agents · Upgrade with green dot · Invite, Integrations, Settings) | `IconRail` everywhere; clicking the avatar slides the full `Sidebar` out over the page (Esc, outside click, collapse button or navigation closes it) |
+| Navigation | Compact 60px icon rail on **every** page (avatar · Home, AskFred · Meetings, Tasks, AI Skills · Analytics, Voice Agents · Upgrade with green dot · Invite, Integrations, Settings) | `AppNav` everywhere: the rail avatar (hover → "Expand sidebar" tooltip) slides the rail open into the full `Sidebar`, pushing the page; it stays open across pages until collapsed. The name button opens the two-column account menu (plan, storage, links, theme, logout · mobile / Chrome / desktop apps) |
 | Home | "Welcome Aboard, {name}!" card with product-demo video, **Quick Start** (Schedule Meeting · Upload File · Capture Meeting), Recent \| Upcoming \| AI Feed + Settings, **Try More** (Desktop App Download, Mobile App stores), floating "?" help | `HomeView` rebuilt to this layout; recent rows show "Thu, Oct 8 2026, 3:00 PM" |
 | Global | Dismissible "You are eligible for 7 days business plan free trial · Start free trial →" strip | `TrialBanner` (dismissal remembered per browser) |
 | Top bar | "3 Free meetings" counter + green **Upgrade**, bell, Capture ▾ | `PlanBadge` ("3 Free meetings" + Upgrade), bell, Capture ▾ |
