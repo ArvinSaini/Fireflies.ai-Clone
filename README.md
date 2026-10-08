@@ -9,6 +9,8 @@ A full-stack clone of the [Fireflies.ai](https://fireflies.ai) post-meeting work
 - AskFred chat, both for one meeting and across all meetings
 - global search, tasks, analytics and dark mode
 
+> 📋 **Requirement-by-requirement coverage, UML diagrams and the evaluation checklist: [`docs/DELIVERABLES.md`](docs/DELIVERABLES.md)**
+>
 > **Stack:** Next.js 16 (TypeScript, App Router, Tailwind v4, TanStack Query) · FastAPI · SQLAlchemy 2 · SQLite (+ FTS5)
 
 The UI was modelled on the **current** Fireflies app. Before any frontend code was written, I studied its 2026 help-center screenshots and product pages. The findings, sampled colors and design decisions are in [`docs/UI_RESEARCH.md`](docs/UI_RESEARCH.md).
@@ -79,7 +81,7 @@ The app is fully functional without an LLM: a built-in extractive engine produce
 │ lib/api.ts   typed fetch client                          │        │   meetings · search · insights · export     │
 │ lib/queries.ts TanStack Query hooks + cache invalidation │        │   transcript_parser · chat · workspace_ai   │
 │ PlayerContext virtual clock ↔ transcript sync            │        │   ai/ heuristic engine | Claude (optional)  │
-└──────────────────────────────────────────────────────────┘        │ models/       SQLAlchemy 2 ORM (13 tables)  │
+└──────────────────────────────────────────────────────────┘        │ models/       SQLAlchemy 2 ORM (15 tables)  │
                                                                      │ schemas/      Pydantic request/response     │
                                                                      │ SQLite + FTS5 virtual table (triggers)      │
                                                                      └─────────────────────────────────────────────┘
