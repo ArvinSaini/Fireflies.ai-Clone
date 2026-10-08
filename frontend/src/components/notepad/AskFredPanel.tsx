@@ -90,7 +90,7 @@ export function AskFredPanel({ meetingId }: { meetingId: number }) {
     onSuccess: () => qc.invalidateQueries({ queryKey: keys.chat(meetingId) }),
   });
 
-  useEffect(() => bottom.current?.scrollIntoView({ behavior: "smooth" }), [history, pending]);
+  useEffect(() => { bottom.current?.scrollIntoView({ behavior: "smooth" }); }, [history, pending]);
 
   const send = (q: string) => {
     if (!q.trim() || ask.isPending) return;

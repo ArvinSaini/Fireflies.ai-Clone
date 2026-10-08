@@ -39,7 +39,9 @@ const Line = memo(function Line({
   onSeek, onSave, onSpeaker, onBookmark, onSoundbite, onComment,
 }: LineProps) {
   const name = seg.speaker?.name ?? "Unknown speaker";
-  let matchIndex = -1;
+  // Number each match so the "current" one (find → next/prev) can be styled.
+  const parts = splitMatches(seg.text, query);
+  const matchOrder = parts.map((_, i) => parts.slice(0, i + 1).filter((p) => p.match).length - 1);
   return (
     <div data-segment={seg.id} className="group relative py-3">
       <div className="flex items-center gap-1.5 text-[14px]">
@@ -88,15 +90,13 @@ const Line = memo(function Line({
             active ? "bg-active-line text-ink" : "hover:bg-subtle",
           )}
         >
-          {splitMatches(seg.text, query).map((part, i) => {
-            if (!part.match) return <span key={i}>{part.text}</span>;
-            matchIndex += 1;
-            return (
-              <mark key={i} className={cn(matchIndex === currentMatch && "current")} data-current={matchIndex === currentMatch || undefined}>
-                {part.text}
-              </mark>
-            );
-          })}
+          {parts.map((part, i) =>
+            part.match ? (
+              <mark key={i} className={cn(matchOrder[i] === currentMatch && "current")}>{part.text}</mark>
+            ) : (
+              <span key={i}>{part.text}</span>
+            ),
+          )}
         </p>
       )}
 
@@ -169,7 +169,13 @@ export function TranscriptPanel({ segments, editing }: { segments: Segment[]; ed
     return plan;
   }, [visible, query]);
   const totalMatches = matchPlan.reduce((a, p) => a + p.count, 0);
-  useEffect(() => setCurrent(0), [query, filter]);
+  // Restart at the first match whenever the query or filter changes (reset during render, not in an effect).
+  const findKey = `${query}|${filter?.label ?? ""}`;
+  const [prevFindKey, setPrevFindKey] = useState(findKey);
+  if (prevFindKey !== findKey) {
+    setPrevFindKey(findKey);
+    setCurrent(0);
+  }
 
   const locate = (n: number): { segId: number; local: number } | null => {
     let acc = 0;

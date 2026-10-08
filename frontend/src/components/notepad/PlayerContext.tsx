@@ -42,9 +42,9 @@ export function PlayerProvider({ durationMs, mediaUrl, children }: { durationMs:
   // --- virtual clock --------------------------------------------------------
   useEffect(() => {
     if (mediaUrl || !playing) return;
-    clock.current.last = performance.now();
+    const c = clock.current;
+    c.last = performance.now();
     const tick = (now: number) => {
-      const c = clock.current;
       c.ms = Math.min(durationMs, c.ms + (now - c.last) * rate);
       c.last = now;
       setCurrentMs(c.ms);
@@ -54,8 +54,8 @@ export function PlayerProvider({ durationMs, mediaUrl, children }: { durationMs:
       }
       c.raf = requestAnimationFrame(tick);
     };
-    clock.current.raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(clock.current.raf);
+    c.raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(c.raf);
   }, [playing, rate, durationMs, mediaUrl]);
 
   // --- real audio element -----------------------------------------------------

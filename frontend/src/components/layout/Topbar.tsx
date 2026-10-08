@@ -58,7 +58,7 @@ export function NotificationsBell() {
                 </span>
               </Link>
             ))}
-            {!data?.items.length && <p className="px-3 py-6 text-center text-[13px] text-ink-5">You're all caught up</p>}
+            {!data?.items.length && <p className="px-3 py-6 text-center text-[13px] text-ink-5">You&apos;re all caught up</p>}
           </div>
         </div>
       )}

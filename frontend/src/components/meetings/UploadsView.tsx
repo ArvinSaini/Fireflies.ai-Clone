@@ -3,7 +3,6 @@
 import { Upload } from "lucide-react";
 import Link from "next/link";
 import { Topbar } from "@/components/layout/Topbar";
-import { Button } from "@/components/ui/Button";
 import { EmptyState, Skeleton } from "@/components/ui/Primitives";
 import { formatBytes, formatDuration, formatShortDate } from "@/lib/format";
 import { useMeetings } from "@/lib/queries";
@@ -29,7 +28,9 @@ export function UploadsView() {
           <p className="mt-1 text-[14px] text-ink-4">
             .txt, .vtt, .srt or .json up to 5 MB. <span className="underline decoration-dashed">Supported formats</span>
           </p>
-          <span className="mt-4"><Button>Browse Files</Button></span>
+          <span className="mt-4 inline-flex h-8 items-center rounded-lg border border-line-strong bg-surface px-3 text-[13px] font-medium text-ink-2 shadow-xs">
+            Browse Files
+          </span>
         </button>
 
         <h2 className="mt-8 mb-3 text-[15px] font-medium text-ink">My Uploads</h2>

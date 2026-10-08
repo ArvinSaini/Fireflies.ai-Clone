@@ -2,7 +2,7 @@
 
 import { ArrowDownUp, FolderInput, Hash, Lock, MessageSquare, Plus, Search, Trash2, Upload, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Topbar } from "@/components/layout/Topbar";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
@@ -41,22 +41,27 @@ function Chip({ children, onRemove }: { children: React.ReactNode; onRemove: () 
   );
 }
 
+/** Reads the URL; keying the library by view/channel resets its local state when you switch. */
 export function MeetingsView() {
   const params = useSearchParams();
+  const view = params.get("view") === "all" ? "all" : "mine";
+  const channelId = Number(params.get("channel")) || null;
+  return <Library key={`${view}-${channelId}`} view={view} channelId={channelId} initialQuery={params.get("q") ?? ""} />;
+}
+
+function Library({ view, channelId, initialQuery }: { view: "all" | "mine"; channelId: number | null; initialQuery: string }) {
   const comingSoon = useComingSoon();
   const createMeeting = useCreateMeeting();
   const invalidate = useInvalidateLibrary();
   const { data: channels } = useChannels();
   const { data: people } = useParticipants();
 
-  const view = params.get("view") === "all" ? "all" : "mine";
-  const channelId = Number(params.get("channel")) || null;
   const channel = channels?.find((c) => c.id === channelId);
 
   const [scope, setScope] = useState<"mine" | "shared" | null>(null);
   const [filters, setFilters] = useState<LibraryFilters>(EMPTY_FILTERS);
-  const [searchOpen, setSearchOpen] = useState(!!params.get("q"));
-  const [q, setQ] = useState(params.get("q") ?? "");
+  const [searchOpen, setSearchOpen] = useState(!!initialQuery);
+  const [q, setQ] = useState(initialQuery);
   const [sort, setSort] = useState<Sort>("recent");
   const [limit, setLimit] = useState(PAGE);
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -64,9 +69,14 @@ export function MeetingsView() {
   const [bulk, setBulk] = useState<"move" | "delete" | null>(null);
   const debouncedQ = useDebounced(q.trim(), 250);
 
-  // Reset paging/selection whenever the view changes.
-  useEffect(() => { setLimit(PAGE); setSelected(new Set()); }, [view, channelId, scope, filters, debouncedQ, sort]);
-  useEffect(() => { setScope(null); setFilters(EMPTY_FILTERS); }, [view, channelId]);
+  // New filters → back to the first page with nothing selected (reset during render, not in an effect).
+  const resetKey = JSON.stringify([scope, filters, debouncedQ, sort]);
+  const [prevResetKey, setPrevResetKey] = useState(resetKey);
+  if (prevResetKey !== resetKey) {
+    setPrevResetKey(resetKey);
+    setLimit(PAGE);
+    setSelected(new Set());
+  }
 
   const query: MeetingFilters = useMemo(() => {
     const base = toQuery(filters);
@@ -81,7 +91,7 @@ export function MeetingsView() {
     };
   }, [filters, debouncedQ, scope, channelId, sort, limit]);
   const { data, isLoading, isFetching } = useMeetings(query);
-  const items = data?.items ?? [];
+  const items = useMemo(() => data?.items ?? [], [data]);
 
   const groups = useMemo(() => {
     const out: { key: string; label: string; items: MeetingListItem[] }[] = [];

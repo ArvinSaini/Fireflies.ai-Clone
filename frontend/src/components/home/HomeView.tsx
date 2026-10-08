@@ -6,13 +6,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Topbar } from "@/components/layout/Topbar";
 import { useCreateMeeting } from "@/components/meetings/CreateMeetingModal";
 import { useComingSoon } from "@/components/providers/ComingSoonProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { EmptyState, Segmented, Skeleton, Switch } from "@/components/ui/Primitives";
 import { firstName, formatDuration, formatShortDate, formatTime, greeting } from "@/lib/format";
+import { useIsClient } from "@/lib/hooks";
 import { useMe, useMeetings, useStats } from "@/lib/queries";
 
 type Tab = "recent" | "upcoming" | "feed";
@@ -41,8 +42,8 @@ export function HomeView() {
   const [tab, setTab] = useState<Tab>("recent");
   const [assistant, setAssistant] = useState(true);
   const [ask, setAsk] = useState("");
-  const [hello, setHello] = useState<{ text: string; emoji: string } | null>(null);
-  useEffect(() => setHello(greeting()), []); // client clock only (avoids SSR mismatch)
+  const isClient = useIsClient();
+  const hello = isClient ? greeting() : null; // uses the viewer's clock, so only after hydration
 
   const submitAsk = (e: React.FormEvent) => {
     e.preventDefault();

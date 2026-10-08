@@ -2,7 +2,7 @@
 
 import { Bot, FileText, Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { Avatar } from "@/components/ui/Avatar";
 import { Modal } from "@/components/ui/Modal";
 import { formatShortDate, formatTimestamp } from "@/lib/format";
@@ -44,7 +44,11 @@ function Palette({ initial, onClose }: { initial: string; onClose: () => void })
   const transcripts = hits.filter((h) => h.kind === "transcript");
   const ordered = [...titles, ...transcripts];
 
-  useEffect(() => setActive(0), [debounced]);
+  const [prevQuery, setPrevQuery] = useState(debounced);
+  if (prevQuery !== debounced) {
+    setPrevQuery(debounced);
+    setActive(0);
+  }
 
   const go = (href: string) => {
     onClose();

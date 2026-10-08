@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+
+const noopSubscribe = () => () => {};
+
+/** False during SSR/hydration, true afterwards — for values that only exist on the client (clock, locale). */
+export const useIsClient = () => useSyncExternalStore(noopSubscribe, () => true, () => false);
 
 export function useDebounced<T>(value: T, delay = 250): T {
   const [debounced, setDebounced] = useState(value);
