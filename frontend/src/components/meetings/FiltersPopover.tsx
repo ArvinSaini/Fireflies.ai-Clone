@@ -84,7 +84,7 @@ function OptionRow({ checked, onToggle, children, radio }: { checked: boolean; o
           {checked && <span className="size-2 rounded-full bg-brand" />}
         </span>
       ) : (
-        <Checkbox checked={checked} onChange={onToggle} />
+        <Checkbox checked={checked} decorative />
       )}
     </button>
   );

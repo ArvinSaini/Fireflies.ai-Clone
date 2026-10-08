@@ -52,8 +52,27 @@ export function Field({ label, hint, children }: { label: string; hint?: ReactNo
 }
 
 export function Checkbox({
-  checked, onChange, label, className, indeterminate,
-}: { checked: boolean; onChange: (v: boolean) => void; label?: string; className?: string; indeterminate?: boolean }) {
+  checked, onChange, label, className, indeterminate, decorative,
+}: {
+  checked: boolean;
+  onChange?: (v: boolean) => void;
+  label?: string;
+  className?: string;
+  indeterminate?: boolean;
+  /** Purely visual (inside an already-clickable row) — renders a <span>, avoiding nested buttons. */
+  decorative?: boolean;
+}) {
+  const visual = cn(
+    "inline-flex size-4 shrink-0 items-center justify-center rounded border transition-colors",
+    checked || indeterminate ? "border-brand bg-brand text-white" : "border-line-strong bg-surface",
+    className,
+  );
+  if (decorative)
+    return (
+      <span aria-hidden className={visual}>
+        {checked && <Check className="size-3" strokeWidth={3} />}
+      </span>
+    );
   return (
     <button
       type="button"
@@ -62,7 +81,7 @@ export function Checkbox({
       aria-label={label}
       onClick={(e) => {
         e.stopPropagation();
-        onChange(!checked);
+        onChange?.(!checked);
       }}
       className={cn(
         "inline-flex size-4 shrink-0 items-center justify-center rounded border transition-colors",
