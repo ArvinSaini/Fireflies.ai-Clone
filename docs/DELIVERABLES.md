@@ -4,7 +4,7 @@ This document checks the assignment brief line by line against what was built, s
 explains how to verify it. The README covers setup; this document is the evaluation companion.
 
 - **Repository:** https://github.com/ArvinSaini/Fireflies.ai-Clone (`frontend/` + `backend/`)
-- **Live demo:** _added after deployment_ (backend on Render via `render.yaml`, frontend on Vercel)
+- **Live demo:** https://firefliesai-arvin.vercel.app (frontend on Vercel) · API https://fireflies-ai-clone-5iyf.onrender.com (Render free tier; first request after idle takes ~30–60 s)
 - **Docs:** [`README.md`](../README.md) (setup, stack, architecture, schema, API, assumptions) ·
   [`docs/UI_RESEARCH.md`](UI_RESEARCH.md) (study of the current Fireflies UI) · this file
 
@@ -103,7 +103,7 @@ Legend: ✅ done · 🟡 placeholder by design (allowed by the brief)
 |---|---|
 | Public GitHub repo with `frontend/` and `backend/` | ✅ structure ready, commits authored by Arvin Saini; **push pending your go-ahead** |
 | README with setup, architecture, schema, API overview | ✅ `README.md` |
-| Hosted working link | ⏳ configs ready (`render.yaml`, `.env.example` files); deploy needs your Render/Vercel accounts |
+| Hosted working link | ✅ https://firefliesai-arvin.vercel.app · backend https://fireflies-ai-clone-5iyf.onrender.com; full audit 86/86 against the live site |
 
 ---
 
@@ -338,11 +338,11 @@ flowchart LR
 | Playwright: click line → seek & play; seek bar → active line; find "SSO" → 7 highlighted marks, "1 / 7"; Smart Search "Questions" filter | ✅ |
 | Playwright CRUD: paste transcript → AI notes → add/complete/delete action item → rename → AskFred answer → delete meeting | ✅ |
 | Playwright: dark mode, 390 px mobile, PDF export (A4 PDF generated from the print view) | ✅ |
-| **Full site audit** (Playwright, visible browser, production build): 73 checks covering every core requirement, global-search jump to the exact moment, CRUD with reload-persistence, placeholders, all 6 bonuses, every page and control (home tabs, AskFred page, notifications, channels, bulk move, details drawer, player speed/skip/keyboard, summary templates, summary edit + regenerate, transcript edit + speaker re-assignment, all rail panels, Smart Search filters, topic trackers, tasks, analytics, settings, integrations, upgrade, 404) 16 responsive checks (390 / 768 / 1024 / 1440 px × 4 pages, no horizontal overflow), **parity checks against the live Fireflies UI** (trial banner, top bar, Meetings Ask Fred panel, meeting rail + tabs + AskFred chips, AskFred start screen, Plans toggle, Team / feedback placeholders) and a **light + dark theme sweep of all 10 pages** (theme applied, correct surface colour, no overflow) | ✅ **82/82**, 0 unexpected console errors |
+| **Full site audit** (Playwright, visible browser, production build): 73 checks covering every core requirement, global-search jump to the exact moment, CRUD with reload-persistence, placeholders, all 6 bonuses, every page and control (home tabs, AskFred page, notifications, channels, bulk move, details drawer, player speed/skip/keyboard, summary templates, summary edit + regenerate, transcript edit + speaker re-assignment, all rail panels, Smart Search filters, topic trackers, tasks, analytics, settings, integrations, upgrade, 404) 16 responsive checks (390 / 768 / 1024 / 1440 px × 4 pages, no horizontal overflow), **parity checks against the live Fireflies UI** (trial banner, top bar, compact rail that slides open + hover tooltip, account menu, Home welcome / Quick Start / Try More, Meetings Ask Fred panel, meeting rail + tabs + AskFred chips, AskFred start screen, Plans toggle, Team / feedback placeholders) and a **light + dark theme sweep of all 10 pages** (theme applied, correct surface colour, no overflow) | ✅ **86/86**, 0 unexpected console errors |
 
 ## 9. Five-minute demo script (for the evaluator)
 
-1. **Home** (`/`): greeting, assistant cards, Recent / AI Feed. Press **Ctrl+K** and search "SSO" to jump to the exact transcript moment.
+1. **Home** (`/`): Welcome card, Quick Start (Upload File opens the upload form), Recent / AI Feed, Try More. Click the rail avatar to slide the sidebar open; click your name for the account menu. Press **Ctrl+K** and search "SSO" to jump to the exact transcript moment.
 2. **Meetings**: use Filters → Participants, try *Hosted by me*, open a channel, hover a card for **Details** and ⋯, then bulk-select and move. In the **Ask Fred** panel on the right, click *Key decisions*.
 3. Open **Q4 Product Roadmap Planning**: press ▶, click transcript lines, drag the seek bar, and use **Find** "SSO".
 4. Open **Smart Search** → Questions / Sentiment / Talk time / Topic Trackers.

@@ -14,6 +14,7 @@ import { AppStoreIcon, PlayStoreIcon } from "@/components/ui/StoreIcons";
 import { EmptyState, Segmented, Skeleton } from "@/components/ui/Primitives";
 import { firstName, formatRecentDate, formatShortDate } from "@/lib/format";
 import { useMe, useMeetings } from "@/lib/queries";
+import { ServerWaking } from "@/components/ui/ServerWaking";
 
 type Tab = "recent" | "upcoming" | "feed";
 
@@ -28,7 +29,7 @@ function WelcomeCard({ name }: { name: string }) {
   return (
     <section className="flex flex-col items-center gap-8 rounded-2xl border border-[#f5d5bd] bg-[#fdf1e7] px-8 py-10 sm:flex-row sm:px-[140px] dark:border-[#5c3418] dark:bg-[#3b2111]">
       <div className="flex-1">
-        <h1 className="text-[24px] font-semibold tracking-tight text-ink">Welcome Aboard, {name}!</h1>
+        <h1 className="text-[24px] font-semibold tracking-tight text-ink">Welcome Aboard{name ? `, ${name}` : ""}!</h1>
         <p className="mt-3 max-w-[400px] text-[16px] leading-relaxed text-ink-3">
           Fireflies is now ready to automate your meetings and streamline your workflows.
         </p>
@@ -125,6 +126,7 @@ export function HomeView() {
             <div className="mt-4">
               {tab === "recent" && (
                 <div>
+                  {isLoading && <ServerWaking className="my-3" />}
                   {isLoading && Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="my-4 h-10" />)}
                   {recent?.items.map((m) => (
                     <Link key={m.id} href={`/meetings/${m.id}`} className="flex items-center gap-5 rounded-xl px-5 py-3 hover:bg-surface/70">

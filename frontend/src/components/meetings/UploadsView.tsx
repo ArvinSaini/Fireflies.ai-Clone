@@ -7,6 +7,7 @@ import { EmptyState, Skeleton } from "@/components/ui/Primitives";
 import { formatBytes, formatDuration, formatShortDate } from "@/lib/format";
 import { useMeetings } from "@/lib/queries";
 import { useCreateMeeting } from "./CreateMeetingModal";
+import { ServerWaking } from "@/components/ui/ServerWaking";
 
 const BADGE_COLORS: Record<string, string> = { vtt: "#2e90fa", srt: "#7a5af8", json: "#f79009", txt: "#12b76a" };
 
@@ -35,6 +36,7 @@ export function UploadsView() {
 
         <h2 className="mt-8 mb-3 text-[15px] font-medium text-ink">My Uploads</h2>
         <div className="space-y-3">
+          {isLoading && <ServerWaking />}
           {isLoading && Array.from({ length: 2 }, (_, i) => <Skeleton key={i} className="h-[74px] rounded-xl" />)}
           {data?.items.map((m) => {
             const ext = (m.source_filename?.split(".").pop() ?? (m.platform === "paste" ? "txt" : "file")).toLowerCase();

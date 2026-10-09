@@ -27,7 +27,37 @@ function toQuery(params?: Query): string {
   return s ? `?${s}` : "";
 }
 
+// In-flight request tracker: lets the UI notice when the backend is slow to answer
+// (the free Render instance takes up to a minute to wake after idling).
+let pending = 0;
+let busySince = 0; // when the current run of pending requests started; 0 when idle
+const trackerListeners = new Set<() => void>();
+const notifyTracker = () => trackerListeners.forEach((l) => l());
+
+export const requestTracker = {
+  subscribe(listener: () => void) {
+    trackerListeners.add(listener);
+    return () => void trackerListeners.delete(listener);
+  },
+  busySince: () => busySince,
+};
+
 async function request<T>(path: string, init?: RequestInit & { query?: Query }): Promise<T> {
+  if (pending++ === 0) {
+    busySince = Date.now();
+    notifyTracker();
+  }
+  try {
+    return await send<T>(path, init);
+  } finally {
+    if (--pending === 0) {
+      busySince = 0;
+      notifyTracker();
+    }
+  }
+}
+
+async function send<T>(path: string, init?: RequestInit & { query?: Query }): Promise<T> {
   const { query, ...rest } = init ?? {};
   const isForm = rest.body instanceof FormData;
   const res = await fetch(`${API_URL}/api${path}${toQuery(query)}`, {
@@ -51,6 +81,7 @@ const json = (body: unknown) => JSON.stringify(body);
 
 export const api = {
   // workspace
+  health: () => request<{ status: string }>("/health"),
   me: () => request<Me>("/me"),
   stats: () => request<WorkspaceStats>("/stats"),
   participants: (role?: "host" | "attendee") => request<ParticipantCount[]>("/participants", { query: { role } }),

@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
+import { BackendWarmup } from "./BackendWarmup";
 import { ComingSoonProvider } from "./ComingSoonProvider";
 import { AppNavProvider } from "@/components/layout/AppNav";
 import { CommandPaletteProvider } from "@/components/search/CommandPalette";
@@ -31,6 +32,7 @@ export function Providers({ children }: { children: ReactNode }) {
             </CommandPaletteProvider>
           </CreateMeetingProvider>
         </ComingSoonProvider>
+        <BackendWarmup />
         <Toaster position="bottom-left" richColors closeButton toastOptions={{ className: "font-sans" }} />
       </ThemeProvider>
     </QueryClientProvider>

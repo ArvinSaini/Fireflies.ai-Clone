@@ -15,7 +15,7 @@ A full-stack clone of the [Fireflies.ai](https://fireflies.ai) post-meeting work
 >
 > **Stack:** Next.js 16 (TypeScript, App Router, Tailwind v4, TanStack Query) · FastAPI · SQLAlchemy 2 · SQLite (+ FTS5)
 
-The UI was modelled on the **current** Fireflies app. Before any frontend code was written, I studied its 2026 help-center screenshots and product pages. I then compared every page side by side with the live app (a free account, viewed read-only) and matched the differences: the trial banner, the Meetings-page Ask Fred panel, the meeting page's 4-icon rail and tab order, the AskFred start screen and the Plans page. The findings, sampled colors and design decisions are in [`docs/UI_RESEARCH.md`](docs/UI_RESEARCH.md).
+The UI was modelled on the **current** Fireflies app. Before any frontend code was written, I studied its 2026 help-center screenshots and product pages. I then compared every page side by side with the live app (a free account, viewed read-only) and matched the differences: the Home page (welcome card, Quick Start, Try More), the compact icon rail that slides open into the full sidebar, the account menu, the trial banner, the Meetings-page Ask Fred panel, the meeting page's 4-icon rail and tab order, the AskFred start screen and the Plans page. The findings, sampled colors and design decisions are in [`docs/UI_RESEARCH.md`](docs/UI_RESEARCH.md).
 
 ---
 
@@ -23,6 +23,7 @@ The UI was modelled on the **current** Fireflies app. Before any frontend code w
 
 | Area | What works |
 |---|---|
+| **Navigation & Home** | A compact icon rail on every page. Hover the profile avatar for *Expand sidebar*, click it to slide the full sidebar open (it pushes the page and stays open until collapsed). The name button opens the account menu: plan and storage meters, Upgrade, Settings, My Team, theme toggle, Logout, and app downloads (placeholders). Top bar: Ctrl+K search, free-meetings counter, notifications, Capture ▾. **Home**: welcome card, Quick Start (Schedule · Upload · Capture), Recent / Upcoming / AI Feed, Try More. |
 | **Meetings library** | Meeting cards grouped by day, showing date · time · duration · host and capture-source icons. **Channels** (`#public` / 🔒 private) appear in a second-level panel. Views: *My Meetings* (Hosted by me / Shared with me), *All Meetings* and *Uploads*. **Filters** popover: host, participants, date range, duration, captured-from, channels. Local search by title or participant, sorting, "load more" paging, bulk select → move / delete, per-meeting ⋯ menu (share, copy link, download, move to channel, rename, delete) and a **Details** drawer. A permanent **Ask Fred** panel on the right answers questions across the current scope (My action items · Key decisions · Key initiatives). |
 | **Meeting page** | Same layout as Fireflies: a 4-icon left rail (Smart Search open by default, Soundbites, Comments, Bookmarks), notes in the middle, **AskFred | Transcript** tabs on the right. **Transcript:** speaker avatars, clickable timestamps and **click-to-seek**. The playing line highlights and auto-scrolls, with a "Sync with audio" button when you scroll away. **Player:** seek bar with chapter ticks, ±15 s, speed, keyboard shortcuts. **Find in transcript** with highlighted matches and next/previous. Inline transcript editing and speaker re-assignment. Hover toolbar: soundbite, comment, bookmark, copy, link to this moment (`?t=` deep links). |
 | **AI notes** | Keywords, overview, timestamped notes sections, action items grouped by assignee (add / edit / assign / complete / delete) and an outline of chapters. Summary "templates", edit and regenerate. |
@@ -445,6 +446,13 @@ Lines without timestamps get times estimated from word count (~150 wpm).
 - **Backend → Render**: `render.yaml` is a ready blueprint (root `backend/`, `uvicorn app.main:app`, health check `/api/health`). Set `CORS_ORIGIN_REGEX` to your Vercel domain (the default allows `*.vercel.app`).
 - **Frontend → Vercel**: import the repo with **Root Directory `frontend/`** and set `NEXT_PUBLIC_API_URL` to the Render URL.
 - SQLite lives on the instance's disk. On free hosting tiers the disk is ephemeral, so the demo **re-seeds automatically** on a fresh start. For lasting data, attach a persistent disk and point `DATABASE_URL` at it.
+
+### Handling the free plan's sleep (cold starts)
+
+Render's free plan puts the backend to sleep after 15 minutes without traffic, and the first request after that takes about 30–60 s while it starts up. The app handles this in two ways:
+
+1. **Wake it early.** As soon as the site opens, on any page, `BackendWarmup` pings `/api/health` in the background, and a `<link rel="preconnect">` opens the connection to the API. The server starts waking while the visitor is still on Home, before they open anything that needs data.
+2. **Explain the wait.** The API client counts in-flight requests (`requestTracker` in `lib/api.ts`). If a data section's request is still pending after about 2.5 s, that section shows a *"Waking up the server…"* notice (`ServerWaking`) above its loading skeletons. It disappears as soon as the data arrives. When the server is awake, the notice never appears.
 
 ## Assumptions
 

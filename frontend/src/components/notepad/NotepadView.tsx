@@ -19,6 +19,7 @@ import { PlayerProvider, usePlayer } from "./PlayerContext";
 import { BookmarksPanel, CommentsPanel, LeftRail, SmartSearchPanel, SoundbitesPanel } from "./RailPanels";
 import { SummaryColumn } from "./SummaryColumn";
 import { TranscriptPanel } from "./TranscriptPanel";
+import { ServerWaking } from "@/components/ui/ServerWaking";
 
 /** Applies a `?t=<ms>` deep link (from global search / copied moment links) once the player is ready. */
 function DeepLinkSeek({ segments }: { segments: Segment[] }) {
@@ -142,6 +143,7 @@ export function NotepadView({ id }: { id: number }) {
         <div className="flex flex-1">
           <div className="w-[60px] border-r border-line" />
           <div className="mx-auto w-full max-w-[760px] space-y-4 p-10">
+            <ServerWaking />
             <Skeleton className="h-8 w-2/3" />
             <Skeleton className="h-4 w-1/3" />
             <Skeleton className="mt-10 h-32" />

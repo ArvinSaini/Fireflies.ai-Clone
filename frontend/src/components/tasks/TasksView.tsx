@@ -15,6 +15,7 @@ import { formatDayHeader, formatTime } from "@/lib/format";
 import { errorToast, useInvalidateLibrary, useParticipants, useTasks } from "@/lib/queries";
 import type { ActionItemWithMeeting, ParticipantCount } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ServerWaking } from "@/components/ui/ServerWaking";
 
 type Status = "open" | "completed" | "all";
 
@@ -166,6 +167,7 @@ export function TasksView() {
           </button>
 
           <div className="mt-6 space-y-4">
+            {isLoading && <ServerWaking />}
             {isLoading && Array.from({ length: 3 }, (_, i) => <Skeleton key={i} className="h-40 rounded-xl" />)}
             {groups.map(([meetingId, list]) => <MeetingGroup key={meetingId} meetingId={meetingId} tasks={list} people={people ?? []} m={m} />)}
             {!isLoading && !groups.length && (

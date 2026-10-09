@@ -22,6 +22,7 @@ import { LibraryAskFred } from "./LibraryAskFred";
 import { MeetingCard } from "./MeetingCard";
 import { ConfirmDialog, MeetingDetailsDrawer, MoveToChannelDialog } from "./MeetingDialogs";
 import { PLATFORMS } from "./PlatformIcon";
+import { ServerWaking } from "@/components/ui/ServerWaking";
 
 const PAGE = 20;
 type Sort = NonNullable<MeetingFilters["sort"]>;
@@ -211,6 +212,7 @@ function Library({ view, channelId, initialQuery }: { view: "all" | "mine"; chan
         )}
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-10">
+          {isLoading && <ServerWaking className="mt-5" />}
           {isLoading && Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="mt-5 h-[104px] rounded-xl" />)}
           {groups.map((g, gi) => {
             const ids = g.items.map((m) => m.id);

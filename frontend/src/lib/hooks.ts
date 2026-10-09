@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { requestTracker } from "./api";
 
 const noopSubscribe = () => () => {};
 
@@ -33,4 +34,16 @@ export function useHotkey(
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
+}
+
+/** True once backend requests have been pending for `delayMs` without a break, e.g. while the server wakes up. */
+export function useBackendSlow(delayMs = 2500): boolean {
+  const since = useSyncExternalStore(requestTracker.subscribe, requestTracker.busySince, () => 0);
+  const [slowRun, setSlowRun] = useState(0);
+  useEffect(() => {
+    if (!since) return;
+    const id = setTimeout(() => setSlowRun(since), delayMs);
+    return () => clearTimeout(id);
+  }, [since, delayMs]);
+  return since > 0 && slowRun === since;
 }

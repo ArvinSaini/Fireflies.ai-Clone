@@ -8,6 +8,7 @@ import { Segmented, Skeleton } from "@/components/ui/Primitives";
 import { formatDuration, parseDate } from "@/lib/format";
 import { useIsClient } from "@/lib/hooks";
 import { useMeetings, useParticipants, useStats } from "@/lib/queries";
+import { ServerWaking } from "@/components/ui/ServerWaking";
 
 function Tile({ icon, label, value, sub }: { icon: React.ReactNode; label: string; value: React.ReactNode; sub?: string }) {
   return (
@@ -96,6 +97,7 @@ export function AnalyticsView() {
             <h1 className="text-[22px] font-medium text-ink">Conversation analytics</h1>
             <p className="text-[14px] text-ink-4">How your team spends time in meetings.</p>
           </div>
+          {!stats && <ServerWaking />}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stats ? (
               <>
