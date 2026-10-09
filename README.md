@@ -454,6 +454,24 @@ Lines without timestamps get times estimated from word count (~150 wpm).
 - **Channel membership is many-to-many.** "Move to channel" replaces a meeting's channel set.
 - **Global AskFred is stateless on the server.** Recent chats are kept in the browser's localStorage. Per-meeting AskFred history is stored in the database.
 
+## Originality
+
+This project is original work written for this assignment.
+
+> **No code from the original Fireflies website or app was used.** No HTML, CSS, JavaScript, design files, images or other assets were copied from fireflies.ai, its web app or its help center. **No code from any other repository, Fireflies clone, tutorial or template was used either.** The only third-party code is the open-source packages listed below, installed as normal dependencies.
+
+- **All application code was written for this project:** every page, component, style, API route, service, database model, AI engine, seed file and test.
+- **No images or media were taken** from Fireflies, its website or help center, or from any GitHub repository. The repo contains one image, `frontend/src/app/icon.svg`: an "F" mark drawn from scratch in SVG for this project. The App Store, Google Play and Chrome marks are simplified hand-made SVGs, avatars are generated initials, and the product-demo thumbnail on Home is drawn with CSS. No photos or screenshots ship with the app.
+- **The real Fireflies app was a visual reference only.** Its public help-center screenshots and the live app (a free account, viewed read-only) were studied to match layout, wording and colors. Colors were sampled as hex values; the screenshots were not committed. The research is written up in [`docs/UI_RESEARCH.md`](docs/UI_RESEARCH.md).
+- **The seed data is fictional** and was written for this project: 8 meetings with invented people, companies and conversations.
+- **The database schema, API design and AI engines** (heuristic summarizer, AskFred intents and retrieval) are this project's own design.
+- **Third-party code is used only through declared open-source packages**, under their licenses:
+  - Frontend: Next.js, React, Tailwind CSS, TanStack Query, lucide-react (icons), sonner (toasts), next-themes, clsx, tailwind-merge, and the Inter font via `next/font`.
+  - Backend: FastAPI, Uvicorn, SQLAlchemy, Pydantic, pydantic-settings, python-multipart, and the Anthropic SDK (optional).
+- The Next.js project was started with `create-next-app`. Its standard config files (`tsconfig.json`, `next.config.ts`, `eslint.config.mjs`) were kept and adapted; its sample page, styles and images were replaced or removed.
+
+"Fireflies", "Fireflies.ai" and "AskFred" belong to their owner, Fireflies.ai. This is an educational clone for an assignment and is not affiliated with or endorsed by Fireflies.ai.
+
 ## Project structure
 
 ```
