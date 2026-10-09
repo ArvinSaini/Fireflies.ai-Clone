@@ -11,7 +11,7 @@ A full-stack clone of the [Fireflies.ai](https://fireflies.ai) post-meeting work
 
 > 📋 **Requirement-by-requirement coverage, UML diagrams and the evaluation checklist: [`docs/DELIVERABLES.md`](docs/DELIVERABLES.md)**
 >
-> 🔗 **Live demo:** _add the Vercel URL after deploying_ · **Repository:** https://github.com/ArvinSaini/Fireflies.ai-Clone
+> 🔗 **Live demo:** https://firefliesai-arvin.vercel.app (API: https://fireflies-ai-clone-5iyf.onrender.com — free tier, the first request after idle takes ~30–60 s) · **Repository:** https://github.com/ArvinSaini/Fireflies.ai-Clone
 >
 > **Stack:** Next.js 16 (TypeScript, App Router, Tailwind v4, TanStack Query) · FastAPI · SQLAlchemy 2 · SQLite (+ FTS5)
 
