@@ -257,16 +257,126 @@ erDiagram
     meetings ||--o{ meeting_channels : "filed in"
     channels ||--o{ meeting_channels : contains
     meetings ||--o{ transcript_segments : has
-    participants ||--o{ transcript_segments : speaks
+    participants |o--o{ transcript_segments : speaks
     meetings ||--o| summaries : "has (1:1)"
     meetings ||--o{ chapters : has
     meetings ||--o{ action_items : has
-    participants ||--o{ action_items : "assigned to"
-    transcript_segments ||--o{ action_items : "mentioned at"
+    participants |o--o{ action_items : "assigned to"
+    transcript_segments |o--o{ action_items : "mentioned at"
     transcript_segments ||--o{ comments : on
     transcript_segments ||--o{ bookmarks : on
-    transcript_segments ||--o{ soundbites : "anchored to"
+    transcript_segments |o--o{ soundbites : "anchored to"
+    users ||--o{ comments : writes
+    users ||--o{ bookmarks : saves
     meetings ||--o{ chat_messages : "AskFred history"
+
+    users {
+        int id PK
+        string name
+        string email UK
+        string avatar_color
+    }
+    meetings {
+        int id PK
+        int owner_id FK
+        string title
+        datetime started_at
+        int duration_ms
+        string platform
+        string language
+        string media_url
+        string source_filename
+    }
+    participants {
+        int id PK
+        string name
+        string email UK
+        string color
+    }
+    meeting_participants {
+        int id PK
+        int meeting_id FK
+        int participant_id FK
+        string role "host or attendee"
+    }
+    channels {
+        int id PK
+        int owner_id FK
+        string name
+        bool is_private
+        string color
+    }
+    meeting_channels {
+        int meeting_id PK, FK
+        int channel_id PK, FK
+    }
+    transcript_segments {
+        int id PK
+        int meeting_id FK
+        int participant_id FK "SET NULL"
+        int position
+        int start_ms
+        int end_ms
+        text text "indexed by FTS5"
+    }
+    summaries {
+        int meeting_id PK, FK
+        text overview
+        json keywords
+        json notes
+        string generated_by
+    }
+    chapters {
+        int id PK
+        int meeting_id FK
+        string title
+        int start_ms
+        int end_ms
+    }
+    action_items {
+        int id PK
+        int meeting_id FK
+        int assignee_id FK "SET NULL"
+        int segment_id FK "SET NULL"
+        text text
+        bool is_completed
+        date due_date
+        string source "ai or user"
+    }
+    comments {
+        int id PK
+        int meeting_id FK
+        int segment_id FK
+        int author_id FK
+        text body
+    }
+    bookmarks {
+        int id PK
+        int meeting_id FK
+        int segment_id FK
+        int user_id FK
+    }
+    soundbites {
+        int id PK
+        int meeting_id FK
+        int segment_id FK "SET NULL"
+        string title
+        int start_ms
+        int end_ms
+    }
+    topic_trackers {
+        int id PK
+        int owner_id FK
+        string name
+        json keywords
+    }
+    chat_messages {
+        int id PK
+        int meeting_id FK
+        string role
+        text content
+        json citations
+    }
 ```
 
 | Table | Key columns | Notes |
