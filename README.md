@@ -34,6 +34,19 @@ The UI was modelled on the **current** Fireflies app. Before any frontend code w
 
 ---
 
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | **Next.js 16** (App Router, TypeScript strict), React 19, **Tailwind CSS v4**, **TanStack Query** (server state + cache invalidation), lucide-react icons, sonner toasts, next-themes (dark mode) |
+| Backend | **Python 3.12 + FastAPI**, Pydantic v2 (request/response contracts), pydantic-settings, Uvicorn |
+| Database | **SQLite** via **SQLAlchemy 2** (typed `Mapped[]` models, 15 tables) + an **FTS5** full-text index kept in sync by triggers |
+| AI | Built-in heuristic engine by default; optional **Claude** (Anthropic SDK) or **Gemini** (REST) with automatic fallback |
+| Testing & quality | pytest (43 tests), Playwright end-to-end audit (86 checks), ESLint, Ruff, `tsc --noEmit` |
+| Hosting | Frontend on **Vercel**, backend on **Render** (`render.yaml` blueprint) |
+
+---
+
 ## Getting started
 
 Prerequisites: **Python 3.12+** and **Node 20+**.
