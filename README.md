@@ -91,22 +91,125 @@ The app is fully functional without an LLM: a built-in extractive engine produce
 
 ## Architecture
 
+### System overview
+
+```mermaid
+flowchart LR
+    user((User))
+
+    subgraph browser["Browser"]
+        ui["Next.js 16 client<br/>React 19 · Tailwind v4"]
+        cache[("TanStack Query<br/>cache")]
+    end
+
+    subgraph vercel["Vercel"]
+        web["Next.js server<br/>static shell + streamed routes"]
+    end
+
+    subgraph render["Render"]
+        api["FastAPI<br/>REST · /api"]
+        db[("SQLite<br/>15 tables")]
+        fts[("FTS5 index<br/>segments_fts")]
+    end
+
+    llm{{"Optional LLM<br/>Claude · Gemini"}}
+
+    user --> ui
+    web -- "HTML · JS" --> ui
+    ui <--> cache
+    cache -- "JSON over HTTPS<br/>NEXT_PUBLIC_API_URL" --> api
+    api -- "SQLAlchemy 2 ORM" --> db
+    db -. "triggers keep it in sync" .-> fts
+    api -- "MATCH + snippets" --> fts
+    api -. "summaries · AskFred<br/>(falls back to the built-in engine)" .-> llm
 ```
-┌──────────────── Next.js 16 (frontend/) ────────────────┐        ┌──────────── FastAPI (backend/) ─────────────┐
-│ app/                route groups → layouts              │  JSON  │ api/routes/   thin HTTP layer (validation,  │
-│  (main)/  sidebar shell: Home, Tasks, AskFred, …        │ ─────▶ │               auth dependency, status codes) │
-│  (library)/ icon rail + channels: Meetings, Uploads      │  REST  │ api/deps.py   DB session, current user,     │
-│  (notepad)/meetings/[id]  meeting page                   │ ◀───── │               ownership checks              │
-│ components/  feature folders (meetings, notepad, …)      │        │ services/     use-cases & business logic    │
-│ lib/api.ts   typed fetch client                          │        │   meetings · action_items · transcript ·    │
-│ lib/queries.ts TanStack Query hooks + cache invalidation │        │   channels · topic_trackers · search ·      │
-│ PlayerContext virtual clock ↔ transcript sync            │        │   insights · export · chat · workspace_ai · │
-│                                                          │        │   parser · errors · ai/ (heuristic|LLM)     │
-└──────────────────────────────────────────────────────────┘        │ models/       SQLAlchemy 2 ORM (15 tables)  │
-                                                                     │ schemas/      Pydantic request/response     │
-                                                                     │ SQLite + FTS5 virtual table (triggers)      │
-                                                                     └─────────────────────────────────────────────┘
+
+The browser talks to the API directly. Vercel only serves the Next.js app, and Render runs FastAPI with the SQLite file on the same instance.
+
+### Backend layers
+
+```mermaid
+flowchart TB
+    req(["HTTP request"]) --> routes
+
+    subgraph backend["FastAPI backend · backend/app"]
+        direction TB
+        routes["api/routes<br/>validation · status codes"]
+        deps["api/deps<br/>DB session · current_user"]
+        schemas["schemas/<br/>Pydantic contracts"]
+        parser["services/transcript_parser<br/>txt · vtt · srt · json"]
+        services["services/<br/>use-cases · business rules · transactions"]
+        ai["services/ai<br/>Summarizer · Assistant"]
+        models["models/<br/>SQLAlchemy ORM"]
+        errors["services/errors<br/>NotFound · Conflict · InvalidInput"]
+    end
+
+    handler["main.py exception handler<br/>→ 404 · 409 · 422"]
+    db[("SQLite + FTS5")]
+
+    routes --> deps
+    routes --> schemas
+    routes --> parser
+    routes --> services
+    services --> ai
+    services --> models --> db
+    services -. raises .-> errors -. mapped by .-> handler
 ```
+
+### AI engine selection
+
+```mermaid
+flowchart LR
+    call["get_summarizer()<br/>get_assistant()"] --> pick{"AI_PROVIDER<br/>and keys set?"}
+    pick -- "Claude key" --> claude{{"ClaudeProvider<br/>messages.parse"}}
+    pick -- "Gemini key" --> gemini{{"GeminiProvider<br/>generateContent · JSON"}}
+    pick -- "no key" --> heur["Heuristic engine<br/>extractive · offline"]
+    claude -. "error · refusal" .-> heur
+    gemini -. "error · rate limit" .-> heur
+    claude --> out[("summaries<br/>generated_by")]
+    gemini --> out
+    heur --> out
+```
+
+### Request flow: creating a meeting from a pasted transcript
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant FE as Next.js (browser)
+    participant R as FastAPI route
+    participant P as transcript_parser
+    participant S as services/meetings
+    participant AI as Summarizer
+    participant DB as SQLite + FTS5
+
+    U->>FE: Paste transcript, click Create
+    FE->>R: POST /api/meetings
+    R->>P: parse_transcript(text)
+    P-->>R: segments + speakers
+    R->>S: create_meeting(data, segments)
+    S->>AI: summarize(context)
+    AI-->>S: overview · notes · action items · chapters
+    S->>DB: INSERT meeting, segments, summary, items (one commit)
+    Note over DB: FTS5 triggers index the new segments
+    S-->>R: MeetingDetail
+    R-->>FE: 201 Created
+    FE->>FE: invalidate library · stats · tasks caches
+```
+
+### Frontend: transcript ↔ player sync
+
+```mermaid
+flowchart LR
+    clock["PlayerContext<br/>virtual clock (rAF) or audio element"]
+    clock -- "current time" --> tr["Transcript<br/>binary search → active line"]
+    clock -- "current time" --> bar["Seek bar<br/>chapter ticks"]
+    tr -- "click a line" --> clock
+    bar -- "drag" --> clock
+    links["Notes timestamps · AskFred citations · ?t= links"] -- "seek(ms)" --> clock
+```
+
+The frontend is split into three route groups, each with its own shell: `(main)` for Home, Tasks, AskFred and Settings; `(library)` for Meetings and Uploads, which adds the channels panel; and `(notepad)` for the full-width meeting page. Every page uses the compact icon rail, which slides open into the full sidebar from the profile avatar.
 
 **Backend layering:**
 
